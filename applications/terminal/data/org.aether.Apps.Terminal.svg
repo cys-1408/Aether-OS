@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Terminal icon">
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#c9d7de" stroke="#e8e1d6" stroke-width="1"/>
+<rect x="10" y="14" width="44" height="36" rx="6" fill="#262a30"/><path d="M18 26 L24 32 L18 38" stroke="#e9e3d9" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="28" y="36" width="14" height="3" rx="1.5" fill="#e9e3d9"/>
+</svg>

@@ -1,0 +1,18 @@
+# aether-action-ledger.package — privacy-aware append-only action history.
+name: aether-action-ledger
+version_from: VERSION
+recipe: packaging/PKGBUILD-aether-ai
+license: GPL-3.0-only
+source:
+  - miso/ledger
+  - miso/workspaces (action-context for undo links)
+installs_to:
+  /usr/libexec/aether/miso/ledger: miso/ledger
+unit: system/services/aether-ledger.service
+provides:
+  - /run/aether/ledger.sock (ActionLedger.{append,query,undo,clear_user})
+db: $XDG_DATA_HOME/aether/ledger/ledger.db (schema.sql + redact_secrets on write)
+policy:
+  - protected entries (policy/audit class) may not be erased by the agent (security/audit/audit-policy.yaml)
+  - user-visible retention in rootfs/etc/aether/miso.yaml
+depends: [python, aether-capability-broker]

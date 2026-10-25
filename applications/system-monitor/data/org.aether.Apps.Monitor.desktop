@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Monitor
+Comment=Monitor — Aether application
+Exec=aether-system-monitor
+Terminal=false
+Categories=Utility;

@@ -1,0 +1,14 @@
+# packaging/manifests/installer.yaml — the live installer environment.
+# The base set (see base.yaml) plus partitioning tools and the GTK front-end.
+packages:
+  - sgdisk
+  - parted
+  - gtk3
+  - python
+  - python-yaml
+  - python-gobject
+aether:
+  - aether-installer
+  - aether-base
+  - aether-configs
+  - aether-recovery

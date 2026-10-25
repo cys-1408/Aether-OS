@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.24)
+project(aether-files C)
+set(CMAKE_C_STANDARD 11)
+add_library(aether-files STATIC src/file_identity.c src/file_ops.c src/permission_check.c)
+target_include_directories(aether-files PUBLIC include ../libaether-core/include)
+target_compile_options(aether-files PRIVATE -Wall -Wextra)

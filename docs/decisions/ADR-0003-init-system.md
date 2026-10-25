@@ -1,0 +1,2 @@
+# ADR-0003: Init System
+Status: Accepted. Decision: systemd as init/service manager. Rationale: dependency-aware units, sandboxing directives, journald, timers, user services — all required capabilities exist natively and maintained. Policy: one aether-*.service per daemon with hardening baseline, Restart=on-failure, targets for graphical/installer/recovery/firstboot, timers for reconcile/update/maintenance/backup-reminder. No custom init is invented.

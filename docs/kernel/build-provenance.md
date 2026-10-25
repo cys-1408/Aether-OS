@@ -1,0 +1,2 @@
+# Build Provenance
+Every kernel build records: upstream commit/tag (provenance/upstream-commit.txt), applied patch digests (patch-manifest.json), merged .config hash (config-hash.txt), and toolchain versions (toolchain-manifest.json) via kernel/scripts/collect-provenance.sh. The release manifest (release/) references these records. Reproducibility notes and the build environment lock live in build/reproducibility/; verify-reproducibility.sh checks declared inputs before a release build. Provenance files are generated at build time, not hand-maintained.

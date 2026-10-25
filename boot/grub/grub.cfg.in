@@ -1,0 +1,22 @@
+# Generated grub.cfg (rendered by build/scripts/60-stage-bootloader.sh).
+set default="${saved_entry:-0}"
+set timeout=5
+set menu_color_normal=white/black
+set menu_color_highlight=black/orange
+search --no-floppy --label AETHEROS --set=root
+if [ -f /boot/grub/grubenv ]; then load_env -f /boot/grub/grubenv; fi
+
+menuentry "Aether OS" --class aether --class os {
+    linux /boot/vmlinuz-aether @NORMAL_CMDLINE@
+    initrd /boot/initramfs-aether.img
+}
+menuentry "Aether OS (recovery)" --class aether --class os {
+    linux /boot/vmlinuz-aether @RECOVERY_CMDLINE@
+    initrd /boot/initramfs-aether.img
+}
+submenu "Advanced" {
+    menuentry "Aether OS (known-good)" {
+        linux /boot/vmlinuz-aether @NORMAL_CMDLINE@ aether.known_good=1
+        initrd /boot/initramfs-aether.img
+    }
+}

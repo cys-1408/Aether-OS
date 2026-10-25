@@ -1,0 +1,16 @@
+Aether Cognitive Operating System
+Copyright 2026 The Aether Authors
+
+This distribution includes software from third parties. Prominent components:
+- Linux kernel: GPL-2.0-only WITH Linux-syscall-note (kernel.org)
+- systemd: LGPL-2.1-or-later
+- sway / wlroots: MIT
+- GTK / GLib / PyGObject stack: LGPL-2.1-or-later
+- pacman: GPL-2.0-or-later
+- llama.cpp: MIT (optional inference backend)
+- Noto fonts: OFL-1.1
+
+Full obligations are listed in LICENSES.md. Model weights are downloaded at
+runtime from the sources pinned in /etc/aether/supported-model-sources.yaml and
+remain under their own licenses (see ai/policies/model-license-policy.yaml).
+No model weights are distributed with this source tree.

@@ -1,0 +1,8 @@
+#!/bin/sh
+# 30-filesystem-drivers: ensure the root + ESP filesystem modules are loaded.
+for fs in ${ROOT_FSTYPES:-ext4 btrfs} vfat; do
+  modprobe -q "$fs" 2>/dev/null \
+    || echo "  fs module $fs: not loaded (may be built-in)"
+done
+[ -d /dev/disk ] || mdev -s 2>/dev/null
+exit 0

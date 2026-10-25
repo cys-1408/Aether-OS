@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aether-os.org/schemas/action-plan.schema.json",
+  "title": "Structured action plan with risk annotations",
+  "type": "object",
+  "required": [
+    "plan_id",
+    "intent",
+    "steps"
+  ],
+  "properties": {
+    "plan_id": {
+      "type": "string"
+    },
+    "intent": {
+      "type": "string"
+    },
+    "mode": {
+      "enum": [
+        "model",
+        "rule-based"
+      ]
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "index",
+          "capability_id",
+          "params",
+          "risk_class"
+        ],
+        "properties": {
+          "index": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "capability_id": {
+            "type": "string"
+          },
+          "params": {
+            "type": "object"
+          },
+          "risk_class": {
+            "enum": [
+              "read_only",
+              "low_reversible",
+              "write",
+              "destructive"
+            ]
+          },
+          "confirmation": {
+            "enum": [
+              "never",
+              "policy",
+              "always"
+            ]
+          },
+          "undoable": {
+            "type": "boolean"
+          },
+          "targets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "properties": {
+        "max_steps": {
+          "type": "integer"
+        },
+        "max_duration_s": {
+          "type": "integer"
+        }
+      }
+    },
+    "cancellable": {
+      "type": "boolean"
+    }
+  }
+}

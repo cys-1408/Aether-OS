@@ -1,0 +1,11 @@
+# ISO directory + boot catalog layout
+volume_label: AETHEROS
+directories:
+  /boot: [vmlinuz-aether, initramfs-aether.img, grub/grub.cfg]
+  /efi/boot: [BOOTX64.EFI]
+  /repo: package-repo
+  /aether: [installer, system]
+boot_catalog:
+  bios: boot/grub/core.img (El Torito, no emulation)
+  efi: /efi/boot/BOOTX64.EFI (UEFI spec path)
+hybrid: isohybrid-mbr + isohybrid-gpt-basdat

@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Monitor
+GenericName=System Monitor
+Comment=Inspect CPU, memory, processes, storage and services
+Exec=/usr/bin/aether-system-monitor
+TryExec=/usr/bin/aether-system-monitor
+Icon=org.aether.Apps.SystemMonitor
+Terminal=false
+Categories=System;
+StartupNotify=true
+StartupWMClass=org.aether.Apps.SystemMonitor
+X-Aether-App-ID=org.aether.Apps.SystemMonitor

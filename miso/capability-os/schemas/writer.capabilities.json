@@ -1,0 +1,137 @@
+{
+  "group": "writer",
+  "version": "1.0.0",
+  "capabilities": [
+    {
+      "id": "create_document",
+      "version": "1.0.0",
+      "provider": "agent-local",
+      "risk_class": "write",
+      "permission": "user-write",
+      "timeout_s": 15,
+      "idempotent": false,
+      "side_effects": "creates a document file",
+      "confirmation": "policy",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        }
+      },
+      "undo": {
+        "supported": true,
+        "method": "move_to_trash"
+      }
+    },
+    {
+      "id": "open_document",
+      "version": "1.0.0",
+      "provider": "agent-local",
+      "risk_class": "low_reversible",
+      "permission": "session",
+      "timeout_s": 15,
+      "idempotent": false,
+      "side_effects": "opens in Writer",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "opened": {
+            "type": "boolean"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "save_draft",
+      "version": "1.0.0",
+      "provider": "agent-local",
+      "risk_class": "write",
+      "permission": "user-write",
+      "timeout_s": 10,
+      "idempotent": false,
+      "side_effects": "writes a draft file",
+      "confirmation": "policy",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        }
+      },
+      "undo": {
+        "supported": true,
+        "method": "move_to_trash"
+      }
+    },
+    {
+      "id": "summarize_selected_document",
+      "version": "1.0.0",
+      "provider": "agent-local",
+      "risk_class": "read_only",
+      "permission": "session+ai",
+      "timeout_s": 90,
+      "idempotent": true,
+      "side_effects": "local inference only",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    }
+  ]
+}

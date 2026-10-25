@@ -1,0 +1,7 @@
+[Unit]
+Description=Aether First-Boot Setup
+Requires=multi-user.target
+Wants=aether-firstboot.service
+After=multi-user.target
+
+[Install]

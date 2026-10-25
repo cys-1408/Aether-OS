@@ -1,0 +1,8 @@
+[Unit]
+Description=Aether Live Installer
+Requires=basic.target
+Wants=aether-hardware-probe.service aether-network-policy.service NetworkManager.service
+After=basic.target
+AllowIsolate=yes
+
+[Install]

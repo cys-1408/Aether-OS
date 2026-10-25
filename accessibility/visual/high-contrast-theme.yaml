@@ -1,0 +1,20 @@
+# accessibility/visual/high-contrast-theme.yaml
+# Palette override consumed by desktop/theme/widget_style.py when the
+# high-contrast profile is active.
+palette:
+  background: "#000000"
+  surface: "#101418"
+  text: "#FFFFFF"
+  text-dim: "#C9D1D9"
+  accent: "#FFB547"
+  accent-text: "#000000"
+  success: "#3FB950"
+  warning: "#F2CC60"
+  error: "#FF7B72"
+  focus-ring: "#58A6FF"
+overrides:
+  min_contrast: 7.0
+  window_opacity: 1.0            # no translucency while the profile is on
+  panel_translucency: disabled
+  shadows: reduced
+  font_scale_minimum: 1.1

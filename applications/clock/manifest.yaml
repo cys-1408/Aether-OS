@@ -1,0 +1,6 @@
+name: Clock
+app_id: org.aether.Apps.Clock
+version: 1.0.0
+binary: aether-clock
+package: aether-apps
+description: Clock — native Aether application (GTK3)

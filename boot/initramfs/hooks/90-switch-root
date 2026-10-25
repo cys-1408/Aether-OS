@@ -1,0 +1,17 @@
+#!/bin/sh
+# 90-switch-root: final integrity check before the move to the real root.
+if [ ! -d /newroot/usr ]; then
+  echo "FATAL: /newroot has no /usr; refusing to hand off an incomplete root"
+  if [ "${INSTALLER:-0}" = "1" ]; then exec sh; fi
+  exit 1
+fi
+if [ ! -x /newroot/sbin/init ] && [ ! -x /newroot/usr/lib/systemd/systemd ]; then
+  echo "FATAL: no init binary found on /newroot"
+  exit 1
+fi
+# Device events now belong to the real init's udev/eudev.
+if [ -n "$(pidof mdev 2>/dev/null)" ]; then
+  kill $(pidof mdev) 2>/dev/null
+fi
+echo "initramfs complete: switch_root to /newroot"
+exit 0

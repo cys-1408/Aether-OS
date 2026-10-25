@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aether-os.org/schemas/action-ledger-entry.schema.json",
+  "title": "Audit event with redaction rules",
+  "type": "object",
+  "required": [
+    "entry_id",
+    "timestamp",
+    "uid",
+    "request",
+    "permission_decision",
+    "result"
+  ],
+  "properties": {
+    "entry_id": {
+      "type": "string"
+    },
+    "prev_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "entry_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "uid": {
+      "type": "integer"
+    },
+    "request": {
+      "type": "object"
+    },
+    "model_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "plan": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "capability_calls": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "permission_decision": {
+      "enum": [
+        "allow",
+        "confirm",
+        "deny"
+      ]
+    },
+    "confirmation": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "result": {
+      "enum": [
+        "ok",
+        "denied",
+        "failed",
+        "cancelled",
+        "needs_confirmation"
+      ]
+    },
+    "verification": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "affected_resources": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rollback": {
+      "type": "object",
+      "properties": {
+        "available": {
+          "type": "boolean"
+        },
+        "method": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "retention_category": {
+      "enum": [
+        "user-action",
+        "system-action",
+        "diagnostic"
+      ]
+    }
+  }
+}

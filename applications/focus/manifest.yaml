@@ -1,0 +1,6 @@
+name: Focus timer
+app_id: org.aether.Apps.Focus
+version: 1.0.0
+binary: aether-focus
+package: aether-apps
+description: Focus timer — native Aether application (GTK3)

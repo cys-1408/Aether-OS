@@ -1,0 +1,16 @@
+# aether-recovery.package — recovery services and the recovery menu/environment.
+name: aether-recovery
+version_from: VERSION
+recipe: packaging/PKGBUILD-aether-recovery
+license: GPL-3.0-only
+source:
+  - recovery
+installs_to:
+  /usr/libexec/aether/recovery: recovery/
+  /usr/bin/aether-recovery: wrapper -> recovery/ui/recovery_menu.py
+entry: recovery target (system/targets/aether-recovery.target) or menu app
+provides:
+  - boot/service diagnostics + redacted bundles (recovery/diagnostics)
+  - repairs: bootloader, initramfs, package db, runtime config, IntentFS index (recovery/repair)
+  - known-good rollback (recovery/rollback)
+depends: [python]

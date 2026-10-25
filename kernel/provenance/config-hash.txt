@@ -1,0 +1,1 @@
+# Generated at build time by kernel/scripts/collect-provenance.sh (sha256 of the merged .config).

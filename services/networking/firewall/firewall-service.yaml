@@ -1,0 +1,14 @@
+# AetherOS firewall-service defaults (installed to /etc/aether/firewall.yaml)
+version: 1
+
+ruleset: /etc/aether/firewall/default.nft
+apply_timeout_s: 30
+state_path: /var/lib/aether/firewall/state.json
+helper: /usr/libexec/aether/aether-firewall-helper
+polkit_action: org.aether.firewall.apply
+
+# Incoming ping: privacy defaults keep it off. Operators can add a validated
+# rule at runtime via Firewall.rule_add with:
+#   {direction: input, protocol: icmp, verb: accept,
+#    limit_rate: 4, limit_unit: second, comment: "allow incoming ping"}
+incoming_ping_default: off

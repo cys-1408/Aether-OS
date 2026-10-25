@@ -1,0 +1,3 @@
+#!/bin/sh
+# Aether Calculator launcher — executes the installed application bundle.
+exec /usr/bin/python3 /usr/libexec/aether/apps/calculator/main.py "$@"

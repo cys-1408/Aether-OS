@@ -1,0 +1,17 @@
+# package-manager/policy/signature_required.yaml
+# Repositories listed here REQUIRE a valid signature from the pinned
+# aether-releases keyring before any package listing is trusted or any
+# install transaction may read them.
+signature_required:
+  aether-repo:
+    keyring: /usr/share/aether/keys/aether-releases.gpg
+    unsigned_result: block     # refuse installs from this repo when unsigned
+  aether-updates:
+    keyring: /usr/share/aether/keys/aether-releases.gpg
+    unsigned_result: block
+require_summary_in_ui: true   # software-center signature_status shows per-repo state
+dev_repositories:             # local test/build repos clearly flagged
+  aether-repo-local:
+    keyring: null
+    unsigned_result: warn
+    require_explicit_flag: --insecure-local-repo

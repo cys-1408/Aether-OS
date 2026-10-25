@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aether-os.org/schemas/inference-request.schema.json",
+  "title": "Bounded inference request",
+  "type": "object",
+  "required": [
+    "request_id",
+    "task_class",
+    "prompt"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "task_class": {
+      "enum": [
+        "assistant",
+        "summarize",
+        "code",
+        "embeddings",
+        "extraction",
+        "concept"
+      ]
+    },
+    "prompt": {
+      "type": "string",
+      "maxLength": 131072
+    },
+    "max_tokens": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2048
+    },
+    "temperature": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 2.0
+    },
+    "stop": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "timeout_s": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 120
+    },
+    "stream": {
+      "type": "boolean"
+    },
+    "cancellation_token": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "context": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

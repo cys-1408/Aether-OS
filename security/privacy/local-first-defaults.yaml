@@ -1,0 +1,6 @@
+local_first:
+  inference: on-device-only
+  semantic_index: on-device
+  action_history: on-device
+  accounts: none
+  cloud: none

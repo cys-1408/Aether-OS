@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Archive Manager
+Comment=Archive Manager — Aether application
+Exec=aether-archive-manager
+Terminal=false
+Categories=Utility;System;

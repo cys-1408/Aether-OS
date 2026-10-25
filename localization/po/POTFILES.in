@@ -1,0 +1,5 @@
+desktop/shell/shell_application.py
+desktop/miso-view/miso_panel.py
+applications/files/main.py
+applications/writer/main.py
+applications/settings/settings_shell.py

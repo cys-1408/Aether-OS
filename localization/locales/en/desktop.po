@@ -1,0 +1,33 @@
+# Aether desktop shell messages (en).
+msgid ""
+msgstr ""
+"Project-Id-Version: Aether Desktop 1.0.0\n"
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "All calm"
+msgstr "All calm"
+
+msgid "Miso desktop companion"
+msgstr "Miso desktop companion"
+
+msgid "Miso is nearby"
+msgstr "Miso is nearby"
+
+msgid "Miso's activity"
+msgstr "Miso's activity"
+
+msgid "Notifications"
+msgstr "Notifications"
+
+msgid "Volume"
+msgstr "Volume"
+
+msgid "Settled into the desktop. Watching over things."
+msgstr "Settled into the desktop. Watching over things."
+
+msgid "FOCUS SESSION"
+msgstr "FOCUS SESSION"
+
+msgid "Aether"
+msgstr "Aether"

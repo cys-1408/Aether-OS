@@ -1,0 +1,89 @@
+# AetherOS package: aether-updater
+# staged updates (updater/)
+pkgname=aether-updater
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Aether Cognitive Operating System — aether-updater"
+arch=('x86_64')
+license=('GPL3')
+depends=('python' 'python-yaml' 'systemd')
+makedepends=()
+options=('!strip')
+
+build() {
+  # Pure-python/data packages; verification only
+  python3 -m compileall -q "$srcdir"/aether 2>/dev/null || true
+}
+
+package() {
+  SRC="$srcdir/aether"
+  USR="$pkgdir/usr"
+  mkdir -p "$USR/libexec/aether" "$USR/lib/aether/python" "$USR/share/aether" "$pkgdir/etc"
+
+  case "aether-updater" in
+    aether-base|aether-configs)
+      cp -a "$SRC/rootfs/etc/aether" "$pkgdir/etc/"
+      cp -a "$SRC/rootfs/etc/os-release" "$SRC/rootfs/etc/hostname" "$SRC/rootfs/etc/issue" "$pkgdir/etc/" 2>/dev/null || true
+      cp -a "$SRC/rootfs/etc/sysusers.d" "$pkgdir/etc/" 2>/dev/null || true
+      cp -a "$SRC/rootfs/etc/skel" "$pkgdir/etc/" 2>/dev/null || true
+      cp -a "$SRC/rootfs/etc/sudoers.d" "$pkgdir/etc/" 2>/dev/null || true
+      install -Dm644 "$SRC/VERSION" "$USR/share/aether/VERSION"
+      ;;
+    aether-services)
+      cp -r "$SRC/services/"* "$USR/libexec/aether/"
+      cp -r "$SRC/libraries/libaether-core/python/aether_core" "$USR/lib/aether/python/"
+      cp -a "$SRC/system/services" "$SRC/system/targets" "$SRC/system/timers" "$pkgdir/etc/systemd/system/" 2>/dev/null || true
+      cp -r "$SRC/system" "$USR/share/aether/system-src"
+      cp -r "$SRC/protocols" "$USR/share/aether/protocols"
+      ;;
+    aether-desktop)
+      cp -r "$SRC/desktop" "$USR/libexec/aether/desktop"
+      cp -r "$SRC/libraries/libaether-core/python/aether_core" "$USR/lib/aether/python/"
+      ;;
+    aether-apps)
+      cp -r "$SRC/applications" "$USR/libexec/aether/applications"
+      ;;
+    aether-ai)
+      cp -r "$SRC/ai" "$USR/libexec/aether/ai"
+      ;;
+    aether-intentfs)
+      cp -r "$SRC/intentfs" "$USR/libexec/aether/intentfs"
+      ;;
+    aether-miso)
+      cp -r "$SRC/miso" "$USR/libexec/aether/miso"
+      ;;
+    aether-installer)
+      cp -r "$SRC/installer" "$USR/libexec/aether/installer"
+      ;;
+    aether-recovery)
+      cp -r "$SRC/recovery" "$USR/libexec/aether/recovery"
+      ;;
+    aether-updater)
+      cp -r "$SRC/updater" "$USR/libexec/aether/updater"
+      ;;
+  esac
+
+  # Executable wrappers
+  case "aether-updater" in
+    aether-desktop) mkdir -p "$USR/bin"; cat > "$USR/bin/aether-shell" <<'EOF'
+#!/bin/sh
+exec python3 /usr/libexec/aether/desktop/shell/app_main.py "$@"
+EOF
+      chmod 755 "$USR/bin/aether-shell" ;;
+    aether-installer) mkdir -p "$USR/bin"; cat > "$USR/bin/aether-installer" <<'EOF'
+#!/bin/sh
+exec python3 /usr/libexec/aether/installer/app/main.py "$@"
+EOF
+      chmod 755 "$USR/bin/aether-installer" ;;
+    aether-updater) mkdir -p "$USR/bin"; cat > "$USR/bin/aether-update" <<'EOF'
+#!/bin/sh
+exec python3 /usr/libexec/aether/updater/cli/aether_update.py "$@"
+EOF
+      chmod 755 "$USR/bin/aether-update" ;;
+    aether-recovery) mkdir -p "$USR/bin"; cat > "$USR/bin/aether-recovery" <<'EOF'
+#!/bin/sh
+exec python3 /usr/libexec/aether/recovery/ui/recovery_menu.py "$@"
+EOF
+      chmod 755 "$USR/bin/aether-recovery" ;;
+  esac
+}

@@ -1,0 +1,39 @@
+# AetherOS policy: AI network access (networking/policies/ai_network_access.yaml)
+# Installed to /etc/aether/policies/ai_network_access.yaml.
+# Evaluated by services/networking/network-consent (per_capability_network_policy).
+#
+# Core AetherOS privacy stance: AI capabilities get NO network egress by
+# default.  A model runs locally (llama.cpp on loopback); any outbound
+# transfer performed by or for AI components requires an explicit user grant
+# recorded in /var/lib/aether/consent.json.
+
+version: 1
+
+default: deny
+
+applies_to:
+  # Capability-ID prefixes treated as AI (see CONVENTIONS.md section 5).
+  capability_prefixes:
+    - "models."
+    - "agent."
+  # System services that act on behalf of the AI stack.
+  services:
+    - aether-runtime
+    - aether-broker
+
+loopback:
+  # Local inference traffic on loopback is never blocked by this policy.
+  allow: true
+  documentation: "llama.cpp binds 127.0.0.1 only; loopback is exempt from egress consent."
+
+require_consent:
+  capability: network.egress
+  store: /var/lib/aether/consent.json
+  scope: network-egress
+  audit: true
+
+allowlist: []  # empty by design; add only documented, reviewed exceptions
+
+on_deny:
+  notify_category: ai
+  log: /var/lib/aether/consent-audit.log

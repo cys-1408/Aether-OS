@@ -1,0 +1,21 @@
+# Aether Runtime status explanations (en).
+msgid ""
+msgstr ""
+"Project-Id-Version: Aether Runtime 1.0.0\n"
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Aether Runtime is not running. Aether is fully usable without AI."
+msgstr "Aether Runtime is not running. Aether is fully usable without AI."
+
+msgid "No compatible model for this machine is available right now."
+msgstr "No compatible model for this machine is available right now."
+
+msgid "Model download requires your explicit consent."
+msgstr "Model download requires your explicit consent."
+
+msgid "Verifying model integrity before loading."
+msgstr "Verifying model integrity before loading."
+
+msgid "Inference is paused under memory pressure; core features are unaffected."
+msgstr "Inference is paused under memory pressure; core features are unaffected."

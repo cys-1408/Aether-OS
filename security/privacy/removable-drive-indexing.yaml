@@ -1,0 +1,4 @@
+removable_indexing:
+  default: ask
+  per_device_consent: true
+  store: ~/.local/share/aether/removable-consent.json

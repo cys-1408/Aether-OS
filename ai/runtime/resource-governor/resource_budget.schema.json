@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "max_mem_mb": {"type": "integer"},
+    "cpu_percent": {"type": "integer"},
+    "max_concurrent": {"type": "integer"},
+    "disk_mb": {"type": "integer"}
+  }
+}

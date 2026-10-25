@@ -1,0 +1,2 @@
+# Resource Governor
+Event loop (10 s): memory PSI avg10 over threshold → escalate: pause indexing queue → shrink context → unload idle model → notify. Battery: background inference pauses on battery unless the user opted in. Thermal: zone state beyond trip → pause/throttle inference. Idle policy unloads models after configured idle time (pinned models honor user intent). All decisions are recorded and surfaced in Settings → AI Runtime. Queues enforce bounded concurrency (interactive 1) and reject, not queue indefinitely, under backpressure.

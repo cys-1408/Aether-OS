@@ -1,0 +1,13 @@
+#!/bin/sh
+# aether-installer launcher (installed to /usr/bin by the image build).
+# Must run as root from the live ISO session.
+set -eu
+
+INSTALLER_LIB="${AETHER_INSTALLER_LIB:-/usr/lib/aether/installer}"
+
+if [ "$(id -u)" -ne 0 ]; then
+    echo "aether-installer: this program must run as root (live ISO session)." >&2
+    exit 77
+fi
+
+exec python3 "${INSTALLER_LIB}/app/main.py" "$@"

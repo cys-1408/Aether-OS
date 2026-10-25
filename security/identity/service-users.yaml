@@ -1,0 +1,10 @@
+# Dedicated service users (system users, nologin; see rootfs/etc/sysusers.d)
+users:
+  - {name: aether-hw, uid: 960, purpose: hardware probe + device events, home: /var/lib/aether}
+  - {name: aether-runtime, uid: 961, purpose: Aether Runtime daemon, home: /var/lib/aether}
+  - {name: aether-broker, uid: 962, purpose: Capability Broker (privileged gateway), home: /var/lib/aether}
+  - {name: aether-intentfs, uid: 963, purpose: IntentFS indexer, home: /var/lib/aether}
+  - {name: aether-ledger, uid: 964, purpose: Action Ledger, home: /var/lib/aether}
+  - {name: aether-health, uid: 965, purpose: health/notifications/updates/backup/cleanup, home: /var/lib/aether}
+groups:
+  - {name: aether-services, gid: 966, members: [aether-hw, aether-runtime, aether-broker, aether-intentfs, aether-ledger, aether-health], purpose: socket access}

@@ -1,0 +1,3 @@
+telemetry:
+  enabled: false
+  note: structurally absent — no telemetry code paths exist in Aether 1.0.0

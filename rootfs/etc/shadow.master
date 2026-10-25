@@ -1,0 +1,9 @@
+# Template shipped read-only; the installed system generates /etc/shadow via
+# systemd-sysusers + passwd at first boot. NEVER commit real credentials.
+root:!::0:::::
+aether-hw:!:0:::::
+aether-runtime:!:0:::::
+aether-broker:!:0:::::
+aether-intentfs:!:0:::::
+aether-ledger:!:0:::::
+aether-health:!:0:::::

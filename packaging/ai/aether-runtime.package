@@ -1,0 +1,15 @@
+# aether-runtime.package — the model runtime service and API.
+name: aether-runtime
+version_from: VERSION
+recipe: packaging/PKGBUILD-aether-ai
+license: GPL-3.0-only
+source: ai
+installs_to:
+  /usr/libexec/aether/ai: ai/
+unit: system/services/aether-runtime.service (dynamic user, sandbox restrictions in security/sandbox/runtime-sandbox.conf)
+provides:
+  - /run/aether/runtime.sock (JSON-RPC: Runtime.{status,models_list,models_recommend,download_start,infer,warmup,unload})
+  - local-only inference endpoint per ai/runtime/privacy
+depends: [python, python-yaml]
+models_note: No model weights are shipped or fetched; downloads are consent-gated
+  via ai/runtime/download + ai/policies.

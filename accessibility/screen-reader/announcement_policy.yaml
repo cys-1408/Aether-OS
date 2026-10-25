@@ -1,0 +1,16 @@
+# accessibility/screen-reader/announcement_policy.yaml
+# Rate/verbosity policy for live-region announcements
+# (desktop/accessibility/screen_reader_bridge.py + a11y profile "verbose").
+announcements:
+  focus_session_started:   {priority: medium, cooldown_s: 5}
+  focus_session_ended:     {priority: medium, cooldown_s: 5}
+  model_state_change:      {priority: low, cooldown_s: 30}
+  notification:            {priority: high, cooldown_s: 2}
+  error:                   {priority: critical, cooldown_s: 1, always: true}
+  capability_confirmation: {priority: critical, always: true}
+  indexing_status:         {priority: low, cooldown_s: 120}
+  download_progress:       {priority: low, cooldown_s: 60, style: percentage}
+anti_flood:
+  max_per_minute: 12
+  drop_strategy: drop-lowest-priority
+live_region_map: roles from accessible_role_map.yaml

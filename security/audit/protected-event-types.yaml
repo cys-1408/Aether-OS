@@ -1,0 +1,7 @@
+protected_events:
+  - policy_change
+  - ledger_clear
+  - model_remove
+  - update_apply
+  - destructive_confirmations
+note: protected events carry system retention category and survive user clear

@@ -1,0 +1,19 @@
+#!/usr/sbin/nft -f
+# Aether default firewall (applied via aether-firewall-helper)
+table inet aether {
+    chain input {
+        type filter hook input priority 0; policy drop;
+        iif "lo" accept
+        ct state established,related accept
+        ip protocol icmp icmp type echo-request limit rate 4/second accept
+        udp dport 67-68 accept   # DHCP
+        udp dport 5353 accept    # mDNS
+        counter drop
+    }
+    chain forward {
+        type filter hook forward priority 0; policy drop;
+    }
+    chain output {
+        type filter hook output priority 0; policy accept;
+    }
+}

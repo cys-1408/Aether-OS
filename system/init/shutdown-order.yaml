@@ -1,0 +1,12 @@
+# Persistence-sensitive shutdown ordering (Before= on units)
+order:
+  - aether-agent          # stop agent tasks first
+  - aether-broker
+  - aether-runtime        # stop backend (llama-server child)
+  - aether-intentfs       # flush index transactions
+  - aether-workspace
+  - aether-ledger         # flush ledger
+  - aether-notification
+  - aether-health
+  - aether-hardware-probe
+  - aether-backup

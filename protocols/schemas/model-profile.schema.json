@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aether-os.org/schemas/model-profile.schema.json",
+  "title": "Model profile (format, license, needs, hashes, source)",
+  "type": "object",
+  "required": [
+    "model_id",
+    "name",
+    "repo",
+    "file",
+    "format",
+    "license",
+    "size_bytes"
+  ],
+  "properties": {
+    "model_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "repo": {
+      "type": "string"
+    },
+    "file": {
+      "type": "string"
+    },
+    "format": {
+      "enum": [
+        "gguf"
+      ]
+    },
+    "quantization": {
+      "type": "string"
+    },
+    "size_bytes": {
+      "type": "integer"
+    },
+    "license": {
+      "type": "string"
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "context_lengths": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "memory_estimate_mb": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "integer"
+        },
+        "max": {
+          "type": "integer"
+        }
+      }
+    },
+    "hash": {
+      "type": "object",
+      "properties": {
+        "algo": {
+          "enum": [
+            "sha256"
+          ]
+        },
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source": {
+          "enum": [
+            "hf-api",
+            "catalog",
+            "none"
+          ]
+        }
+      }
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "restrictions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "approx_size_gb_note": {
+      "type": "string"
+    }
+  }
+}

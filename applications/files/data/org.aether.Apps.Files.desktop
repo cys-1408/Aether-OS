@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Files
+Comment=Browse and search your files
+Exec=aether-files
+Icon=org.aetherfiles
+Terminal=false
+Categories=Utility;System;
+Keywords=aether;

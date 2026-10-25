@@ -1,0 +1,4 @@
+software_rendering:
+  trigger: no DRM driver bound OR llvmpipe/lavapipe detected
+  behavior: full desktop via llvmpipe; AI GPU offload disabled; UI animations preserved but reduced by default
+  user_visible: settings → AI Runtime reports "no accelerator"

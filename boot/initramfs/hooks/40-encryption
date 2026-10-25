@@ -1,0 +1,48 @@
+#!/bin/sh
+# 40-encryption: unlock the encrypted root when one is configured.
+# Volume spec sources, in priority order:
+#   1. cmdline cryptdevice=UUID=<id>:<mapper>
+#   2. aether.encrypt=1 with root=UUID=<id> (installed defaults)
+spec="$(cat /proc/cmdline | tr ' ' '\n' | sed -n 's/^cryptdevice=//p' | head -n1)"
+if [ -n "$spec" ]; then
+  src="${spec%%:*}"
+  mapper="${spec#*:}"
+  [ -n "$mapper" ] || mapper="${MAPPER_NAME:-aether-root}"
+else
+  if [ "${ENCRYPT:-0}" = "1" ]; then
+    src="$(cat /proc/cmdline | tr ' ' '\n' | sed -n 's/^root=//p' | head -n1)"
+    mapper="${MAPPER_NAME:-aether-root}"
+  else
+    # No encryption requested: nothing to do.
+    exit 0
+  fi
+fi
+
+case "$src" in
+  UUID=*) src="/dev/disk/by-uuid/${src#UUID=}" ;;
+  LABEL=*) src="/dev/disk/by-label/${src#LABEL=}" ;;
+esac
+
+i=0
+while [ "$i" -lt 5 ] && [ ! -e "$src" ]; do i=$((i + 1)); sleep 1; done
+if [ ! -e "$src" ]; then
+  echo "FATAL: encrypted root device $src not found"
+  exit 1
+fi
+
+modprobe -q dm_crypt 2>/dev/null || true
+tries=0
+while [ "$tries" -lt "${KEYFILE_TIMEOUT:-3}" ] || [ "$KEYFILE_TIMEOUT" = "0" ]; do
+  if cryptsetup open "$src" "$mapper" 2>/dev/null \
+      ${ALLOW_DISCARD:+--allow-discards} --type "${LUKS_TYPE:-luks2}"; then
+    # Point root selection at the unlocked mapper.
+    ROOT_SPEC="/dev/mapper/$mapper"
+    export ROOT_SPEC
+    exit 0
+  fi
+  tries=$((tries + 1))
+  echo "unlock failed for $src (attempt $tries); passphrase will be re-asked"
+  echo "${mapper}:${src}" > /run/aether-crypt-failed
+done
+echo "FATAL: could not unlock $src after $KEYFILE_TIMEOUT attempts"
+exit 1

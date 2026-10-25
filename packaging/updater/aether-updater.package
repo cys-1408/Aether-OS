@@ -1,0 +1,16 @@
+# aether-updater.package — update orchestration (check/stage/apply/rollback).
+name: aether-updater
+version_from: VERSION
+recipe: packaging/PKGBUILD-aether-updater
+license: GPL-3.0-only
+source: updater
+installs_to:
+  /usr/libexec/aether/updater: updater/
+  /usr/bin/aether-update: wrapper -> updater/cli/aether_update.py
+unit: system/services/aether-update-check.service + system/timers/aether-update-check.timer
+flow:
+  - metadata signature verification (updater/metadata_verifier.py)
+  - download-only staging (updater/staging.py)
+  - explicit user-confirmed apply (updater/apply.py) marks the known-good entry first
+  - post-update health + rollback trigger (updater/apply + recovery/rollback)
+depends: [pacman, python]

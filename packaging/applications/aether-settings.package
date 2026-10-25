@@ -1,0 +1,16 @@
+# aether-settings.package — the Settings application.
+name: aether-settings
+version_from: VERSION
+recipe: packaging/PKGBUILD-aether-apps
+license: GPL-3.0-only
+source: applications/settings
+installs_to:
+  /usr/libexec/aether/applications/settings: applications/settings
+  /usr/share/applications/org.aether.Apps.Settings.desktop
+integrates:
+  - services/networking/network-service (network_page)
+  - intentfs (intentfs_page: scope/exclusions/pause/reindex)
+  - ai runtime (ai_runtime_page: hardware profile, models, resource usage)
+  - updater (updates_page: metadata, notes, transaction state)
+  - package-manager/authorization polkit (permissions_page)
+depends: [aether-desktop, gtk3]

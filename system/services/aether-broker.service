@@ -1,0 +1,39 @@
+[Unit]
+Description=Aether Capability Broker
+Documentation=https://aether-os.org/docs
+After=aether-ledger.service
+Wants=aether-ledger.service
+ConditionPathExists=/usr/libexec/aether
+
+[Service]
+Type=simple
+User=aether-broker
+Group=aether-broker
+ExecStart=/usr/bin/python3 /usr/libexec/aether/miso/broker/main.py
+Restart=on-failure
+RestartSec=2s
+RuntimeDirectory=aether
+RuntimeDirectoryMode=0755
+UMask=007
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM
+CapabilityBoundingSet=
+AmbientCapabilities=
+ReadWritePaths=/var/lib/aether /run/aether
+NoNewPrivileges=yes
+ProtectSystem=strict
+
+[Install]
+WantedBy=multi-user.target

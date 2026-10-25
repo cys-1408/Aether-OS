@@ -1,0 +1,12 @@
+<schemalist>
+  <schema id="org.aether.Shell" path="/org/aether/shell/">
+    <key name="distraction-protection" type="b"><default>true</default><summary>Distraction protection</summary></key>
+    <key name="auto-organize" type="b"><default>false</default><summary>Auto-organize windows</summary></key>
+    <key name="reduced-motion" type="b"><default>false</default><summary>Reduce motion</summary></key>
+    <key name="text-only-mode" type="b"><default>false</default><summary>Text-only assistant mode</summary></key>
+    <key name="focus-minutes" type="i"><default>25</default><summary>Default focus length</summary></key>
+    <key name="miso-enabled" type="b"><default>true</default><summary>Show Miso companion</summary></key>
+    <key name="high-contrast" type="b"><default>false</default><summary>High contrast surfaces</summary></key>
+    <key name="font-scale" type="d"><default>1.0</default><summary>UI font scale</summary></key>
+  </schema>
+</schemalist>

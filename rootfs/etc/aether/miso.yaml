@@ -1,0 +1,19 @@
+# Miso agent configuration (no secrets, no permissive defaults)
+broker_socket: /run/aether/broker.sock
+planner:
+  prefer_model: true
+  fallback_rule_based: true
+budgets:
+  max_steps: 8
+  max_duration_s: 120
+  max_tokens: 4000
+confirmation:
+  write: required
+  destructive: always
+  low_reversible: toast
+presence:
+  categories:
+    download_completed: true
+    low_memory: false
+    indexing_failed: true
+  rate_limit_seconds: 60

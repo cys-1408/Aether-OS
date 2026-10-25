@@ -1,0 +1,2 @@
+# Removable media tagging for mount policy + indexing consent
+SUBSYSTEM=="block", KERNEL=="sd[b-z]*|mmcblk*", ATTRS{removable}=="1", ENV{AETHER_REMOVABLE}="1", TAG+="systemd", ENV{SYSTEMD_WANTS}+="aether-removable@%k.service"

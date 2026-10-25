@@ -1,0 +1,6 @@
+profile: recovery-x86_64
+target: recovery-environment
+cmdline: boot/kernel-cmdline/recovery.conf
+aether_packages_extra:
+  - aether-recovery
+default_target: aether-recovery.target

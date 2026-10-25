@@ -1,0 +1,12 @@
+# Diagnostic bundles
+consent: required
+default_scope:
+  - unit_states
+  - kernel_version
+  - hardware_summary
+  - failed_units_journal_200_lines
+never_included:
+  - user_documents
+  - clipboard
+  - keyring
+redaction: system/logging/redaction-rules.yaml

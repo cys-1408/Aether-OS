@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Focus
+GenericName=Focus Timer
+Comment=Run distraction-free focus sessions with break reminders
+Exec=/usr/bin/aether-focus
+TryExec=/usr/bin/aether-focus
+Icon=org.aether.Apps.Focus
+Terminal=false
+Categories=Utility;
+StartupNotify=true
+StartupWMClass=org.aether.Apps.Focus
+X-Aether-App-ID=org.aether.Apps.Focus

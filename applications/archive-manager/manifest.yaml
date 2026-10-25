@@ -1,0 +1,6 @@
+name: Archive Manager
+app_id: org.aether.Apps.ArchiveManager
+version: 1.0.0
+binary: aether-archive-manager
+package: aether-apps
+description: Archive Manager — native Aether application (GTK3)

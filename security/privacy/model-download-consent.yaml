@@ -1,0 +1,4 @@
+model_download:
+  consent: per-download, explicit
+  shown: [model name, size, license, source, destination, network usage]
+  remember: false

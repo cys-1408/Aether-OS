@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["created_at", "files", "type"],
+  "properties": {
+    "created_at": {"type": "string"},
+    "type": {"enum": ["aether-backup-1"]},
+    "files": {"type": "array", "items": {"type": "object", "required": ["path", "sha256", "size"], "properties": {
+      "path": {"type": "string"}, "sha256": {"type": "string"}, "size": {"type": "integer"}, "mtime": {"type": "integer"}}}}
+  }
+}

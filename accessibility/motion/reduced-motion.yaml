@@ -1,0 +1,16 @@
+# accessibility/motion/reduced-motion.yaml
+# Honored by desktop/accessibility/reduced_motion.py and every animation
+# defined in desktop/theme/motion.yaml.
+policy:
+  enabled_by:
+    - user setting accessibility.reduced_motion
+    - profile "reduced-motion" (accessibility/accessibility_profiles.yaml)
+    - session idle brightness reduction is NOT affected
+effects:
+  disable: [miso walk/run/jump animation, window open/close zoom,
+            taskbar hover bounce, toasts slide]
+  keep:    [focus rectangles, instant state changes (no fades > 50ms)]
+  toast_reveal: "instant"
+  miso_state_change: "static"    # render target state as a still frame
+apps: all built-in applications read the same live setting via
+  desktop/settings-integration/settings_bridge.py

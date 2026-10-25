@@ -1,0 +1,24 @@
+<svg viewBox="0 0 150 135" aria-hidden="true">
+    <ellipse cx="75" cy="125" rx="45" ry="5" fill="#51483d" opacity=".13"/>
+    <g class="tail"><path d="M42 94C14 90 8 70 20 60Q32 54 30 67C26 75 38 80 48 80" fill="none" stroke="#f6eee2" stroke-width="14" stroke-linecap="round"/><path d="M20 62Q16 75 32 79" fill="none" stroke="#a68b73" stroke-width="5" stroke-linecap="round"/></g>
+    <path d="M40 88Q45 67 76 69Q108 69 116 102L110 119H48Q35 108 40 88Z" fill="#f8f1e7" stroke="#d8cbbb"/>
+    <path d="M52 74Q60 88 78 75L85 70Q96 79 89 90Q69 97 52 86Z" fill="#a88b73"/>
+    <path d="M91 75Q105 77 108 89L104 97Q95 91 91 82Z" fill="#a88b73"/>
+    <path d="M46 104L45 119Q45 124 52 123H65M94 106L99 120Q100 124 106 123L117 121" fill="#f8f1e7" stroke="#d8cbbb"/>
+    <g class="head">
+      <path d="M54 50L51 23Q52 16 60 23L73 36Q84 33 94 37L108 22Q114 18 115 27L113 53Z" fill="#f8f1e7" stroke="#d8cbbb"/>
+      <path d="M57 29L61 26L68 38L60 40ZM103 39L111 28L110 39L106 44Z" fill="#d4a5a0"/>
+      <path d="M57 47Q63 33 83 35Q105 35 109 51Q113 69 94 78Q73 83 60 69Q52 59 57 47Z" fill="#fff8ee" stroke="#d8cbbb"/>
+      <path d="M57 47Q62 35 80 35L76 49L67 56L58 55ZM95 36Q107 40 109 58L100 53L93 44Z" fill="#a88b73"/>
+      <path d="M70 38L76 45L72 51L65 48ZM89 37L94 43L90 49L85 42Z" fill="#a88b73"/>
+      <g id="pupils">
+        <ellipse cx="72" cy="56" rx="4" ry="5" fill="#35342f"/>
+        <ellipse cx="96" cy="56" rx="4" ry="5" fill="#35342f"/>
+        <circle cx="73" cy="54" r="1.4" fill="white"/>
+        <circle cx="97" cy="54" r="1.4" fill="white"/>
+      </g>
+      <path d="M81 64Q84 60 87 64Q84 68 81 64Z" fill="#d98c91"/>
+      <path d="M84 67Q81 72 77 69M84 67Q88 72 92 68" fill="none" stroke="#82756a" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M62 64L46 61M62 68L47 70M101 64L117 60M102 68L117 71" stroke="#b5a595" stroke-width="1"/>
+    </g>
+  <rect x="112" y="60" width="24" height="30" rx="4" fill="#8a857b"/><text x="124" y="78" font-size="9" font-weight="800" fill="#fffdf8" text-anchor="middle">FILE</text></svg>

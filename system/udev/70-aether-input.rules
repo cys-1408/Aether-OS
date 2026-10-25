@@ -1,0 +1,3 @@
+# Input device accessibility tagging
+SUBSYSTEM=="input", ATTRS{name}=="*keyboard*", ENV{AETHER_INPUT_CLASS}="keyboard"
+SUBSYSTEM=="input", ATTRS{name}=="*mouse*", ENV{AETHER_INPUT_CLASS}="pointer"

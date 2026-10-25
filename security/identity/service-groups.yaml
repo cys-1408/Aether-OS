@@ -1,0 +1,4 @@
+groups:
+  aether-services: {socket_access: /run/aether/*.sock, mode: '0660'}
+  wheel: {purpose: admin (polkit auth_admin)}
+  users: {purpose: regular accounts}

@@ -1,0 +1,31 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Aether Desktop 1.0.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "All calm"
+msgstr "All calm"
+
+msgid "Miso desktop companion"
+msgstr "Miso desktop companion"
+
+msgid "Ask Miso"
+msgstr "Ask Miso"
+
+msgid "Miso is nearby"
+msgstr "Miso is nearby"
+
+msgid "Tell Miso what you need…"
+msgstr "Tell Miso what you need…"
+
+msgid "Open the terminal"
+msgstr "Open the terminal"
+
+msgid "Focus session"
+msgstr "Focus session"
+
+msgid "Pause"
+msgstr "Pause"
+
+msgid "End"
+msgstr "End"

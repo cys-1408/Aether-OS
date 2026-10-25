@@ -1,0 +1,17 @@
+#!/bin/sh
+# 20-storage-drivers: modprobe controller drivers needed for the root device.
+# (Built-in kernels make these a no-op; initramfs builds include them explicitly.)
+if [ -n "$modprobe" ]; then
+  for m in $modprobe; do
+    case "$m" in
+      ext4|vfat|cryptsetup) continue ;;  # handled by 30-/40-
+    esac
+    modprobe -q "$m" 2>/dev/null \
+      || echo "  storage module $m: not loaded (may be built-in)"
+  done
+else
+  for m in virtio_pci virtio_blk nvme ahci sd_mod; do
+    modprobe -q "$m" 2>/dev/null || true
+  done
+fi
+exit 0

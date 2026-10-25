@@ -1,0 +1,40 @@
+[Unit]
+Description=Aether IntentFS semantic indexer
+Documentation=https://aether-os.org/docs
+After=aether-hardware-probe.service aether-runtime.service
+Wants=aether-hardware-probe.service
+ConditionPathExists=/usr/libexec/aether
+
+[Service]
+Type=simple
+User=aether-intentfs
+Group=aether-intentfs
+ExecStart=/usr/bin/python3 /usr/libexec/aether/intentfs/daemon/main.py
+Restart=on-failure
+RestartSec=2s
+RuntimeDirectory=aether
+RuntimeDirectoryMode=0755
+UMask=007
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM
+CapabilityBoundingSet=
+AmbientCapabilities=
+ReadWritePaths=/var/lib/aether /run/aether
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=tmpfs
+
+[Install]
+WantedBy=multi-user.target

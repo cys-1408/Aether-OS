@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aether-os.org/schemas/notification.schema.json",
+  "title": "System/application notification",
+  "type": "object",
+  "required": [
+    "id",
+    "source",
+    "title",
+    "timestamp"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "observed_vs_inferred": {
+      "enum": [
+        "observed",
+        "inferred",
+        "mixed"
+      ]
+    },
+    "read": {
+      "type": "boolean"
+    }
+  }
+}

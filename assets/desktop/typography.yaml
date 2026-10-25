@@ -1,0 +1,14 @@
+# assets/desktop/typography.yaml — shared type system.
+# desktop/theme/typography.yaml is the runtime copy used by widget_style; keep
+# both in sync.
+base_size_px: 12
+font_family: 'Noto Sans'
+brand_weight: 800
+h1_size_px: 23
+h1_letter_spacing: '-.04em'
+eyebrow:
+  size_px: 10
+  letter_spacing: '.12em'
+  transform: uppercase
+sub_size_px: 12
+monospace: 'monospace'

@@ -1,0 +1,24 @@
+# Aether Runtime configuration
+model_store: ~/.local/share/aether/models
+catalog_path: /usr/share/aether/ai/catalog/catalog.json
+catalog_digest_required: true
+backend: llama-cpp
+backend_binary_search: ["/usr/lib/aether/backends/llama-server", "/usr/bin/llama-server"]
+endpoint_bind: 127.0.0.1
+inference:
+  max_tokens: 2048
+  default_timeout_s: 60
+  max_timeout_s: 120
+  interactive_concurrency: 1
+memory:
+  os_reserve_mb: 1024
+  desktop_reserve_mb: 1024
+unload:
+  idle_timeout_s: 900
+battery:
+  pause_background_inference: true
+thermal:
+  pause_at_trip: true
+prompt_log:
+  enabled: false
+  retention_days: 0

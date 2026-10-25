@@ -1,0 +1,60 @@
+profile: desktop-x86_64
+target: installed-desktop
+arch: x86_64
+firmware: uefi-preferred, bios-documented
+cmdline: boot/kernel-cmdline/normal.conf
+base_packages:
+  - base
+  - linux-aether
+  - systemd
+  - systemd-sysvcompat
+  - pacman
+  - archlinux-keyring
+  - grub
+  - efibootmgr
+  - mkinitcpio
+  - networkmanager
+  - pipewire
+  - wireplumber
+  - sway
+  - swaylock
+  - grim
+  - slurp
+  - xdg-user-dirs
+  - polkit
+  - dbus
+  - sudo
+  - cryptsetup
+  - e2fsprogs
+  - dosfstools
+  - ntfs-3g
+  - nftables
+  - linux-firmware
+  - noto-fonts
+  - noto-fonts-cjk
+  - ttf-croscore
+  - gtk3
+  - python
+  - python-yaml
+  - python-gobject
+  - gtk-layer-shell
+  - hicolor-icon-theme
+  - smartmontools
+  - poppler
+aether_packages:
+  - aether-configs
+  - aether-services
+  - aether-desktop
+  - aether-apps
+  - aether-ai
+  - aether-intentfs
+  - aether-miso
+  - aether-updater
+  - aether-recovery
+enabled_services:
+  - NetworkManager.service
+  - aether-hardware-probe.service
+  - aether-health.service
+  - aether-notification.service
+  - aether-update-check.timer
+default_target: aether-graphical.target

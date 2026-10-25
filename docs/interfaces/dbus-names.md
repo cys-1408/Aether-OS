@@ -1,0 +1,2 @@
+# Interface Names
+Documented D-Bus-style names: org.aether.Runtime, org.aether.IntentFS, org.aether.CapabilityBroker, org.aether.ActionLedger, org.aether.Workspaces, org.aether.Settings, org.aether.Updates, org.aether.Notifications, org.aether.SystemStatus. Each XML in protocols/dbus/ maps methods to its JSON-RPC UDS socket (annotation org.aether.Socket). Names are stable; additions are backwards-compatible, removals require a major version (compatibility-policy).

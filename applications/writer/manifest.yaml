@@ -1,0 +1,6 @@
+name: Writer
+app_id: org.aether.Apps.Writer
+version: 1.0.0
+binary: aether-writer
+package: aether-apps
+description: Writer — native Aether application (GTK3)

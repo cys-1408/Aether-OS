@@ -1,0 +1,7 @@
+account_policy:
+  min_password_length: 8
+  reject_common_passwords: true
+  admin_group: wheel
+  home_from_skel: true
+  shell: /bin/bash
+  lock_unused_after_days: 0  # desktop OS: no auto-lock policy by default

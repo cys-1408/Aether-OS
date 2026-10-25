@@ -1,0 +1,12 @@
+# accessibility/voice/voice-consent.yaml
+# Voice input is OFF until the user explicitly grants capture permission; the
+# microphone indicator is always visible during capture
+# (services/audio/voice-input/voice.yaml + microphone_state.py).
+consent:
+  initial_state: denied
+  prompt: explicit, one-time per service request, revocable in Settings → Permissions
+  recording_indicator: mandatory when capture is active (top bar + panel)
+retention:
+  raw_audio: never stored
+  transcripts: only while the session is active; cleared on close by default
+  cloud_services: none (local-only speech backend per services/audio/voice-input)

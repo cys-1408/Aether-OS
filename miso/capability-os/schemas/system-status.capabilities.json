@@ -1,0 +1,181 @@
+{
+  "group": "system-status",
+  "version": "1.0.0",
+  "capabilities": [
+    {
+      "id": "get_cpu_memory_status",
+      "version": "1.0.0",
+      "provider": "system:hardware-probe",
+      "risk_class": "read_only",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": true,
+      "side_effects": "none",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "cpu": {
+            "type": "object"
+          },
+          "memory": {
+            "type": "object"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "get_storage_status",
+      "version": "1.0.0",
+      "provider": "system:hardware-probe",
+      "risk_class": "read_only",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": true,
+      "side_effects": "none",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "disks": {
+            "type": "array"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "get_network_status",
+      "version": "1.0.0",
+      "provider": "system:network",
+      "risk_class": "read_only",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": true,
+      "side_effects": "none",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "object"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "get_battery_status",
+      "version": "1.0.0",
+      "provider": "system:hardware-probe",
+      "risk_class": "read_only",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": true,
+      "side_effects": "none",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "power": {
+            "type": "object"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "get_service_status",
+      "version": "1.0.0",
+      "provider": "system:health",
+      "risk_class": "read_only",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": true,
+      "side_effects": "none",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "services": {
+            "type": "object"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "read_selected_logs",
+      "version": "1.0.0",
+      "provider": "system:logs",
+      "risk_class": "read_only",
+      "permission": "session",
+      "timeout_s": 20,
+      "idempotent": true,
+      "side_effects": "redacted read",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "unit": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "entries": {
+            "type": "array"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    }
+  ]
+}

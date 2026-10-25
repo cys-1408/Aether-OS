@@ -1,0 +1,30 @@
+# Filesystem hierarchy for the assembled rootfs
+directories:
+  - {path: boot, mode: "0755"}
+  - {path: dev, mode: "0755"}
+  - {path: proc, mode: "0555"}
+  - {path: sys, mode: "0555"}
+  - {path: run, mode: "0755"}
+  - {path: tmp, mode: "1777"}
+  - {path: usr/bin, mode: "0755"}
+  - {path: usr/sbin, mode: "0755"}
+  - {path: usr/lib, mode: "0755"}
+  - {path: usr/libexec, mode: "0755"}
+  - {path: usr/include, mode: "0755"}
+  - {path: usr/share, mode: "0755"}
+  - {path: usr/local, mode: "0755"}
+  - {path: var/cache, mode: "0755"}
+  - {path: var/lib/aether, mode: "0750"}
+  - {path: var/lib/package-manager, mode: "0755"}
+  - {path: var/lib/systemd, mode: "0755"}
+  - {path: var/log, mode: "0755"}
+  - {path: var/spool, mode: "0755"}
+  - {path: var/tmp, mode: "1777"}
+  - {path: home, mode: "0755"}
+  - {path: root, mode: "0700"}
+  - {path: opt/aether, mode: "0755"}
+  - {path: srv, mode: "0755"}
+  - {path: mnt, mode: "0755"}
+  - {path: media, mode: "0755"}
+  - {path: lost+found, mode: "0700"}
+  - {path: etc/aether, mode: "0755"}

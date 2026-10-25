@@ -1,0 +1,26 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+  "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<!--
+  org.aether.ActionLedger — documented interface contract.
+  Transport v1: JSON-RPC 2.0 over unix socket /run/aether/ledger.sock
+  (annotation org.aether.Socket below). Method names here map 1:1 to
+  <Namespace.method> JSON-RPC methods (CONVENTIONS.md §4).
+-->
+<node name="/org/aether/ActionLedger">
+  <interface name="org.aether.ActionLedger">
+    <annotation name="org.aether.Socket" value="/run/aether/ledger.sock"/>
+    <annotation name="org.aether.Transport" value="jsonrpc-uds-v1"/>
+    <method name="query">
+      <arg name="filters" direction="in" type="s"/>
+    </method>
+    <method name="export">
+      <arg name="format" direction="in" type="s"/>
+    </method>
+    <method name="clear">
+      <arg name="scope" direction="in" type="s"/>
+    </method>
+    <method name="status">
+      <arg name="params" direction="in" type="s"/>
+    </method>
+  </interface>
+</node>

@@ -1,0 +1,5 @@
+window_padding: 16
+card_padding: 13
+panel_padding: 13
+row_gap: 8
+item_gap: 9

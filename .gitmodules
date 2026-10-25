@@ -1,0 +1,3 @@
+# AetherOS pins third-party sources via version files + build-time fetch with
+# digest verification (see third-party/pins.yaml); no git submodules are used for
+# release builds so that every fetch is re-verified against a recorded digest.

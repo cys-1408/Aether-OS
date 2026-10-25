@@ -1,0 +1,2 @@
+# Privacy Defaults
+Local-first: all inference, indexing, ledger data on-device; no telemetry of any kind (telemetry-policy.yaml); no accounts; clipboard history OFF; microphone denied by default with visible capture indicator; removable drives indexed only after per-drive consent; AI capabilities denied network egress by default (networking/policies/ai_network_access.yaml); diagnostics export requires explicit review/consent and ships redacted.

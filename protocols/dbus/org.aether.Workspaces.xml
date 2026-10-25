@@ -1,0 +1,29 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+  "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<!--
+  org.aether.Workspaces — documented interface contract.
+  Transport v1: JSON-RPC 2.0 over unix socket /run/aether/workspace.sock
+  (annotation org.aether.Socket below). Method names here map 1:1 to
+  <Namespace.method> JSON-RPC methods (CONVENTIONS.md §4).
+-->
+<node name="/org/aether/Workspaces">
+  <interface name="org.aether.Workspaces">
+    <annotation name="org.aether.Socket" value="/run/aether/workspace.sock"/>
+    <annotation name="org.aether.Transport" value="jsonrpc-uds-v1"/>
+    <method name="save">
+      <arg name="name" direction="in" type="s"/>
+    </method>
+    <method name="list">
+      <arg name="params" direction="in" type="s"/>
+    </method>
+    <method name="preview_restore">
+      <arg name="workspace_id" direction="in" type="s"/>
+    </method>
+    <method name="restore">
+      <arg name="workspace_id" direction="in" type="s"/>
+    </method>
+    <method name="delete">
+      <arg name="workspace_id" direction="in" type="s"/>
+    </method>
+  </interface>
+</node>

@@ -1,0 +1,12 @@
+# linux-aether-modules.package — modules for the linux-aether kernel image.
+name: linux-aether-modules
+version_from: kernel/upstream.lock
+recipe: packaging/PKGBUILD-aether-base (kernel case)
+source: kernel/source/linux (build products only)
+produces:
+  - /lib/modules/<kver>/ (modules.builtin, depmod index, .ko files)
+depends: [linux-aether]
+note: |
+  Split from the image package so kernel rollback
+  (recovery/rollback/kernel_rollback.py) can retain the previous module tree
+  beside the previous vmlinuz without duplicating the image payload.

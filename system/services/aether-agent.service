@@ -1,0 +1,38 @@
+[Unit]
+Description=Miso agent (user service; also installed as aether-agent@.service)
+Documentation=https://aether-os.org/docs
+After=aether-broker.service
+Wants=aether-broker.service
+ConditionPathExists=/usr/libexec/aether
+
+[Service]
+Type=simple
+User=aether-intentfs
+Group=aether-intentfs
+ExecStart=/usr/bin/python3 /usr/libexec/aether/miso/agent/main.py
+Restart=on-failure
+RestartSec=2s
+RuntimeDirectory=aether
+RuntimeDirectoryMode=0755
+UMask=007
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM
+CapabilityBoundingSet=
+AmbientCapabilities=
+# Runs as the logged-in user in session scope: aether-agent.service is the user-unit alias
+ReadWritePaths=/run/aether
+
+[Install]
+WantedBy=multi-user.target

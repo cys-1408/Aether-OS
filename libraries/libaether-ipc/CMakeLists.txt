@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.24)
+project(aether-ipc C)
+set(CMAKE_C_STANDARD 11)
+add_library(aether-ipc STATIC src/ipc.c)
+target_include_directories(aether-ipc PUBLIC include)
+target_compile_options(aether-ipc PRIVATE -Wall -Wextra)
+target_link_libraries(aether-ipc PRIVATE pthread)

@@ -1,0 +1,4 @@
+window: '0 18px 55px rgba(64,57,44,0.19)'
+active_window: '0 18px 55px rgba(64,57,44,0.30)'
+art_tile: '0 5px 15px rgba(91,83,69,0.11)'
+miso: '0 12px 8px rgba(57,52,43,0.11)'

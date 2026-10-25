@@ -1,0 +1,6 @@
+# Capability permissions baseline (runtime decisions come from the policy engine)
+permissions:
+  session: {desc: user-session-scoped actions, default: allow-with-policy}
+  user-write: {desc: writes inside user-approved roots, default: confirm}
+  ai-network+disk: {desc: model downloads, default: explicit per-download consent}
+  settings-write: {desc: registered settings keys only, default: confirm}

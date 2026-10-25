@@ -1,0 +1,2 @@
+# Backup and Restore
+User-level backup service: manifest-based tar.gz with per-file sha256, verify mode, restore preview with conflict decisions (fail/rename/overwrite-with-confirm). Targets: local path or mounted drive from ~/.config/aether/backup.yaml; schedules via aether-backup-reminder.timer. The Recovery Center surfaces status truthfully — nothing implies a backup exists when none is configured. System-level snapshots: btrfs subvolume snapshots when the root is btrfs; otherwise documented as unavailable (no fake snapshots).

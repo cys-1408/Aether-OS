@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Calc
+Comment=Calc — Aether application
+Exec=aether-calculator
+Terminal=false
+Categories=Utility;

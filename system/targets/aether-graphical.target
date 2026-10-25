@@ -1,0 +1,9 @@
+[Unit]
+Description=Aether Graphical Session
+Requires=multi-user.target
+Wants=aether-hardware-probe.service aether-health.service aether-notification.service greetd.service
+After=multi-user.target
+AllowIsolate=yes
+
+[Install]
+Alias=default.target

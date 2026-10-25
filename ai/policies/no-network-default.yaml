@@ -1,0 +1,5 @@
+ai_network_access: denied-by-default
+exemptions:
+  - id: model-download
+    requires: explicit per-download consent
+    hosts: [huggingface.co, cdn-lfs.huggingface.co]

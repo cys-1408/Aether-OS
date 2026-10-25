@@ -1,0 +1,2 @@
+# Compatibility Policy
+Within a major version: existing method names keep semantics; new optional params allowed; renamed/removed methods forbidden. Sockets: additive names only. Schemas: additive fields optional with defaults; enum value additions are minor bumps. Config: new keys optional, removed keys migrated by libaether-config. Data (ledger/intentfs/workspace DBs) migrate forward only via numbered migrations. D-Bus contract XMLs update in the same commit as the UDS contract they document.

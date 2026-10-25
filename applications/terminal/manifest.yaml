@@ -1,0 +1,6 @@
+name: Terminal
+app_id: org.aether.Apps.Terminal
+version: 1.0.0
+binary: aether-terminal
+package: aether-apps
+description: Terminal — native Aether application (GTK3)

@@ -1,0 +1,154 @@
+{
+  "group": "window",
+  "version": "1.0.0",
+  "capabilities": [
+    {
+      "id": "list_windows",
+      "version": "1.0.0",
+      "provider": "desktop",
+      "risk_class": "read_only",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": true,
+      "side_effects": "none",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "windows": {
+            "type": "array"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "arrange_windows",
+      "version": "1.0.0",
+      "provider": "desktop",
+      "risk_class": "low_reversible",
+      "permission": "session",
+      "timeout_s": 20,
+      "idempotent": false,
+      "side_effects": "moves windows",
+      "confirmation": "policy",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "tiled": {
+            "type": "integer"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "tile_windows",
+      "version": "1.0.0",
+      "provider": "desktop",
+      "risk_class": "low_reversible",
+      "permission": "session",
+      "timeout_s": 20,
+      "idempotent": false,
+      "side_effects": "moves windows into a grid",
+      "confirmation": "policy",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "tiled": {
+            "type": "integer"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "minimize_window",
+      "version": "1.0.0",
+      "provider": "desktop",
+      "risk_class": "low_reversible",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": false,
+      "side_effects": "minimizes a window",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "window_id": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          }
+        }
+      },
+      "undo": {
+        "supported": true,
+        "method": "restore_window"
+      }
+    },
+    {
+      "id": "restore_window",
+      "version": "1.0.0",
+      "provider": "desktop",
+      "risk_class": "low_reversible",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": false,
+      "side_effects": "restores a window",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "window_id": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    }
+  ]
+}

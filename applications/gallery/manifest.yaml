@@ -1,0 +1,6 @@
+name: Gallery
+app_id: org.aether.Apps.Gallery
+version: 1.0.0
+binary: aether-gallery
+package: aether-apps
+description: Gallery — native Aether application (GTK3)

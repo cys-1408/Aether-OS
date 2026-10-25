@@ -1,0 +1,2 @@
+# Recovery
+The recovery boot entry boots aether-recovery.target with a TUI (recovery/ui/recovery_menu.py): system detection, diagnostics collection (redacted bundles), repair tools (filesystem check, package database repair, bootloader reinstall, initramfs rebuild, user config reset, runtime config reset, broken model removal, IntentFS rebuild), rollback (known-good boot entry, kernel downgrade from cache, package rollback) and backup/restore. Core repair tasks work fully offline. Nothing in recovery claims a snapshot or backup exists unless it is configured and verified.

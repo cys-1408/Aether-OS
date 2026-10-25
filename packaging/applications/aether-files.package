@@ -1,0 +1,14 @@
+# aether-files.package — the native file manager.
+name: aether-files
+version_from: VERSION
+recipe: packaging/PKGBUILD-aether-apps
+license: GPL-3.0-only
+source: applications/files
+installs_to:
+  /usr/libexec/aether/applications/files: applications/files
+  /usr/share/applications/org.aether.Apps.Files.desktop
+  /usr/share/icons/...: desktop/assets/icons/aether-files.svg
+integrates:
+  - intentfs daemon (search panel, concept chips, index status)
+  - storage trash service (trash/restore views)
+depends: [aether-desktop, aether-intentfs, gtk3]

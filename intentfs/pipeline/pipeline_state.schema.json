@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "queued": {"type": "integer"},
+    "processing": {"type": "integer"},
+    "paused": {"type": "boolean"}
+  }
+}

@@ -1,0 +1,11 @@
+# fragment: debug-and-diagnostics
+# Policy: config recorded in the image (IKCONFIG) for provenance; sysrq for
+# recovery; NO full debug info (build speed and artifact size — the documented
+# trade-off is no BTF); GCC plugins off.
+CONFIG_IKCONFIG=y
+CONFIG_IKCONFIG_PROC=y
+CONFIG_MAGIC_SYSRQ=y
+CONFIG_DEBUG_INFO_NONE=y
+CONFIG_GCC_PLUGINS=n
+CONFIG_STRIP_ASM_SYMS=y
+CONFIG_MODULE_COMPRESS_ZSTD=y

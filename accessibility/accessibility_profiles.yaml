@@ -1,0 +1,5 @@
+profiles:
+  default: {reduced_motion: false, high_contrast: false, text_only: false, font_scale: 1.0}
+  high-contrast: {reduced_motion: true, high_contrast: true, text_only: false, font_scale: 1.1}
+  screen-reader: {reduced_motion: true, high_contrast: false, text_only: false, font_scale: 1.1, atspi: true}
+  text-only: {reduced_motion: true, high_contrast: false, text_only: true, font_scale: 1.0}

@@ -1,0 +1,7 @@
+# Tested device classes (reference matrix — extended per release testing)
+devices:
+  - {class: laptop, model: "Intel graphics (i915) UEFI", status: tested}
+  - {class: laptop, model: "AMD graphics (amdgpu) UEFI", status: tested}
+  - {class: vm, model: "QEMU/VMware/VirtualBox x86_64", status: tested}
+  - {class: wifi, model: "Intel iwlwifi family", status: expected}
+  - {class: storage, model: "NVMe + AHCI + USB install media", status: tested}

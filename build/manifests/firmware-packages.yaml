@@ -1,0 +1,3 @@
+packages:
+  - linux-firmware
+license_policy: see boot/firmware-policy + hardware/firmware/license-metadata.yaml

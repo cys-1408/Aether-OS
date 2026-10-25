@@ -1,0 +1,8 @@
+# Explicitly excluded from all profiles (with reasons)
+packages:
+  - name: ollama
+    reason: Aether Runtime owns model lifecycle; no Ollama dependency (ADR-0005)
+  - name: apache/nginx/openssh-server
+    reason: no listening services by default
+  - name: chromium/firefox
+    reason: browser is an optional user-installed package (applications/browser/package-policy.md)

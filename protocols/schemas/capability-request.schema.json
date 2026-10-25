@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aether-os.org/schemas/capability-request.schema.json",
+  "title": "Capability request (agent -> broker)",
+  "type": "object",
+  "required": [
+    "request_id",
+    "capability_id",
+    "capability_version",
+    "requester",
+    "params",
+    "issued_at"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "capability_id": {
+      "type": "string",
+      "pattern": "^[a-z_]+$"
+    },
+    "capability_version": {
+      "type": "string"
+    },
+    "requester": {
+      "type": "object",
+      "required": [
+        "uid",
+        "kind"
+      ],
+      "properties": {
+        "uid": {
+          "type": "integer"
+        },
+        "kind": {
+          "enum": [
+            "agent",
+            "app",
+            "system"
+          ]
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "params": {
+      "type": "object"
+    },
+    "issued_at": {
+      "type": "string"
+    },
+    "confirmation_token": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

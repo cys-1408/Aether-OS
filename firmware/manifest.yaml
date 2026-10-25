@@ -1,0 +1,28 @@
+# firmware/manifest.yaml — redistributable firmware artifacts, origins,
+# hashes and licensing status. Consistent with hardware/firmware/ and the
+# license metadata files; the authoritative license data is firmware-catalog.yaml.
+manifest_version: 1
+artifacts:
+  - id: linux-firmware
+    origin: upstream linux-firmware package (distro repo)
+    license: multiple (per-file, see firmware/license-metadata.yaml)
+    include: true
+    provenance_check: build/scripts/40-assemble-rootfs.sh records package digest
+  - id: linux-firmware-intel-microcode
+    origin: distro repo
+    license: proprietary-notice (redistributable)
+    include: true
+  - id: linux-firmware-amd-microcode
+    origin: distro repo
+    license: proprietary-notice (redistributable)
+    include: true
+  - id: excluded-vendor-firmware
+    origin: vendor EULA-restricted images (e.g. some Wi-Fi combo chips)
+    license: non-redistributable
+    include: false
+    fallback_hint: hardware/fallbacks/missing-firmware-guidance.yaml
+policy:
+  - every included artifact has its license + origin recorded in
+    firmware/license-metadata.yaml and firmware-catalog.yaml
+  - no firmware without license permission is packaged; unsupported devices
+    are documented in hardware/compatibility/unsupported-devices.yaml

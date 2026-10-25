@@ -1,0 +1,12 @@
+# systemd presets for Aether (installed to /etc/systemd/system-preset/50-aether.preset)
+enable NetworkManager.service
+enable aether-hardware-probe.service
+enable aether-health.service
+enable aether-notification.service
+enable aether-intentfs.service
+enable aether-ledger.service
+enable aether-workspace.service
+enable aether-update-check.timer
+enable aether-index-reconcile.timer
+enable aether-maintenance.timer
+enable greetd.service

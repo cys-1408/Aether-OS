@@ -1,0 +1,2 @@
+# Secure Boot and Signing
+1.0.0 does not ship shim/MOK-signed boot artifacts; enable Secure Boot only with custom key enrollment (user-managed). Aether signs: release artifacts (detached GPG, release/signing-policy.md), the pacman repo (pacman-key), the model catalog digest, and update metadata. Key handling: offline primary key, subkeys on the build host, rotation procedure in security/cryptography/key-rotation-policy.md. Kernel modules are signed when CONFIG_MODULE_SIG is enabled in the release config.

@@ -1,0 +1,11 @@
+# accessibility/visual/font-scaling.yaml
+scaling:
+  base_px: 14
+  allowed_scale: [0.8, 1.0, 1.1, 1.25, 1.5, 2.0, 2.5]
+  default: 1.0
+  source: user setting accessibility.font_scale (desktop/accessibility/font_scaling.py)
+behavior:
+  gtk: font description scaling on all primary views; fixed-width layouts reflow
+  sway_bar: height scales with font (min 22px at 1.0)
+  wayland_outputs: fractional scaling allowed if display_manager reports support
+persistence: shell gsettings org.aether.Shell font-scale (desktop/shell/org.aether.Shell.gschema.xml)

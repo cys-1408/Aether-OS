@@ -1,0 +1,193 @@
+{
+  "group": "model",
+  "version": "1.0.0",
+  "capabilities": [
+    {
+      "id": "get_runtime_status",
+      "version": "1.0.0",
+      "provider": "system:runtime",
+      "risk_class": "read_only",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": true,
+      "side_effects": "none",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "object"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "list_models",
+      "version": "1.0.0",
+      "provider": "system:runtime",
+      "risk_class": "read_only",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": true,
+      "side_effects": "none",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "models": {
+            "type": "array"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "recommend_model",
+      "version": "1.0.0",
+      "provider": "system:runtime",
+      "risk_class": "read_only",
+      "permission": "session",
+      "timeout_s": 30,
+      "idempotent": true,
+      "side_effects": "none",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "task_class": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "recommendations": {
+            "type": "array"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "start_download",
+      "version": "1.0.0",
+      "provider": "system:runtime",
+      "risk_class": "write",
+      "permission": "ai-network+disk",
+      "timeout_s": 3600,
+      "idempotent": false,
+      "side_effects": "network download + disk usage",
+      "confirmation": "always",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "model_id": {
+            "type": "string"
+          },
+          "consent": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "started": {
+            "type": "boolean"
+          }
+        }
+      },
+      "undo": {
+        "supported": true,
+        "method": "cancel_download"
+      }
+    },
+    {
+      "id": "cancel_download",
+      "version": "1.0.0",
+      "provider": "system:runtime",
+      "risk_class": "low_reversible",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": true,
+      "side_effects": "stops a download",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "model_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "cancelled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "switch_model",
+      "version": "1.0.0",
+      "provider": "system:runtime",
+      "risk_class": "write",
+      "permission": "session",
+      "timeout_s": 120,
+      "idempotent": false,
+      "side_effects": "loads another model",
+      "confirmation": "policy",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "model_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          }
+        }
+      },
+      "undo": {
+        "supported": true,
+        "method": "switch back to previous model"
+      }
+    }
+  ]
+}

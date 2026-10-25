@@ -1,0 +1,5 @@
+application_sandbox:
+  baseline: {no_new_privileges: true, private_tmp: true, kernel_tunables: protected}
+  network: {default: none, grant_via: consent service}
+  filesystem: {default: user-home-read, write: user-approved-roots-only}
+  ipc: {surface: declared UDS sockets only}

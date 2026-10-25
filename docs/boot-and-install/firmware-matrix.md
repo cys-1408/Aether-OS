@@ -1,0 +1,2 @@
+# Firmware Matrix
+Supported: UEFI 2.x x86-64 (preferred; full feature set). Legacy BIOS/CSM: supported boot path via GRUB El Torito/isohybrid MBR, documented limitations (no ESP-based recovery entries; GPT requires protective MBR setup by the installer). Secure Boot: Aether 1.0.0 does not ship signed shim binaries — Secure Boot must be OFF, or the user may enroll their own keys (docs/security/secure-boot-and-signing.md describes the signing surface). VMs: QEMU/VMware/VirtualBox with UEFI or BIOS. Known gaps live in docs/hardware/known-limitations.md.

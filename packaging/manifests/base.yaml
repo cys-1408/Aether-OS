@@ -1,0 +1,32 @@
+# packaging/manifests/base.yaml — packages required for boot + ordinary OS use.
+# Ordered: kernel/boot, init/tooling, storage/crypto, core services.
+packages:
+  - base
+  - linux-aether
+  - linux-aether-modules
+  - linux-firmware
+  - systemd
+  - pacman
+  - grub
+  - mkinitcpio
+  - cryptsetup
+  - e2fsprogs
+  - dosfstools
+  - btrfs-progs
+  - networkmanager
+  - polkit
+  - dbus
+  - sudo
+  - glibc
+  - bash
+  - util-linux
+recommends: []
+# aether packages built from this repo
+aether:
+  - aether-base
+  - aether-configs
+  - aether-services
+  - aether-installer
+  - aether-recovery
+  - aether-updater
+

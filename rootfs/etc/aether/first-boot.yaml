@@ -1,0 +1,4 @@
+# First-boot setup state (state file lives at /var/lib/aether/firstboot-state.json)
+first_boot_required: true
+wizard_pages: [locale, keyboard, timezone, account, network, privacy, encryption_status, optional_ai, completion]
+resumable: true

@@ -1,0 +1,14 @@
+# AetherOS clock-service defaults (installed to /etc/aether/clock.yaml)
+version: 1
+
+timezone:
+  # Changes go through `timedatectl set-timezone` (polkit-authorized).
+  require_confirmation: true
+
+ntp:
+  # systemd-timesyncd by default; chronyd is used for status when installed.
+  enabled_on_firstboot: true
+
+formatting:
+  # ICU-free formatting; language follows /etc/locale.conf LANG.
+  fallback_lang: en

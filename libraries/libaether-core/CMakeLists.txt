@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.24)
+project(aether-core C)
+set(CMAKE_C_STANDARD 11)
+add_library(aether-core STATIC src/result.c src/error.c src/cancellation.c src/resource_limits.c)
+target_include_directories(aether-core PUBLIC include)
+target_compile_options(aether-core PRIVATE -Wall -Wextra)

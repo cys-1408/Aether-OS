@@ -1,0 +1,8 @@
+# Pinned upstream Linux kernel for Aether releases
+version = 6.12.30
+url = https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.30.tar.xz
+tag = v6.12.30
+# sha256 is recorded at fetch time by scripts/fetch-upstream.sh (below) and
+# verified by scripts/verify-upstream.sh before every build. Never hand-edit
+# with an unverified value: an unfilled slot makes verify fail loudly.
+sha256 = UNFILLED-RECORD-AT-FETCH

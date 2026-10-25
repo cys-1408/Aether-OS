@@ -1,0 +1,12 @@
+# fragment: audio
+# Policy: HDA built-in (default laptops/desktops), codecs as modules, USB audio
+# for headsets; consumed by PipeWire via ALSA.
+CONFIG_SOUND=y
+CONFIG_SND=y
+CONFIG_SND_PCI=y
+CONFIG_SND_HDA_INTEL=y
+CONFIG_SND_HDA_CODEC_REALTEK=m
+CONFIG_SND_HDA_CODEC_HDMI=m
+CONFIG_SND_HDA_CODEC_GENERIC=m
+CONFIG_SND_AC97_CODEC=m
+CONFIG_SND_USB_AUDIO=m

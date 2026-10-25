@@ -1,0 +1,128 @@
+{
+  "group": "focus",
+  "version": "1.0.0",
+  "capabilities": [
+    {
+      "id": "start_focus_session",
+      "version": "1.0.0",
+      "provider": "desktop",
+      "risk_class": "low_reversible",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": false,
+      "side_effects": "dims other windows + timer",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "minutes": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 120
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "started": {
+            "type": "boolean"
+          }
+        }
+      },
+      "undo": {
+        "supported": true,
+        "method": "end_focus_session"
+      }
+    },
+    {
+      "id": "pause_focus_session",
+      "version": "1.0.0",
+      "provider": "desktop",
+      "risk_class": "low_reversible",
+      "permission": "session",
+      "timeout_s": 5,
+      "idempotent": true,
+      "side_effects": "pauses timer",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "paused": {
+            "type": "boolean"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "end_focus_session",
+      "version": "1.0.0",
+      "provider": "desktop",
+      "risk_class": "low_reversible",
+      "permission": "session",
+      "timeout_s": 5,
+      "idempotent": false,
+      "side_effects": "ends session, restores opacity",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ended": {
+            "type": "boolean"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "start_break",
+      "version": "1.0.0",
+      "provider": "desktop",
+      "risk_class": "low_reversible",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": false,
+      "side_effects": "starts a break timer",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "minutes": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "started": {
+            "type": "boolean"
+          }
+        }
+      },
+      "undo": {
+        "supported": true,
+        "method": "end_focus_session"
+      }
+    }
+  ]
+}

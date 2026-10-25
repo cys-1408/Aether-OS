@@ -1,0 +1,2 @@
+# Bootloader Layout
+Installed disk layout: ESP (FAT32, ≥1 GiB, /efi) with /EFI/AETHEROS/grubx64.efi; boot files on the root filesystem (/boot/vmlinuz-aether, /boot/initramfs-aether.img); grub.cfg generated from boot/grub/grub.cfg.in with entries: default boot, recovery (aether-recovery.target), known-good (managed via grubenv saved_entry). Live ISO layout: build/iso/iso-layout.yaml (El Torito BIOS catalog + EFI system partition image for hybrid boot; volume label AETHEROS).

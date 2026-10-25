@@ -1,0 +1,9 @@
+policy_version: 1
+name: destructive-action-policy
+defaults:
+  destructive: strong-confirm
+overrides:
+  - {capability: format_disk, effect: deny, reason: agent may never format storage}
+  - {capability: delete_permanently, effect: deny, reason: agent cannot bypass trash}
+  - {capability: change_firewall, effect: deny, reason: security settings off-limits to agent}
+  - {capability: create_user, effect: deny, reason: account changes off-limits to agent}

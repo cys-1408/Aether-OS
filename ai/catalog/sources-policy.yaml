@@ -1,0 +1,5 @@
+allowed_hosts: [huggingface.co, cdn-lfs.huggingface.co]
+digest_source: hf-api-tree-lfs-sha256
+verify_after_download: true
+on_mismatch: delete-part-and-fail
+license_gate: require-acceptance-record

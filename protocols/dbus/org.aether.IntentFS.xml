@@ -1,0 +1,45 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+  "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<!--
+  org.aether.IntentFS — documented interface contract.
+  Transport v1: JSON-RPC 2.0 over unix socket /run/aether/intentfs.sock
+  (annotation org.aether.Socket below). Method names here map 1:1 to
+  <Namespace.method> JSON-RPC methods (CONVENTIONS.md §4).
+-->
+<node name="/org/aether/IntentFS">
+  <interface name="org.aether.IntentFS">
+    <annotation name="org.aether.Socket" value="/run/aether/intentfs.sock"/>
+    <annotation name="org.aether.Transport" value="jsonrpc-uds-v1"/>
+    <method name="search">
+      <arg name="query" direction="in" type="s"/>
+      <arg name="filters" direction="in" type="s"/>
+    </method>
+    <method name="metadata">
+      <arg name="file_id" direction="in" type="s"/>
+    </method>
+    <method name="status">
+      <arg name="params" direction="in" type="s"/>
+    </method>
+    <method name="concepts">
+      <arg name="file_id" direction="in" type="s"/>
+    </method>
+    <method name="reindex">
+      <arg name="path" direction="in" type="s"/>
+    </method>
+    <method name="pause">
+      <arg name="params" direction="in" type="s"/>
+    </method>
+    <method name="resume">
+      <arg name="params" direction="in" type="s"/>
+    </method>
+    <method name="clear">
+      <arg name="scope" direction="in" type="s"/>
+    </method>
+    <method name="exclusions_get">
+      <arg name="params" direction="in" type="s"/>
+    </method>
+    <method name="exclusions_set">
+      <arg name="exclusions" direction="in" type="s"/>
+    </method>
+  </interface>
+</node>

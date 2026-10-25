@@ -1,0 +1,2 @@
+# Secrets Management
+User secrets (disk encryption passphrase, Wi-Fi, tokens) live in the OS secret store (kernel keyring via keyctl, file fallback 0600). Services never log secrets: redaction rules apply at logging and ledger layers; the installer filters passphrases from logs entirely. Model prompts never receive credential-class data (sensitive_data_filter). API keys for optional services, if ever needed, would be per-feature, consent-gated and revocable — none exist in 1.0.0.

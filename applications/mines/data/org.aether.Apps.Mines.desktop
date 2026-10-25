@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Mines
+Comment=Mines — Aether application
+Exec=aether-mines
+Terminal=false
+Categories=Utility;System;

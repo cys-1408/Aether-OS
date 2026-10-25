@@ -1,0 +1,2 @@
+# Privacy Guide
+Everything local by default: no telemetry, no accounts, no cloud AI. Microphone use shows a visible indicator and needs consent. Clipboard history is off by default. Removable drives are indexed only after per-drive consent; excluded folders (SSH keys, GnuPG, custom) are honored. The Action Ledger records what Miso did, with retention and clear controls. IntentFS data is deletable without touching your files (index deletion never deletes source files). Diagnostic exports are redacted and require your explicit review.

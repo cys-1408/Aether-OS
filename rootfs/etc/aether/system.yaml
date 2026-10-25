@@ -1,0 +1,33 @@
+# System-wide Aether service endpoints (CONVENTIONS.md §4)
+system:
+  version: 1.0.0
+  ipc: jsonrpc-uds
+system_sockets:
+  hardware-probe: /run/aether/hardware-probe.sock
+  power-manager: /run/aether/power-manager.sock
+  account: /run/aether/account.sock
+  session: /run/aether/session.sock
+  storage: /run/aether/storage.sock
+  network: /run/aether/network.sock
+  firewall: /run/aether/firewall.sock
+  consent: /run/aether/consent.sock
+  audio: /run/aether/audio.sock
+  voice: /run/aether/voice.sock
+  clock: /run/aether/clock.sock
+  reminders: /run/user/{uid}/aether/reminders.sock
+  notifications: /run/aether/notifications.sock
+  clipboard: /run/user/{uid}/aether/clipboard.sock
+  printing: /run/aether/printing.sock
+  logs: /run/aether/logs.sock
+  backup: /run/aether/backup.sock
+  updates: /run/aether/updates.sock
+  health: /run/aether/health.sock
+  runtime: /run/aether/runtime.sock
+  intentfs: /run/aether/intentfs.sock
+  broker: /run/aether/broker.sock
+  ledger: /run/aether/ledger.sock
+  workspace: /run/aether/workspace.sock
+  shell: /run/user/{uid}/aether/shell.sock
+  agent: /run/user/{uid}/aether/agent.sock
+  trash: /run/user/{uid}/aether/trash.sock
+user_sockets_dir: /run/user/{uid}/aether

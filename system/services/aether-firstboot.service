@@ -1,0 +1,39 @@
+[Unit]
+Description=Aether first-boot setup wizard
+Documentation=https://aether-os.org/docs
+After=systemd-user-sessions.service getty@tty1.service
+Wants=network-online.target
+ConditionPathExists=/usr/libexec/aether
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=/usr/bin/python3 /usr/libexec/aether/system/firstboot/firstboot_wizard.py
+Restart=on-failure
+RestartSec=2s
+RuntimeDirectory=aether
+RuntimeDirectoryMode=0755
+UMask=007
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM
+CapabilityBoundingSet=
+AmbientCapabilities=
+ConditionPathExists=|!/var/lib/aether/firstboot-state.json
+StandardInput=tty
+TTYPath=/dev/tty7
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,8 @@
+# User preferences live here; system defaults are in /etc/aether/.
+shell:
+  distraction_protection: true
+  auto_organize: false
+  reduced_motion: false
+  text_only_mode: false
+  focus_minutes: 25
+  miso_enabled: true

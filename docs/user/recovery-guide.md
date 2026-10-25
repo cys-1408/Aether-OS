@@ -1,0 +1,2 @@
+# Recovery Guide
+Boot "Aether OS (recovery)" from the boot menu. The TUI detects your installed system and offers: diagnostics (redacted bundle export), repairs (filesystem, package database, bootloader, initramfs, user config, runtime config, broken models, IntentFS rebuild), rollback (known-good boot entry, kernel downgrade, package rollback), and backup/restore. Core repair works offline. Nothing is restored or deleted without explicit confirmation, and no backup/snapshot is claimed unless configured and verified.

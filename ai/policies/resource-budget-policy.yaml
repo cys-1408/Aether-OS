@@ -1,0 +1,5 @@
+defaults:
+  os_reserve_mb: 1024
+  desktop_reserve_mb: 1024
+  max_model_mem_mb: 6144
+  kv_cache_hard_cap_mb: 1024

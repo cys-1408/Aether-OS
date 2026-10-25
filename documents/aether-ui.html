@@ -1,0 +1,1708 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aether — Miso desktop companion (UI redesign)</title>
+<!--
+  Aether UI redesign prototype.
+  Reference shell: ui.html (Miso — Living Desktop Companion). Its cat, window
+  chrome, timing and interaction model are reproduced here faithfully.
+  What changed vs. the reference (per the brief): real Aether apps integrated
+  (Writer / Files / Terminal / Code / Clock / Calc / Gallery / Mines / Monitor /
+  Focus timer / Settings), no mock file arrays, honest capability reporting,
+  Aether branding in the top bar, plus responsive and reduced-motion support.
+-->
+<style>
+:root{--ink:#292824;--muted:#817b70;--paper:#fffdf8;--line:#e8e1d6;--orange:#d98250;--green:#7c9080;--blue:#8fa9c4}
+*{box-sizing:border-box}
+body{margin:0;overflow:hidden;font:14px/1.45 system-ui,Segoe UI,sans-serif;color:var(--ink);background:#e9e4d9}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;border:0}
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+
+.desktop{height:100dvh;min-height:550px;position:relative;overflow:hidden;background:radial-gradient(ellipse at 15% 12%,#fffdf8,transparent 45%),radial-gradient(ellipse at 80% 80%,#d2ccbf,transparent 42%),linear-gradient(135deg,#f2eee5,#e4dfd4)}
+
+.top{height:43px;position:absolute;inset:0 0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:#ffffff7a;backdrop-filter:blur(14px);z-index:8;font-size:12px;color:#625f57}
+.brand{font-weight:800;color:#292824}
+.brand b{display:inline-grid;place-items:center;background:#292824;color:white;border-radius:7px;width:23px;height:23px;margin-right:8px;font-weight:800}
+.brandsub{font-weight:400;color:#938b7d}
+#topstatus{font-weight:600}
+
+.icons{position:absolute;top:64px;left:15px;display:grid;gap:10px;z-index:1}
+.deskicon{width:75px;text-align:center;padding:7px 4px;border-radius:10px;font-size:11px;cursor:pointer;color:#514e46}
+.deskicon:hover{background:#ffffff80}
+.art{width:42px;height:42px;margin:0 auto 6px;border-radius:12px;background:#e6b96e;display:grid;place-items:center;font-size:20px;box-shadow:0 5px 15px #5b53451c}
+
+.window{position:absolute;display:flex;flex-direction:column;min-width:250px;min-height:170px;border:1px solid #fff;border-radius:16px;background:#fffdf9ed;box-shadow:0 18px 55px #40392c20;backdrop-filter:blur(16px);overflow:hidden;z-index:3;transition:opacity .3s,transform .35s,width .6s cubic-bezier(.2,.7,.2,1),height .6s cubic-bezier(.2,.7,.2,1),left .6s cubic-bezier(.2,.7,.2,1),top .6s cubic-bezier(.2,.7,.2,1)}
+.window.hidden{opacity:0;pointer-events:none;transform:translateY(50px) scale(.9)}
+.window.active{z-index:7;box-shadow:0 18px 55px #40392c30,0 0 0 2px #d9825055}
+.titlebar{height:40px;flex-shrink:0;display:flex;align-items:center;gap:10px;padding:0 14px;border-bottom:1px solid #ece7df;background:#fffdf9;cursor:grab;user-select:none}
+.traffic{display:flex;gap:7px;margin-right:14px;flex-shrink:0}
+.dot{width:11px;height:11px;border-radius:50%;border:none;padding:0;cursor:pointer;transition:filter .15s}
+.dot:hover{filter:brightness(0.9)}
+.red{background:#ff5f57}.yellow{background:#ffbd2e}.green{background:#28ca41}
+.wtitle{font-weight:750;font-size:12px;flex:1}
+.content{padding:16px;overflow:auto;flex:1}
+
+.eyebrow{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#9a8874;font-weight:800}
+.h1{font-size:23px;line-height:1.2;letter-spacing:-.04em;margin:8px 0}
+.sub{font-size:12px;color:var(--muted)}
+.card{margin-top:15px;background:#f5f0e6;border:1px solid #ece3d4;padding:13px;border-radius:12px}
+.card h3{margin:0 0 6px;font-size:14px}
+.card p{margin:0;font-size:12px;color:#666259}
+.note{width:100%;height:100px;border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:12px;resize:vertical;background:#fffefb}
+.btn{padding:8px 11px;border-radius:9px;background:#292824;color:#fff;font-size:12px;font-weight:650}
+.soft{background:#f0e9de;color:#4e4a42}
+.orange{background:var(--orange)}
+.row{display:flex;align-items:center;gap:8px}
+.between{justify-content:space-between}
+
+.search{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;margin:10px 0}
+.file{display:flex;align-items:center;gap:9px;padding:9px;border-radius:9px;cursor:pointer}
+.file:hover,.file.selected{background:#f4eee4}
+.ft{width:32px;height:34px;display:grid;place-items:center;border-radius:7px;background:#f0e1d5;font-size:9px;font-weight:800;color:#fff}
+.fmeta{flex:1;min-width:0}
+.fname{font-size:12px;font-weight:750;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fpath{font-size:10px;color:#8a857b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.filelist{max-height:220px;overflow:auto}
+
+.code{background:#262a30;color:#e9e3d9;border-radius:10px;padding:14px;font:12px/1.8 monospace;white-space:pre}
+.tok-k{color:#c3a6ff}.tok-s{color:#7ec699}.tok-c{color:#6b7581}.tok-n{color:#e9c9a7}
+.codelarge{height:220px;overflow:auto}
+
+.timer{font-size:34px;font-weight:800;text-align:center;margin:30px 0 18px}
+.clockbig{font-size:44px;font-weight:800;text-align:center;letter-spacing:-.02em;margin:26px 0 4px}
+.switch{width:36px;height:20px;background:#e8e1d6;border-radius:10px;position:relative;cursor:pointer;transition:.2s;flex-shrink:0}
+.switch.on{background:var(--orange)}
+.switch::after{content:"";position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:2px;left:2px;transition:.2s;box-shadow:0 1px 3px #00000030}
+.switch.on::after{left:18px}
+.settingrow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);gap:10px}
+.settingrow:last-of-type{border:0}
+
+/* terminal */
+.termwrap{display:flex;flex-direction:column;height:100%;min-height:220px}
+.termscroll{flex:1;overflow:auto;background:#262a30;color:#e9e3d9;border-radius:10px;padding:12px;font:12px/1.7 monospace;white-space:pre-wrap}
+.termscroll .terr{color:#e0603c}.termscroll .tok-n{color:#e9c9a7}
+.termrow{display:flex;align-items:center;gap:8px;margin-top:10px;flex-shrink:0}
+.termprompt{font:12px/1.4 monospace;font-weight:800;color:#8a6f55}
+.termrow input{flex:1;min-width:0;border:1px solid var(--line);border-radius:9px;padding:9px 10px;font:12px/1.4 monospace;background:#fffefb}
+
+/* writer */
+.wlist{max-height:118px;overflow:auto;margin-top:8px;border-radius:10px;background:#f7f2e8;border:1px solid #ece3d4;padding:4px}
+.wlist .witem{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:8px;cursor:pointer;font-size:12px}
+.wlist .witem:hover,.wlist .witem.sel{background:#f1e9db}
+.wlist .witem .wt{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+.wlist .witem .wd{font-size:10px;color:#9a9184}
+.writerbar{display:flex;align-items:center;justify-content:space-between;margin:8px 0 2px;gap:8px}
+
+/* calc */
+.calcdis{background:#262a30;color:#e9e3d9;border-radius:12px;padding:12px 14px;font:20px/1.2 monospace;text-align:right;margin-bottom:10px;min-height:46px;overflow:auto}
+.calcgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.calcgrid button{height:38px;border-radius:9px;background:#f0e9de;color:#4e4a42;font-weight:700;font-size:14px}
+.calcgrid button.op{background:#e6dcc9}
+.calcgrid button.eq{background:var(--orange);color:#fff}
+
+/* gallery */
+.thumbgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.thumbgrid .thumb{aspect-ratio:1;border-radius:9px;background:#eee5d8 url() center/cover;cursor:pointer;border:1px solid #e5dccd}
+.gview{display:flex;flex-direction:column;gap:8px}
+.gview img{width:100%;border-radius:12px;background:#eee5d8;max-height:340px;object-fit:contain}
+.emptycard{margin-top:12px;background:#f5f0e6;border:1px dashed #d8cdba;padding:16px;border-radius:12px;text-align:center;color:#7b7568;font-size:12px}
+
+/* mines */
+.minegrid{display:grid;grid-template-columns:repeat(10,26px);gap:3px;margin:10px 0;justify-content:center}
+.minegrid .mcell{width:26px;height:26px;border-radius:6px;background:#efe6d1;border:1px solid #e0d5c1;display:grid;place-items:center;font-size:12px;font-weight:800;color:#666259;user-select:none}
+.minegrid .mcell.rev{background:#f7f2e7;border-color:#e8e1d6;cursor:default}
+.minegrid .mcell.mine{background:#f2d7cd;border-color:#e0b8a8;color:#c4553b}
+.minegrid .mcell.n1{color:#5b7f9b}.minegrid .mcell.n2{color:#618b6c}.minegrid .mcell.n3{color:#c4763f}
+.minegrid .mcell.n4{color:#a86ba0}.minegrid .mcell.n5,.minegrid .mcell.n6,.minegrid .mcell.n7,.minegrid .mcell.n8{color:#8a7f70}
+
+/* monitor */
+.mvrow{display:flex;align-items:center;gap:9px;padding:9px;border-radius:9px;cursor:pointer;font-size:12px}
+.mvrow:hover{background:#f4eee4}
+.mvrow .ft{width:26px;height:26px;font-size:8px}
+.mvstate{margin-left:auto;font-size:10px;font-weight:800;color:#8a8173;letter-spacing:.06em;text-transform:uppercase;border-radius:12px;padding:3px 8px;background:#efe7d8}
+.mvstate.on{color:#58765b;background:#e9efe7}
+
+.taskbar{position:absolute;bottom:0;left:0;right:0;height:60px;background:#fffdf8b8;border-top:1px solid #fff;backdrop-filter:blur(20px);z-index:15;display:flex;align-items:center;justify-content:center;gap:7px;padding:0 10px}
+.taskbar button{height:40px;min-width:38px;border-radius:11px;background:transparent;font-size:16px;color:#5e5a52;padding:0 8px}
+.taskbar button:hover,.taskbar button.active{background:#e9e3d8}
+.taskbar button.taski{min-width:30px;padding:0 10px;pointer-events:none}
+
+.cat{position:absolute;width:150px;height:135px;z-index:10;cursor:grab;filter:drop-shadow(0 12px 8px #39342b1c);user-select:none;will-change:left,top,transform;touch-action:none}
+.cat:active{cursor:grabbing}
+.cat svg{width:100%;height:100%;overflow:visible}
+.cat-bubble{position:absolute;left:50%;bottom:115%;transform:translateX(-50%);white-space:nowrap;background:#fffdf8;border:1px solid var(--line);border-radius:11px;padding:7px 10px;font-size:11px;font-weight:700;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:12}
+.cat-bubble.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.tail{transform-origin:35px 85px;animation:tail 2s ease-in-out infinite}
+.head{transform-origin:88px 55px;animation:head 5s ease-in-out infinite}
+#pupils{transition:transform .15s ease-out}
+.cat.walking{animation:walkBob .5s ease-in-out infinite}
+.cat.walking .tail{animation:tail 1s ease-in-out infinite}
+.cat.running{animation:walkBob .3s ease-in-out infinite}
+.cat.jumping{animation:jump .65s ease-out}
+.cat.searching .tail{animation:tail .5s ease-in-out infinite}
+.cat.sleeping .tail{animation:tail 4s ease-in-out infinite}
+.cat.pulling{animation:pull 0.6s ease-in-out}
+.cat.pushing{animation:push 0.6s ease-in-out}
+.cat.carrying .head{animation:none}
+.cat.focused .head{animation:none}
+@keyframes tail{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(13deg)}}
+@keyframes head{0%,85%,100%{transform:rotate(0)}90%{transform:rotate(4deg)}95%{transform:rotate(-3deg)}}
+@keyframes walkBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes jump{0%{transform:translateY(0)}40%{transform:translateY(-40px) scale(1.05)}70%{transform:translateY(-20px) scale(.95)}100%{transform:translateY(0)}}
+@keyframes pull{0%{transform:translateY(0) scale(1)}30%{transform:translateY(-15px) scale(1.1, 0.9)}60%{transform:translateY(-25px) scale(1, 1.1)}100%{transform:translateY(0) scale(1)}}
+@keyframes push{0%{transform:translateY(0) scale(1)}30%{transform:translateY(-15px) scale(1.1, 0.9)}60%{transform:translateY(10px) scale(0.9, 1.1)}100%{transform:translateY(0) scale(1)}}
+.carried-file{position:absolute;width:28px;height:34px;border-radius:4px;z-index:11;opacity:0;transition:opacity .3s;box-shadow:0 4px 8px #00000022;display:grid;place-items:center;color:#fff;font-size:9px;font-weight:800;pointer-events:none}
+
+.activity{position:absolute;bottom:76px;left:18px;width:225px;background:#fffdf8a8;border:1px solid #ffffffd0;border-radius:13px;padding:11px;backdrop-filter:blur(12px);z-index:5}
+.activity strong{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8a8173}
+.activity div{font-size:11px;color:#6c665b;margin-top:7px}
+
+.panel{position:absolute;right:18px;bottom:73px;width:340px;max-height:calc(100dvh - 100px);display:flex;flex-direction:column;background:#fffdf8f2;border:1px solid #fff;border-radius:19px;box-shadow:0 22px 70px #3e372c30;backdrop-filter:blur(24px);z-index:20;opacity:0;pointer-events:none;transform:translateY(14px);transition:.25s}
+.panel.open{opacity:1;pointer-events:auto;transform:none}
+.phead{padding:13px 15px;border-bottom:1px solid #eee7dc;display:flex;align-items:center;gap:9px}
+.avatar{width:34px;height:34px;border-radius:11px;background:#f1e7d9;display:grid;place-items:center}
+.status{margin-left:auto;border-radius:20px;padding:4px 8px;background:#e9efe7;color:#58765b;font-size:10px;font-weight:800}
+.messages{padding:13px;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:8px;min-height:90px;max-height:230px;flex:1 1 auto}
+.msg{max-width:90%;padding:9px 11px;border-radius:12px;background:#f2eee6;font-size:12px;white-space:pre-wrap}
+.msg.user{align-self:flex-end;background:#292824;color:white}
+.suggest{padding:0 13px 11px;display:flex;gap:6px;flex-wrap:wrap;flex:0 0 auto;min-height:42px;align-content:flex-start}
+.suggest button{border:1px solid #e0d6c8;background:#fffdf8;color:#514a40;border-radius:18px;padding:8px 10px;font-size:11px;line-height:1.25;white-space:normal;min-height:34px;flex:0 0 auto;max-width:100%}
+.form{padding:11px;border-top:1px solid #eee7dc;display:flex;gap:6px;flex:0 0 auto;background:#fffdf8}
+.form input{min-width:0;flex:1;border:1px solid #e8e0d5;border-radius:10px;padding:10px;font-size:12px}
+.form button{border-radius:10px;padding:0 11px}
+
+.focuschip{position:absolute;top:55px;left:50%;transform:translateX(-50%);z-index:12;display:none;gap:10px;align-items:center;padding:8px 12px;background:#292824;color:white;border-radius:12px;font-size:11px}
+.focuschip.show{display:flex}
+.focuschip button{background:#ffffff20;color:white;border-radius:6px;padding:4px 7px;font-size:10px}
+.toast{position:absolute;right:20px;top:58px;z-index:30;background:#292824;color:white;padding:11px 14px;border-radius:10px;font-size:12px;opacity:0;transition:.2s;max-width:280px}
+.toast.show{opacity:1}
+.dim{position:absolute;inset:43px 0 60px;pointer-events:none;z-index:5;transition:background .5s}
+.desktop.focus .window:not(.focus-target):not(.hidden):not(.minimized){opacity:.15;filter:grayscale(.8) blur(2px)}
+.desktop.focus .window.focus-target{opacity:1;filter:none;z-index:8;transform:scale(1.03)}
+.desktop.focus .dim{background:#00000055}
+
+@media(max-width:900px){
+  .window{left:4% !important;top:8% !important;width:92% !important;max-height:80vh !important}
+  .panel{left:9px;right:9px;width:auto;max-height:calc(100dvh - 82px);bottom:68px}
+  .messages{max-height:30dvh;min-height:70px}
+  .activity{display:none}
+  .cat{width:115px;height:105px}
+  .icons{left:3px}
+  .deskicon{width:57px}
+  .art{width:35px;height:35px}
+  .taskbar{gap:0}
+  .taskbar button{min-width:32px;padding:0 6px}
+  .taskbar button.taski{display:none}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+body.reduced-motion *,body.reduced-motion *:before,body.reduced-motion *:after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+</style>
+</head>
+<body>
+<main class="desktop" id="desktop">
+<header class="top">
+  <div class="brand"><b>a</b>Aether <span class="brandsub">/ Miso desktop companion</span></div>
+  <div id="topstatus">&#9679; All calm&#12288;<span id="clock"></span></div>
+</header>
+
+<div class="icons" id="icons"></div>
+<!-- app windows are generated from the registry in JS -->
+
+<div class="dim"></div>
+<div class="focuschip" id="focuschip">&#9679; FOCUS SESSION <b id="focusclock">25:00</b><button id="pause">Pause</button><button id="end">End</button></div>
+
+<div class="cat" id="cat" role="button" tabindex="0" aria-label="Open Miso assistant">
+  <div class="cat-bubble" id="bubble">Psst&#8230; need a paw?</div>
+  <svg viewBox="0 0 150 135" aria-hidden="true">
+    <ellipse cx="75" cy="125" rx="45" ry="5" fill="#51483d" opacity=".13"/>
+    <g class="tail"><path d="M42 94C14 90 8 70 20 60Q32 54 30 67C26 75 38 80 48 80" fill="none" stroke="#f6eee2" stroke-width="14" stroke-linecap="round"/><path d="M20 62Q16 75 32 79" fill="none" stroke="#a68b73" stroke-width="5" stroke-linecap="round"/></g>
+    <path d="M40 88Q45 67 76 69Q108 69 116 102L110 119H48Q35 108 40 88Z" fill="#f8f1e7" stroke="#d8cbbb"/>
+    <path d="M52 74Q60 88 78 75L85 70Q96 79 89 90Q69 97 52 86Z" fill="#a88b73"/>
+    <path d="M91 75Q105 77 108 89L104 97Q95 91 91 82Z" fill="#a88b73"/>
+    <path d="M46 104L45 119Q45 124 52 123H65M94 106L99 120Q100 124 106 123L117 121" fill="#f8f1e7" stroke="#d8cbbb"/>
+    <g class="head">
+      <path d="M54 50L51 23Q52 16 60 23L73 36Q84 33 94 37L108 22Q114 18 115 27L113 53Z" fill="#f8f1e7" stroke="#d8cbbb"/>
+      <path d="M57 29L61 26L68 38L60 40ZM103 39L111 28L110 39L106 44Z" fill="#d4a5a0"/>
+      <path d="M57 47Q63 33 83 35Q105 35 109 51Q113 69 94 78Q73 83 60 69Q52 59 57 47Z" fill="#fff8ee" stroke="#d8cbbb"/>
+      <path d="M57 47Q62 35 80 35L76 49L67 56L58 55ZM95 36Q107 40 109 58L100 53L93 44Z" fill="#a88b73"/>
+      <path d="M70 38L76 45L72 51L65 48ZM89 37L94 43L90 49L85 42Z" fill="#a88b73"/>
+      <g id="pupils">
+        <ellipse cx="72" cy="56" rx="4" ry="5" fill="#35342f"/>
+        <ellipse cx="96" cy="56" rx="4" ry="5" fill="#35342f"/>
+        <circle cx="73" cy="54" r="1.4" fill="white"/>
+        <circle cx="97" cy="54" r="1.4" fill="white"/>
+      </g>
+      <path d="M81 64Q84 60 87 64Q84 68 81 64Z" fill="#d98c91"/>
+      <path d="M84 67Q81 72 77 69M84 67Q88 72 92 68" fill="none" stroke="#82756a" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M62 64L46 61M62 68L47 70M101 64L117 60M102 68L117 71" stroke="#b5a595" stroke-width="1"/>
+    </g>
+  </svg>
+</div>
+<div class="carried-file" id="carriedFile">FILE</div>
+
+<aside class="activity"><strong>Miso's activity</strong><div id="activitylog">Settled into the desktop. Watching over things.</div></aside>
+
+<section class="panel" id="panel" aria-label="Miso assistant">
+  <div class="phead">
+    <div class="avatar">&#128062;</div>
+    <div><b>Miso</b><div class="sub">Small paws, helpful plans.</div></div>
+    <span class="status" id="status">IDLE</span>
+    <button class="btn soft" id="closepanel" aria-label="Close assistant">&times;</button>
+  </div>
+  <div class="messages" id="messages"><div class="msg">Hi &#8212; I'm Miso. Tell me what you'd like help with.</div></div>
+  <div class="suggest">
+    <button data-cmd="What can you do">What can you do</button>
+    <button data-cmd="Find a file">Find a file</button>
+    <button data-cmd="Help me focus for 25 minutes">Help me focus</button>
+    <button data-cmd="Hide distractions">Hide distractions</button>
+    <button data-cmd="Take a five-minute break with me">Take a break</button>
+    <button data-cmd="Organize my desktop">Organize windows</button>
+    <button data-cmd="Open the terminal">Open the terminal</button>
+  </div>
+  <form class="form" id="form">
+    <input id="command" placeholder="Tell Miso what you need&#8230;" autocomplete="off" aria-label="Command">
+    <button type="button" id="mic" class="soft" title="Voice input">&#127907;</button>
+    <button class="btn" aria-label="Send">&#10148;</button>
+  </form>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<nav class="taskbar" id="taskbar" aria-label="Applications"></nav>
+</main>
+
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const desktop = $('#desktop'), cat = $('#cat'), panel = $('#panel'), bubble = $('#bubble'), carriedFile = $('#carriedFile');
+const store = { dirHandle:null, dirName:'', index:[], pendingImage:null, pendingCode:null };
+
+/* ---------------- feedback primitives ---------------- */
+function log(t){ $('#activitylog').textContent = t; }
+function say(t){ bubble.textContent = t; bubble.classList.add('show'); clearTimeout(say.t); say.t = setTimeout(() => bubble.classList.remove('show'), 3000); }
+function state(s){ $('#status').textContent = s.toUpperCase(); $('#topstatus').firstChild.textContent = '\u25CF ' + s + '\u3000'; }
+function toast(t){ const e = $('#toast'); e.textContent = t; e.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove('show'), 2600); }
+function msg(t, who = ''){ const d = document.createElement('div'); d.className = 'msg ' + who; d.textContent = t; $('#messages').appendChild(d); $('#messages').scrollTop = $('#messages').scrollHeight; }
+function fmt(s){ return String(Math.floor(Math.max(0, s) / 60)).padStart(2, '0') + ':' + String(Math.max(0, s) % 60).padStart(2, '0'); }
+function lsGet(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch{ return d; } }
+function lsSet(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch{} }
+
+/* ---------------- app registry ---------------- */
+const APPS = [
+  { id:'writer',   label:'Writer',      icon:'\u270E', accent:'#f2d7c4', w:470, h:400, pos:{left:'20%', top:'13%'}, desk:true, open:true,  build:buildWriter },
+  { id:'files',    label:'Files',       icon:'\u25A4', accent:'#d9e4d6', w:430, h:420, pos:{left:'29%', top:'21%'}, desk:true, open:true,  build:buildFiles },
+  { id:'terminal', label:'Terminal',    icon:'\u25B0', accent:'#c9d7de', w:470, h:390, pos:{left:'38%', top:'30%'}, desk:true, build:buildTerminal },
+  { id:'code',     label:'Code',        icon:'\u2318', accent:'#d8d1e8', w:480, h:410, pos:{left:'22%', top:'26%'}, desk:true, build:buildCode },
+  { id:'clock',    label:'Clock',       icon:'\u25F7', accent:'#dbe7f2', w:300, h:270, pos:{left:'57%', top:'13%'}, desk:true, open:true,  build:buildClock },
+  { id:'timer',    label:'Focus timer', icon:'\u25F4', accent:'#dbe7f2', w:290, h:340, pos:{left:'60%', top:'30%'}, desk:true, open:true,  build:buildTimer },
+  { id:'calc',     label:'Calc',        icon:'\u003D', accent:'#efe6d1', w:280, h:350, pos:{left:'66%', top:'55%'}, build:buildCalc },
+  { id:'gallery',  label:'Gallery',     icon:'\u2741', accent:'#e6d5e0', w:440, h:390, pos:{left:'6%',  top:'55%'}, build:buildGallery },
+  { id:'mines',    label:'Mines',       icon:'\u229E', accent:'#d9cdd4', w:400, h:460, pos:{left:'45%', top:'42%'}, build:buildMines },
+  { id:'monitor',  label:'Monitor',     icon:'\u25A6', accent:'#cfd8cf', w:440, h:370, pos:{left:'50%', top:'52%'}, build:buildMonitor },
+  { id:'settings', label:'Settings',    icon:'\u2699', accent:'#cfc8bd', w:320, h:330, pos:{left:'72%', top:'58%'}, build:buildSettings },
+];
+
+/* ---------------- window chrome ---------------- */
+function buildWindow(app){
+  const el = document.createElement('section');
+  el.className = 'window hidden';
+  if (app.open) el.classList.add('open-boot');
+  el.id = 'win-' + app.id;
+  el.dataset.app = app.id;
+  el.style.left = (app.pos.left || '20%');
+  el.style.top = (app.pos.top || '15%');
+  el.style.width = app.w + 'px';
+  el.style.height = app.h + 'px';
+  el.innerHTML =
+    '<div class="titlebar">' +
+      '<div class="traffic">' +
+        '<button class="dot red" data-act="close" aria-label="Close"></button>' +
+        '<button class="dot yellow" data-act="min" aria-label="Minimize"></button>' +
+        '<button class="dot green" data-act="max" aria-label="Maximize"></button>' +
+      '</div>' +
+      '<span class="wtitle"></span>' +
+    '</div>' +
+    '<div class="content"></div>';
+  el.querySelector('.wtitle').textContent = app.label;
+  app.el = el;
+  app.body = el.querySelector('.content');
+  desktop.appendChild(el);
+}
+function buildDeskIcons(){
+  const box = $('#icons');
+  APPS.filter(a => a.desk).forEach(a => {
+    const d = document.createElement('div');
+    d.className = 'deskicon'; d.dataset.open = a.id; d.tabIndex = 0; d.setAttribute('role', 'button');
+    d.innerHTML = '<div class="art" style="background:' + a.accent + '">' + a.icon + '</div><span></span>';
+    d.querySelector('span').textContent = a.label;
+    box.appendChild(d);
+  });
+}
+function buildTaskbar(){
+  const tb = $('#taskbar');
+  APPS.forEach(a => {
+    const b = document.createElement('button');
+    b.dataset.open = a.id; b.title = a.label; b.textContent = a.icon; b.setAttribute('aria-label', 'Open ' + a.label);
+    tb.appendChild(b);
+  });
+  const ask = document.createElement('button');
+  ask.id = 'ask'; ask.textContent = '\uD83D\uDC3E'; ask.title = 'Ask Miso'; ask.setAttribute('aria-label', 'Ask Miso');
+  tb.appendChild(ask);
+  const t2 = document.createElement('span');
+  t2.className = 'sub taski'; t2.style.marginLeft = '7px'; t2.textContent = 'Miso is nearby';
+  tb.appendChild(t2);
+}
+
+/* ---------------- window management ---------------- */
+function openApp(id){
+  const app = APPS.find(a => a.id === id); if (!app || !app.el) return app;
+  const w = app.el;
+  if (w.classList.contains('minimized')){
+    w.classList.remove('minimized');
+    w.style.opacity = '1'; w.style.transform = 'scale(1)';
+    w.style.width = w.dataset.prevW || w.style.width;
+    w.style.height = w.dataset.prevH || w.style.height;
+    w.style.left = w.dataset.prevLeft || w.style.left;
+    w.style.top = w.dataset.prevTop || w.style.top;
+  } else {
+    w.classList.remove('hidden');
+  }
+  $$('.window').forEach(x => x.classList.toggle('active', x === w));
+  $$('#taskbar [data-open]').forEach(b => b.classList.toggle('active', b.dataset.open === id));
+  syncMonitor();
+  return app;
+}
+function closeApp(app){
+  const w = app.el;
+  w.classList.add('hidden'); w.classList.remove('active', 'minimized');
+  w.dataset.max = '0';
+  $$('#taskbar [data-open]').forEach(b => b.classList.toggle('active', b.dataset.open === app.id && false));
+  syncMonitor();
+}
+async function handleMaximize(app){
+  const w = app.el;
+  const pos = getWinTopCenter(w); if (!pos) return;
+  await moveCatTo(pos.x, pos.y, 'run');
+  setCatState('pulling'); say('Stretch! \uD83D\uDE46\u200D\u2642\uFE0F');
+  await new Promise(r => setTimeout(r, 300));
+  if (w.dataset.max === '1'){
+    w.style.left = w.dataset.prevLeft; w.style.top = w.dataset.prevTop;
+    w.style.width = w.dataset.prevW; w.style.height = w.dataset.prevH;
+    w.dataset.max = '0';
+  } else {
+    w.dataset.prevLeft = w.style.left; w.dataset.prevTop = w.style.top;
+    w.dataset.prevW = w.style.width; w.dataset.prevH = w.style.height;
+    w.style.left = '0px'; w.style.top = '0px';
+    w.style.width = '100%'; w.style.height = 'calc(100% - 60px)';
+    w.dataset.max = '1';
+  }
+  const newPos = getWinTopCenter(w);
+  if (newPos) await moveCatTo(newPos.x, newPos.y, 'walk');
+  setCatState('idle');
+}
+async function handleMinimize(app){
+  const w = app.el;
+  const pos = getWinTopCenter(w); if (!pos) return;
+  await moveCatTo(pos.x, pos.y, 'run');
+  setCatState('pushing'); say('Shrink! \uD83E\uDD4F');
+  await new Promise(r => setTimeout(r, 300));
+  w.dataset.prevLeft = w.style.left; w.dataset.prevTop = w.style.top;
+  w.dataset.prevW = w.style.width; w.dataset.prevH = w.style.height;
+  const d = desktop.getBoundingClientRect();
+  w.style.left = '50%'; w.style.top = (d.height - 60) + 'px';
+  w.style.width = '0px'; w.style.height = '0px';
+  w.style.opacity = '0'; w.style.transform = 'translateX(-50%) scale(0.1)';
+  w.classList.add('minimized'); w.dataset.max = '0';
+  await moveCatTo(d.width / 2 - 75, d.height - 120, 'walk');
+  setCatState('idle');
+  syncMonitor();
+}
+
+/* ---------------- cat controller ---------------- */
+let catX = 0, catY = 0;
+let isDraggingCat = false, dragOffsetX = 0, dragOffsetY = 0, catMoved = false;
+let busyFlow = false;
+
+function setCatPos(x, y){
+  const d = desktop.getBoundingClientRect();
+  catX = Math.max(-10, Math.min(d.width - 140, x));
+  catY = Math.max(40, Math.min(d.height - 120, y));
+  cat.style.left = catX + 'px'; cat.style.top = catY + 'px';
+}
+function flipCat(facingLeft){ cat.style.transform = facingLeft ? 'scaleX(-1)' : 'scaleX(1)'; }
+function moveCatTo(tx, ty, speed = 'walk'){
+  if (isDraggingCat) return Promise.resolve();
+  const sx = catX, sy = catY;
+  if (Math.abs(tx - sx) < 2 && Math.abs(ty - sy) < 2){ setCatState('idle'); return Promise.resolve(); }
+  const start = Date.now();
+  const dur = speed === 'run' ? 700 : speed === 'walk' ? 1200 : 500;
+  const dx = tx - sx, dy = ty - sy;
+  if (Math.abs(dx) > 5) flipCat(dx < 0);
+  setCatState(speed === 'run' ? 'running' : 'walking');
+  return new Promise(res => {
+    function step(){
+      if (isDraggingCat){ res(); return; }
+      const t = Math.min(1, (Date.now() - start) / dur);
+      const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      setCatPos(sx + dx * e, sy + dy * e);
+      if (t < 1) requestAnimationFrame(step);
+      else { setCatState('idle'); res(); }
+    }
+    requestAnimationFrame(step);
+  });
+}
+async function jumpCat(){ setCatState('jumping'); await new Promise(r => setTimeout(r, 650)); setCatState('idle'); }
+function setCatState(s){
+  ['walking','running','jumping','searching','sleeping','carrying','focused','pulling','pushing'].forEach(st => cat.classList.remove(st));
+  if (s !== 'idle') cat.classList.add(s);
+}
+function getWinCenter(el){
+  if (!el || el.classList.contains('hidden') || el.classList.contains('minimized')) return null;
+  const r = el.getBoundingClientRect(), d = desktop.getBoundingClientRect();
+  return { x: r.left - d.left + r.width / 2 - 75, y: r.top - d.top + r.height / 2 - 60 };
+}
+function getWinTopCenter(el){
+  if (!el || el.classList.contains('hidden') || el.classList.contains('minimized')) return null;
+  const r = el.getBoundingClientRect(), d = desktop.getBoundingClientRect();
+  return { x: r.left - d.left + r.width / 2 - 75, y: r.top - d.top - 60 };
+}
+function walkToApp(id, speed = 'walk'){
+  const a = APPS.find(x => x.id === id); if (!a || !a.el) return Promise.resolve();
+  openApp(id);
+  const c = getWinCenter(a.el) || getWinTopCenter(a.el);
+  return c ? moveCatTo(c.x, c.y, speed) : Promise.resolve();
+}
+async function walkToIcon(){
+  const ic = $('#icons .deskicon[data-open="files"]');
+  const r = ic ? ic.getBoundingClientRect() : { left: 40, top: 130 };
+  const d = desktop.getBoundingClientRect();
+  await moveCatTo(r.left - d.left - 10, Math.max(45, r.top - d.top), 'run');
+}
+/* cat dragging */
+cat.addEventListener('pointerdown', e => {
+  isDraggingCat = true; catMoved = false;
+  const rect = cat.getBoundingClientRect();
+  dragOffsetX = e.clientX - rect.left;
+  dragOffsetY = e.clientY - rect.top;
+  cat.setPointerCapture(e.pointerId);
+  e.stopPropagation();
+});
+cat.addEventListener('pointermove', e => {
+  if (!isDraggingCat) return;
+  catMoved = true;
+  const d = desktop.getBoundingClientRect();
+  setCatPos(e.clientX - d.left - dragOffsetX, e.clientY - d.top - dragOffsetY);
+});
+cat.addEventListener('pointerup', e => {
+  if (!isDraggingCat) return;
+  isDraggingCat = false;
+  if (catMoved) e.stopPropagation();
+});
+cat.addEventListener('click', () => {
+  if (catMoved){ catMoved = false; return; }
+  cat.classList.remove('sleeping');
+  panel.classList.toggle('open');
+  if (panel.classList.contains('open')) say('Hi! What shall we do?');
+  $('#command').focus();
+});
+/* eye tracking */
+document.addEventListener('mousemove', e => {
+  if (cat.classList.contains('sleeping')) return;
+  if (lastEye && Date.now() - lastEye < 40) return;
+  lastEye = Date.now();
+  const r = cat.getBoundingClientRect();
+  const cx = r.left + r.width / 2, cy = r.top + r.height * 0.4;
+  const dx = e.clientX - cx, dy = e.clientY - cy;
+  const dist = Math.min(2.5, Math.hypot(dx, dy) / 80);
+  const ang = Math.atan2(dy, dx);
+  const ox = Math.cos(ang) * dist, oy = Math.sin(ang) * dist;
+  $('#pupils').setAttribute('transform', 'translate(' + ox.toFixed(2) + ' ' + oy.toFixed(2) + ')');
+});
+let lastEye = 0;
+/* carried-file chip follows the cat via a short rAF loop that ends itself */
+let carryActive = false, carryRaf = null;
+function carryStart(type, color){
+  carriedFile.style.background = color || '#8a857b';
+  carriedFile.textContent = type;
+  carriedFile.style.opacity = '1';
+  setCatState('carrying');
+  carryActive = true;
+  cancelAnimationFrame(carryRaf || 0);
+  carryRaf = requestAnimationFrame(function tick(){
+    if (!carryActive){ carryRaf = null; return; }
+    if (!isDraggingCat){
+      carriedFile.style.left = (catX + 60) + 'px';
+      carriedFile.style.top = (catY + 30) + 'px';
+    }
+    carryRaf = requestAnimationFrame(tick);
+  });
+}
+function carryStop(){ carryActive = false; carriedFile.style.opacity = '0'; setCatState(focusOn ? 'focused' : 'idle'); }
+
+/* ---------------- focus mode ---------------- */
+let focusOn = false, paused = false, remaining = 1500, focusInt = null;
+function startFocus(minutes = 25, targetId = 'writer'){
+  if (focusOn) endFocus(false);
+  focusOn = true; paused = false; remaining = minutes * 60;
+  desktop.classList.add('focus');
+  $('#focuschip').classList.add('show');
+  $('#focusclock').textContent = fmt(remaining);
+  $('#pause').textContent = 'Pause';
+  const target = APPS.find(a => a.id === targetId) || APPS[0];
+  target.el.classList.add('focus-target');
+  openApp(target.id);
+  setCatState('focused');
+  state('FOCUS MODE'); log('Focus mode started — ' + target.label);
+  say('I\u2019ll guard your focus. One thing at a time.');
+  clearInterval(focusInt);
+  focusInt = setInterval(() => {
+    if (!focusOn || paused) return;
+    remaining--; $('#focusclock').textContent = fmt(remaining);
+    if (remaining <= 0) endFocus(true);
+  }, 1000);
+  toast('Focus mode started \u00B7 ' + minutes + ' minutes');
+}
+function endFocus(done = false){
+  focusOn = false; paused = false; clearInterval(focusInt);
+  desktop.classList.remove('focus'); $('#focuschip').classList.remove('show');
+  $$('.window').forEach(w => w.classList.remove('focus-target'));
+  setCatState('idle');
+  state(done ? 'COMPLETED' : 'IDLE');
+  say(done ? 'You did it! Time for a little stretch.' : 'Focus mode is off. Nice work showing up.');
+  log(done ? 'Focus session completed.' : 'Focus mode ended.');
+}
+
+/* ---------------- focus timer app ---------------- */
+let timerLeft = 1500, timerRunning = false, timerInt = null;
+function buildTimer(app){
+  const c = app.body;
+  c.innerHTML =
+    '<div class="eyebrow" style="text-align:center">One thing at a time</div>' +
+    '<div class="timer" id="timernum">25:00</div>' +
+    '<div class="row" style="justify-content:center">' +
+      '<button class="btn orange" id="timerstart">Start</button>' +
+      '<button class="btn soft" id="timerreset">Reset</button>' +
+    '</div>' +
+    '<div style="margin-top:12px;display:flex;justify-content:center">' +
+      '<select id="duration" style="padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:#fffdf8">' +
+        '<option value="15">15 minutes</option><option value="25" selected>25 minutes</option>' +
+        '<option value="45">45 minutes</option><option value="60">60 minutes</option>' +
+        '<option value="5">5 minute break</option>' +
+      '</select>' +
+    '</div>' +
+    '<p class="sub" style="text-align:center;margin-top:10px">Start runs a focus session \u2014 other windows dim, Miso keeps watch.</p>';
+  function setTimer(m){
+    timerLeft = m * 60; $('#timernum').textContent = fmt(timerLeft);
+    timerRunning = false; $('#timerstart').textContent = 'Start'; clearInterval(timerInt);
+  }
+  function startSession(){
+    if (focusOn){ toast('A focus session is already running.'); return; }
+    const m = +$('#duration').value; setTimer(m);
+    startFocus(+$('#duration').value, 'writer');
+  }
+  $('#timerstart').onclick = startSession;
+  $('#timerreset').onclick = () => { setTimer(+$('#duration').value); if (focusOn) endFocus(false); };
+  $('#duration').onchange = e => setTimer(+e.target.value);
+  setTimer(25);
+}
+
+/* ---------------- settings app ---------------- */
+const SETTINGS = lsGet('aether-ui.settings.v1', { dist:true, org:false, motion:false });
+function buildSettings(app){
+  const c = app.body;
+  c.innerHTML =
+    '<div class="eyebrow">System / workspace preferences</div>' +
+    '<h2 style="font-size:18px;margin:5px 0 4px">Settings</h2>' +
+    '<div class="settingrow"><span style="font-size:13px">Distraction Protection</span><div class="switch" id="setDist" role="switch" tabindex="0"></div></div>' +
+    '<div class="settingrow"><span style="font-size:13px">Auto-organize Windows</span><div class="switch" id="setOrg" role="switch" tabindex="0"></div></div>' +
+    '<div class="settingrow"><span style="font-size:13px">Reduce Motion</span><div class="switch" id="setMotion" role="switch" tabindex="0"></div></div>' +
+    '<div class="card"><h3>About this mockup</h3><p>A standalone HTML prototype of the Aether desktop with the Miso companion from the reference shell. Browser context only: a real OS kernel, IPC and multi-process isolation are out of scope here, so apps below are honest, self-contained equivalents. Slides, Paint, Browser and Social apps of the real Aether OS are intentionally not faked.</p></div>';
+  function apply(k, on){
+    SETTINGS[k] = on; lsSet('aether-ui.settings.v1', SETTINGS);
+    if (k === 'dist') toast('Distraction protection ' + (on ? 'on' : 'off'));
+    if (k === 'motion'){ document.body.classList.toggle('reduced-motion', on); toast('Reduce motion ' + (on ? 'on' : 'off')); }
+  }
+  function wire(id, key, def){
+    const el = $('#' + id);
+    const on = SETTINGS[key] !== undefined ? SETTINGS[key] : def;
+    el.classList.toggle('on', on);
+    if (key === 'motion') document.body.classList.toggle('reduced-motion', on);
+    el.onclick = () => { el.classList.toggle('on'); apply(key, el.classList.contains('on')); };
+    el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); el.onclick(); } };
+  }
+  wire('setDist', 'dist', true);
+  wire('setOrg', 'org', false);
+  wire('setMotion', 'motion', false);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.body.classList.add('reduced-motion');
+}
+
+/* ---------------- clock app ---------------- */
+function buildClock(app){
+  const c = app.body;
+  c.innerHTML =
+    '<div class="eyebrow" style="text-align:center">Wall clock</div>' +
+    '<div class="clockbig" id="ckTime">--:--</div>' +
+    '<div class="sub" id="ckDate" style="text-align:center"></div>';
+  function tick(){
+    const n = new Date();
+    $('#ckTime').textContent = n.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    $('#ckDate').textContent = n.toLocaleDateString([], { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  }
+  tick(); setInterval(tick, 1000);
+}
+
+/* ---------------- calc app ---------------- */
+function buildCalc(app){
+  const c = app.body;
+  c.innerHTML = '<div class="calcdis" id="calcDis">0</div><div class="calcgrid" id="calcGrid"></div>';
+  const keys = ['C','(',')','\u232B','7','8','9','\u00F7','4','5','6','\u00D7','1','2','3','\u2212','0','.','\u002B','\u003D'];
+  const grid = $('#calcGrid');
+  keys.forEach(k => {
+    const b = document.createElement('button');
+    b.textContent = k;
+    if ('()\u00F7\u00D7\u2212\u002B'.includes(k) && k !== '\u003D') b.classList.add('op');
+    if (k === '\u003D') b.classList.add('eq');
+    grid.appendChild(b);
+  });
+  let expr = '';
+  const dis = $('#calcDis');
+  function show(){ dis.textContent = expr || '0'; }
+  /* tiny shunting-yard evaluator: numbers, + - * / and parentheses */
+  function evalExpr(src){
+    const t = src.replace(/\u00D7/g, '*').replace(/\u00F7/g, '/').replace(/\u2212/g, '-');
+    if (!/^[-+*/(). 0-9]*$/.test(t)) throw new Error('bad');
+    const out = [], ops = [];
+    let prevTok = null;
+    for (let i = 0; i < t.length;){
+      if (t[i] === ' '){ i++; continue; }
+      if (/[0-9.]/.test(t[i])){
+        let j = i; while (j < t.length && /[0-9.]/.test(t[j])) j++;
+        const num = parseFloat(t.slice(i, j)); if (isNaN(num)) throw new Error('bad');
+        out.push(num); prevTok = 'n'; i = j; continue;
+      }
+      const ch = t[i];
+      if (ch === '('){ ops.push(ch); prevTok = '('; i++; continue; }
+      if (ch === ')'){
+        while (ops.length && ops[ops.length - 1] !== '(') out.push(ops.pop());
+        if (!ops.length) throw new Error('paren'); ops.pop(); prevTok = 'n'; i++; continue;
+      }
+      if ('+-*/'.includes(ch)){
+        if (prevTok === null || prevTok === '(' || prevTok === 'op'){
+          if (ch === '-' && (prevTok === 'op' || prevTok === '(' || prevTok === null)){ out.push(0); }
+          else throw new Error('op');
+        }
+        while (ops.length && '*/'.includes(ops[ops.length - 1]) && '+-'.includes(ch)) out.push(ops.pop());
+        while (ops.length && ops[ops.length - 1] !== '(' && prec(ops[ops.length - 1]) >= prec(ch)) out.push(ops.pop());
+        ops.push(ch); prevTok = 'op'; i++; continue;
+      }
+      throw new Error('bad');
+    }
+    while (ops.length){ const o = ops.pop(); if (o === '(') throw new Error('paren'); out.push(o); }
+    const st = [];
+    for (const x of out){
+      if (typeof x === 'number') st.push(x);
+      else { const b = st.pop(), a = st.pop(); if (a === undefined || b === undefined) throw new Error('stack');
+        st.push(x === '+' ? a + b : x === '-' ? a - b : x === '*' ? a * b : b === 0 ? NaN : a / b); }
+    }
+    if (st.length !== 1 || isNaN(st[0])) throw new Error('bad');
+    return st[0];
+  }
+  function prec(o){ return '*/'.includes(o) ? 2 : 1; }
+  grid.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const k = b.textContent;
+    if (k === 'C'){ expr = ''; show(); return; }
+    if (k === '\u232B'){ expr = expr.slice(0, -1); show(); return; }
+    if (k === '\u003D'){
+      if (!expr) return;
+      try { expr = String(evalExpr(expr)); } catch { toast('That expression didn\u2019t compute.'); expr = ''; }
+      show(); return;
+    }
+    expr += k; show();
+  });
+  c.tabIndex = 0;
+  c.addEventListener('keydown', e => {
+    const k = e.key;
+    if (/^[0-9.]+$/.test(k)) expr += k;
+    else if (k === '+' || k === '-' || k === '*' || k === '/') expr += k === '*' ? '\u00D7' : k === '/' ? '\u00F7' : k === '-' ? '\u2212' : k;
+    else if (k === 'Enter'){ try { expr = String(evalExpr(expr)); } catch { toast('That expression didn\u2019t compute.'); expr = ''; } }
+    else if (k === 'Backspace') expr = expr.slice(0, -1);
+    else if (k === 'Escape') expr = '';
+    else return;
+    show(); e.preventDefault();
+  });
+}
+
+/* ---------------- mines app ---------------- */
+function buildMines(app){
+  const c = app.body;
+  const N = 10, MINES = 8;
+  let grid = [], over = false, started = false, t0 = 0, timerId = null, safeFirst = 10;
+  c.innerHTML =
+    '<div class="eyebrow" style="text-align:center">Mines \u00B7 click to reveal, right-click to flag</div>' +
+    '<div class="row between" style="margin-top:6px"><span class="sub" id="mStat">10\u00D710 \u00B7 ' + MINES + ' mines</span><span class="sub" id="mTime">00:00</span></div>' +
+    '<div class="minegrid" id="mGrid"></div>' +
+    '<div class="row between"><button class="btn soft" id="mNew">New game</button><span class="sub" id="mMsg"></span></div>';
+  const mg = $('#mGrid');
+  for (let i = 0; i < N * N; i++){
+    const d = document.createElement('button');
+    d.className = 'mcell'; d.dataset.i = i; d.setAttribute('aria-label', 'cell ' + i);
+    mg.appendChild(d); grid.push({ mine:false, rev:false, flag:false, n:0, el:d });
+  }
+  function reset(){
+    grid.forEach((g, i) => { g.mine = g.rev = g.flag = false; g.n = 0; g.el.className = 'mcell'; g.el.textContent = ''; });
+    over = started = false; t0 = 0; safeFirst = Math.floor(N * N / 2);
+    clearInterval(timerId); timerId = null; $('#mTime').textContent = '00:00'; $('#mMsg').textContent = '';
+  }
+  function placeMines(avoid){
+    const banned = new Set([avoid]);
+    const ri = (avoid % N), rj = Math.floor(avoid / N);
+    for (let di = -1; di <= 1; di++) for (let dj = -1; dj <= 1; dj++){
+      const x = ri + di, y = rj + dj;
+      if (x >= 0 && x < N && y >= 0 && y < N) banned.add(y * N + x);
+    }
+    let placed = 0;
+    while (placed < MINES){
+      const i = Math.floor(Math.random() * N * N);
+      if (banned.has(i) || grid[i].mine) continue;
+      grid[i].mine = true; placed++;
+    }
+    for (let i = 0; i < N * N; i++){
+      if (grid[i].mine) continue;
+      let n = 0; neighbors(i).forEach(j => { if (grid[j].mine) n++; });
+      grid[i].n = n;
+    }
+  }
+  function neighbors(i){
+    const out = [], x = i % N, y = Math.floor(i / N);
+    [[-1,-1],[0,-1],[1,-1],[-1,0],[1,0],[-1,1],[0,1],[1,1]].forEach(([dx,dy]) => {
+      const nx = x + dx, ny = y + dy;
+      if (nx >= 0 && nx < N && ny >= 0 && ny < N) out.push(ny * N + nx);
+    });
+    return out;
+  }
+  function render(){
+    grid.forEach((g, i) => {
+      const e = g.el;
+      e.className = 'mcell' + (g.rev ? ' rev' : '') + (g.mine && g.rev ? ' mine' : (g.n && g.rev ? ' n' + Math.min(g.n, 8) : ''));
+      if (g.rev && !g.mine) e.textContent = g.n || '';
+      else if (g.rev && g.mine) e.textContent = '\u25CF';
+      else if (g.flag) { e.textContent = '\uD83D\uDEA9'; e.classList.add('rev'); }
+      else e.textContent = '';
+    });
+  }
+  function reveal(i){
+    if (over || grid[i].flag || grid[i].rev) return;
+    if (!started){
+      started = true; placeMines(i); t0 = Date.now();
+      timerId = setInterval(() => { $('#mTime').textContent = fmt(Math.floor((Date.now() - t0) / 1000)); }, 500);
+    }
+    if (grid[i].mine){ grid[i].rev = true; over = true; clearInterval(timerId); render(); boom(i); return; }
+    const stack = [i];
+    while (stack.length){
+      const k = stack.pop();
+      if (grid[k].rev || grid[k].flag) continue;
+      grid[k].rev = true;
+      if (grid[k].n === 0) neighbors(k).forEach(j => { if (!grid[j].rev && !grid[j].mine) stack.push(j); });
+    }
+    render();
+    const revealed = grid.filter(g => g.rev).length;
+    if (revealed === N * N - MINES){
+      over = true; clearInterval(timerId);
+      $('#mMsg').textContent = 'Cleared! Nice paw-work.';
+      say('Cleared it! \uD83D\uDC3E');
+      jumpCat();
+      toast('Mines cleared');
+    }
+  }
+  function boom(i){
+    grid.forEach((g, k) => { if (g.mine) g.rev = true; });
+    render();
+    $('#mMsg').textContent = 'Stepped on a mine. Try again?';
+    log('Mines exploded at cell ' + i + '.');
+  }
+  mg.addEventListener('click', e => { const b = e.target.closest('.mcell'); if (b) reveal(+b.dataset.i); });
+  mg.addEventListener('contextmenu', e => {
+    const b = e.target.closest('.mcell'); if (!b) return;
+    e.preventDefault();
+    const g = grid[+b.dataset.i]; if (g.rev || over) return;
+    g.flag = !g.flag; render();
+  });
+  let lp = null;
+  mg.addEventListener('touchstart', e => {
+    const b = e.target.closest('.mcell'); if (!b) return;
+    lp = setTimeout(() => { const g = grid[+b.dataset.i]; if (g.rev || over) return; g.flag = !g.flag; render(); }, 450);
+  }, { passive:true });
+  mg.addEventListener('touchend', () => clearTimeout(lp));
+  $('#mNew').onclick = reset;
+  reset();
+}
+
+/* ---------------- monitor app ---------------- */
+function syncMonitor(){
+  const el = $('#monitorWins'); if (!el) return;
+  el.innerHTML = '';
+  APPS.forEach(a => {
+    const w = a.el;
+    const st = w.classList.contains('hidden') ? 'closed' : w.classList.contains('minimized') ? 'minimized' : 'open';
+    const r = document.createElement('div');
+    r.className = 'mvrow'; r.tabIndex = 0; r.setAttribute('role', 'button');
+    r.innerHTML = '<span class="ft" style="background:' + a.accent + '">' + a.icon + '</span><span class="fname"></span><span class="mvstate"></span>';
+    r.querySelector('.fname').textContent = a.label;
+    const sb = r.querySelector('.mvstate');
+    sb.textContent = st; sb.classList.toggle('on', st === 'open');
+    r.onclick = () => openApp(a.id);
+    r.onkeydown = e => { if (e.key === 'Enter'){ openApp(a.id); } };
+    el.appendChild(r);
+  });
+}
+function buildMonitor(app){
+  const c = app.body;
+  c.innerHTML =
+    '<div class="eyebrow">Monitor / browser context</div>' +
+    '<div class="card"><h3>Live</h3><p><b id="mvFps">\u2013</b> fps \u00B7 <b id="mvHeap" style="display:none">0</b><span id="mvHeapTxt">JS heap not exposed here</span> \u00B7 <b id="mvVis">visible</b></p></div>' +
+    '<h3 style="font-size:14px;margin:14px 0 6px">Open windows</h3>' +
+    '<div id="monitorWins"></div>' +
+    '<p class="sub" style="margin-top:8px">Browser context only \u2014 no kernel or IPC here, so this shows windows of this mockup rather than real OS processes.</p>';
+  let frames = 0, t = performance.now();
+  function loop(ts){
+    frames++;
+    if (ts - t >= 1000){
+      $('#mvFps').textContent = Math.round(frames * 1000 / (ts - t));
+      frames = 0; t = ts;
+      if (performance.memory){
+        $('#mvHeapTxt').style.display = 'none'; $('#mvHeap').style.display = '';
+        $('#mvHeap').textContent = (performance.memory.usedJSHeapSize / 1048576).toFixed(1) + ' MB';
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  document.addEventListener('visibilitychange', () => $('#mvVis').textContent = document.visibilityState);
+  syncMonitor();
+}
+
+/* ---------------- gallery app ---------------- */
+function buildGallery(app){
+  const c = app.body;
+  c.innerHTML =
+    '<div class="eyebrow">Gallery / your images</div>' +
+    '<div class="row" style="gap:6px;margin:4px 0 8px">' +
+      '<button class="btn" id="gPick">Choose images</button>' +
+      '<input type="file" id="gInput" accept="image/*" multiple style="display:none">' +
+      '<span class="sub" id="gSrc">Nothing picked yet</span>' +
+    '</div>' +
+    '<div class="thumbgrid" id="gGrid"></div>' +
+    '<div id="gEmpty" class="emptycard">No images yet. Pick a few, or grant a folder in<b> Files</b> and Gallery will pick up its images.</div>' +
+    '<div id="gView" class="gview" style="display:none"></div>';
+  let urls = [];
+  function clearUrls(){ urls.forEach(u => URL.revokeObjectURL(u)); urls = []; }
+  function addFrom(filesOrHandles, pathFn){
+    const grid = $('#gGrid'); $('#gEmpty').style.display = 'none';
+    filesOrHandles.slice(0, 60).forEach(async (fh, idx) => {
+      let file, name;
+      if (fh instanceof File){ file = fh; name = pathFn ? pathFn(fh) : fh.name; }
+      else { try { file = await fh.getFile(); name = fh.name; } catch { return; } }
+      if (!/^image\//.test(file.type)) return;
+      const u = URL.createObjectURL(file); urls.push(u);
+      const t = document.createElement('div');
+      t.className = 'thumb'; t.title = name; t.style.backgroundImage = 'url(' + u + ')';
+      t.tabIndex = 0; t.setAttribute('role', 'button'); t.setAttribute('aria-label', 'View ' + name);
+      t.onclick = () => showViewer(name, u, file.size);
+      t.onkeydown = e => { if (e.key === 'Enter') showViewer(name, u, file.size); };
+      grid.appendChild(t);
+      if (idx === 0) $('#gSrc').textContent = filesOrHandles.length + ' image' + (filesOrHandles.length === 1 ? '' : 's');
+    });
+  }
+  function showViewer(name, u, size){
+    const v = $('#gView'); v.style.display = '';
+    $('#gGrid').style.display = 'none'; $('#gEmpty').style.display = 'none';
+    const img = document.createElement('img'); img.src = u; img.alt = name;
+    const cap = document.createElement('div'); cap.className = 'sub'; cap.textContent = name + (size ? ' \u00B7 ' + humanSize(size) : '');
+    const back = document.createElement('button'); back.className = 'btn soft'; back.textContent = '\u2190 Back';
+    back.onclick = () => { v.style.display = 'none'; $('#gGrid').style.display = ''; if (!urls.length) $('#gEmpty').style.display = ''; };
+    v.innerHTML = ''; v.append(img, cap, back);
+  }
+  $('#gPick').onclick = () => $('#gInput').click();
+  $('#gInput').onchange = e => { clearUrls(); $('#gGrid').innerHTML = ''; addFrom([...e.target.files]); };
+  app.refreshImages = () => {
+    if (store.dirHandle){
+      clearUrls(); $('#gGrid').innerHTML = '';
+      const items = store.index.filter(f => f.type === 'IMAGE').map(f => f.handle ? f : f.file).filter(Boolean);
+      if (items.length){ addFrom(items.slice(0, 60)); $('#gSrc').textContent = 'From ' + store.dirName + ' \u00B7 ' + Math.min(items.length, 60) + ' image' + (items.length === 1 ? '' : 's'); }
+      else $('#gSrc').textContent = 'No images in ' + store.dirName;
+    } else {
+      clearUrls(); $('#gGrid').innerHTML = '';
+      const items = store.index.filter(f => f.type === 'IMAGE').map(f => f.file).filter(Boolean);
+      if (items.length){ addFrom(items.slice(0, 60)); $('#gSrc').textContent = 'From picked files \u00B7 ' + Math.min(items.length, 60) + ' image' + (items.length === 1 ? '' : 's'); }
+      else $('#gSrc').textContent = 'Nothing picked yet';
+    }
+  };
+}
+
+/* ---------------- files app ---------------- */
+function extType(name){
+  const e = (name.split('.').pop() || '').toUpperCase();
+  if (['PNG','JPG','JPEG','GIF','WEBP','SVG','BMP','AVIF'].includes(e)) return 'IMAGE';
+  if (['TXT','MD','C','H','CPP','HPP','JS','TS','JAVA','PY','JSON','CSV','HTML','CSS','SH','LISP'].includes(e)) return 'CODE';
+  if (e === 'PDF') return 'PDF';
+  if (['DOCX','DOC','ODT','RTF'].includes(e)) return 'DOC';
+  if (['XLSX','XLS','ODS'].includes(e)) return 'SHEET';
+  if (['MP4','MOV','AVI','MKV','WEBM'].includes(e)) return 'VIDEO';
+  return e.slice(0, 4) || 'FILE';
+}
+const TYPE_COLORS = { IMAGE:'#e8a33c', CODE:'#a855f7', PDF:'#e0603c', DOC:'#3b82f6', SHEET:'#22a06b', VIDEO:'#c05a8b' };
+function humanSize(n){ return n < 1024 ? n + ' B' : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(1) + ' MB'; }
+
+function buildFiles(app){
+  const c = app.body;
+  c.innerHTML =
+    '<div class="eyebrow">This PC / granted folder</div>' +
+    '<h2 style="font-size:18px;margin:5px 0 2px">Your files</h2>' +
+    '<div class="row" style="gap:6px;margin:2px 0 0">' +
+      '<button class="btn" id="fGrant">Grant folder</button>' +
+      '<input type="file" id="fPick" multiple webkitdirectory style="display:none">' +
+      '<span class="sub" id="fSrc">No folder granted yet</span>' +
+    '</div>' +
+    '<input class="search" id="filequery" placeholder="Search files and folders\u2026">' +
+    '<div id="filelist" class="filelist"></div>' +
+    '<div id="fDetails" style="display:none"></div>';
+  function grant(){
+    const dp = window.showDirectoryPicker;
+    if (dp){
+      dp().then(async h => {
+        store.dirHandle = h; store.dirName = h.name;
+        $('#fSrc').textContent = h.name;
+        log('Granted folder ' + h.name);
+        await buildIndexFSA();
+        renderFiles('');
+        toast('Folder granted: ' + h.name);
+        if (APPS.find(a => a.id === 'gallery').refreshImages) APPS.find(a => a.id === 'gallery').refreshImages();
+      }).catch(() => {});
+    } else {
+      $('#fPick').click();
+    }
+  }
+  async function buildIndexFSA(){
+    store.index = [];
+    const budget = { n: 400 };
+    await walkDir(store.dirHandle, '', 0, budget);
+    function walkDir(dir, prefix, depth, budget){
+      return new Promise(async resolve => {
+        for await (const entry of dir.values()){
+          if (budget.n-- <= 0) { resolve(); return; }
+          const p = prefix + entry.name;
+          if (entry.kind === 'file'){
+            store.index.push({ name: entry.name, path: p, type: extType(entry.name), handle: entry });
+          } else if (depth < 3 && budget.n > 0){
+            await walkDir(entry, p + ' / ', depth + 1, budget);
+          }
+        }
+        resolve();
+      });
+    }
+  }
+  $('#fPick').onchange = e => {
+    const files = [...e.target.files];
+    if (!files.length) return;
+    store.dirHandle = null;
+    store.dirName = files[0].webkitRelativePath.split('/')[0] || 'selected files';
+    store.index = files.slice(0, 400).map(f => ({
+      name: f.name,
+      path: f.webkitRelativePath || f.name,
+      type: extType(f.name),
+      size: f.size, file: f
+    }));
+    $('#fSrc').textContent = store.dirName + ' \u00B7 ' + store.index.length + ' files';
+    log('Granted folder ' + store.dirName);
+    renderFiles('');
+    toast('Indexed ' + store.index.length + ' files');
+    if (APPS.find(a => a.id === 'gallery').refreshImages) APPS.find(a => a.id === 'gallery').refreshImages();
+  };
+  function renderFiles(q = ''){
+    const list = $('#filelist'); list.innerHTML = '';
+    $('#fDetails').style.display = 'none';
+    const found = store.index.filter(f => (f.name + ' ' + f.path + ' ' + f.type).toLowerCase().includes(q.toLowerCase()));
+    if (!found.length){
+      list.innerHTML = store.index.length
+        ? '<div class="sub" style="padding:14px;text-align:center">No match in ' + store.index.length + ' indexed files.</div>'
+        : '<div class="sub" style="padding:14px;text-align:center">Grant a folder above \u2014 Files indexes the real contents before searching.</div>';
+      return;
+    }
+    found.slice(0, 120).forEach(f => {
+      const el = document.createElement('div'); el.className = 'file'; el.tabIndex = 0;
+      el.innerHTML =
+        '<span class="ft" style="background:' + (TYPE_COLORS[f.type] || '#6d7d86') + '">' + f.type + '</span>' +
+        '<span class="fmeta"><span class="fname"></span><br><span class="fpath"></span></span>' +
+        '<span class="sub" style="font-size:10px"></span>';
+      el.querySelector('.fname').textContent = f.name;
+      el.querySelector('.fpath').textContent = f.path;
+      el.querySelector('.sub').textContent = f.size ? humanSize(f.size) : f.type;
+      el.onclick = () => openFile(f);
+      el.onkeydown = e => { if (e.key === 'Enter') openFile(f); };
+      list.appendChild(el);
+    });
+  }
+  async function openFile(f, size){
+    if (f.type === 'IMAGE'){
+      store.pendingImage = f; openApp('gallery');
+      const g = APPS.find(a => a.id === 'gallery');
+      if (g.onPendingImage) g.onPendingImage();
+    } else if (f.type === 'CODE'){
+      store.pendingCode = f; openApp('code');
+      const ca = APPS.find(a => a.id === 'code');
+      if (ca.onPendingCode) ca.onPendingCode(f);
+    } else {
+      if (f.handle && size === undefined){
+        try { const file = await f.handle.getFile(); size = file.size; } catch {}
+      }
+      const d = $('#fDetails');
+      d.style.display = '';
+      d.innerHTML = '<div class="card"><h3>Details</h3><p><b></b></p><p style="margin-top:6px"></p><p style="margin-top:4px"></p></div>';
+      const ps = d.querySelectorAll('p');
+      d.querySelector('p b').textContent = f.name;
+      ps[1].textContent = f.path;
+      ps[2].textContent = (size !== undefined ? humanSize(size) + ' \u00B7 ' : '') + f.type.toLowerCase() + ' file \u2014 this type has no in-mockup preview; Gallery and Code cover images and text/code.';
+    }
+  }
+  $('#fGrant').onclick = grant;
+  $('#filequery').oninput = e => renderFiles(e.target.value);
+  app.renderFiles = renderFiles;
+  app.openFileDirect = async function(f){
+    let size = f.size;
+    if (f.handle && size === undefined){ try { const fh = await f.handle.getFile(); size = fh.size; } catch {} }
+    await openFile(f, size);
+  };
+  app.hasIndex = () => store.index.length > 0;
+  app.search = async function(raw){
+    const low = raw.toLowerCase();
+    const wantedType = /\bpdf\b/.test(low) ? 'PDF' : /\bimage(s)?\b|\bphoto(s)?\b|\bpicture(s)?\b/.test(low) ? 'IMAGE' : /\bspreadsheet(s)?\b|\bexcel\b/.test(low) ? 'SHEET'
+      : /\bcode\b|\bsource\b|\bjava\b|\bjavascript\b|\bpython\b|\btypescript\b/.test(low) ? 'CODE' : null;
+    const tokens = low.replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/).filter(t => t.length > 1 && !['the','a','an','my','find','file','folder','and','or','where','is','me'].includes(t));
+    const scored = store.index.map(f => {
+      const hay = (f.name + ' ' + f.path + ' ' + f.type).toLowerCase();
+      let score = 0;
+      for (const t of tokens) if (hay.includes(t)) score += 3;
+      if (wantedType && f.type === wantedType) score += 5;
+      if (wantedType && f.type !== wantedType) score -= 2;
+      return { f, score };
+    }).filter(x => x.score > 0).sort((a, b) => b.score - a.score);
+    return scored.length ? scored[0].f : null;
+  };
+}
+
+/* ---------------- writer app ---------------- */
+function buildWriter(app){
+  const c = app.body;
+  c.innerHTML =
+    '<div class="eyebrow">Aether Writer / your notes</div>' +
+    '<div class="writerbar">' +
+      '<h2 style="font-size:18px;margin:2px 0">Writer</h2>' +
+      '<div class="row" style="gap:6px">' +
+        '<button class="btn soft" id="wNew">+ New note</button>' +
+        '<span class="sub" id="wCount"></span>' +
+      '</div>' +
+    '</div>' +
+    '<div class="wlist" id="wList"></div>' +
+    '<div id="wEditor">' +
+      '<input class="search" id="wTitle" placeholder="Note title" style="margin:8px 0 0">' +
+      '<textarea class="note" id="wBody" placeholder="Start typing\u2026 notes autosave in this browser."></textarea>' +
+      '<div class="row between" style="margin-top:10px">' +
+        '<span class="sub" id="wSaved">\u2013</span>' +
+        '<div class="row" style="gap:6px">' +
+          '<button class="btn soft" id="wDel">Delete</button>' +
+          '<button class="btn soft" id="wFocus">Focus on this</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div id="wEmpty" class="emptycard" style="display:none">No notes yet. <button class="btn" id="wFirst" style="margin-left:6px">Write the first one</button></div>';
+  const KEY = 'aether-ui.writer.v1';
+  let notes = lsGet(KEY, []), sel = notes.length ? notes[0].id : null, saveT = null;
+  const editors = ['#wTitle', '#wBody'].map(s => $(s));
+  function noteById(id){ return notes.find(n => n.id === id); }
+  function renderList(){
+    const l = $('#wList'); l.innerHTML = '';
+    $('#wCount').textContent = notes.length ? notes.length + ' note' + (notes.length === 1 ? '' : 's') : '';
+    $('#wEmpty').style.display = notes.length ? 'none' : '';
+    $('#wEditor').style.display = notes.length ? '' : 'none';
+    notes.forEach(n => {
+      const it = document.createElement('div');
+      it.className = 'witem' + (n.id === sel ? ' sel' : '');
+      it.innerHTML = '<span class="wt"></span><span class="wd"></span>';
+      it.querySelector('.wt').textContent = n.title || 'Untitled';
+      it.querySelector('.wd').textContent = new Date(n.saved || Date.now()).toLocaleTimeString([], { hour:'numeric', minute:'2-digit' });
+      it.onclick = () => { sel = n.id; load(); renderList(); };
+      l.appendChild(it);
+    });
+  }
+  function load(){
+    const n = noteById(sel);
+    if (!n) return;
+    $('#wTitle').value = n.title; $('#wBody').value = n.body;
+    $('#wSaved').textContent = 'Saved \u00B7 ' + new Date(n.saved || Date.now()).toLocaleTimeString([], { hour:'numeric', minute:'2-digit' });
+  }
+  function save(){
+    const n = noteById(sel); if (!n) return;
+    n.title = $('#wTitle').value; n.body = $('#wBody').value; n.saved = Date.now();
+    lsSet(KEY, notes);
+    $('#wSaved').textContent = 'Saved \u00B7 ' + new Date(n.saved).toLocaleTimeString([], { hour:'numeric', minute:'2-digit' });
+    renderList();
+  }
+  function autosave(){ clearTimeout(saveT); saveT = setTimeout(save, 500); }
+  function createNote(){
+    const n = { id:'n' + Date.now(), title:'', body:'', saved:Date.now() };
+    notes.unshift(n); sel = n.id; lsSet(KEY, notes);
+    renderList(); load(); $('#wTitle').focus();
+  }
+  $('#wNew').onclick = createNote;
+  $('#wFirst').onclick = createNote;
+  editors.forEach(e => e.oninput = () => { autosave(); const n = noteById(sel); if (n){ const words = ($('#wBody').value.trim().match(/\S+/g) || []).length; $('#wSaved').textContent = words + ' word' + (words === 1 ? '' : 's') + ' \u00B7 unsaved\u2026'; } });
+  $('#wDel').onclick = () => {
+    if (!noteById(sel)) return;
+    if (!confirm('Delete this note permanently?')) return;
+    notes = notes.filter(n => n.id !== sel); sel = notes.length ? notes[0].id : null;
+    lsSet(KEY, notes); renderList(); if (sel) load();
+    toast('Note deleted');
+  };
+  $('#wFocus').onclick = () => startFocus(25, 'writer');
+  renderList(); if (sel) load();
+}
+
+/* ---------------- terminal app ---------------- */
+function buildTerminal(app){
+  const c = app.body;
+  c.innerHTML =
+    '<div class="termwrap">' +
+      '<div class="termscroll" id="tScroll"></div>' +
+      '<div class="termrow"><span class="termprompt">aether&gt;</span><input id="tInput" autocomplete="off" spellcheck="false" placeholder="help"></div>' +
+    '</div>';
+  const sc = $('#tScroll'), inp = $('#tInput');
+  let history = [], hIdx = -1;
+  function out(t, cls){
+    const d = document.createElement('div');
+    if (cls) d.className = cls;
+    d.textContent = t;
+    sc.appendChild(d); sc.scrollTop = sc.scrollHeight;
+  }
+  /* in-memory AetherFS for the shell when no real folder is granted */
+  const vfs = { name:'aetherfs', kind:'dir', children:[] };
+  function vfsFind(path){
+    if (path === '/' || path === '') return vfs;
+    const parts = path.split('/').filter(Boolean);
+    let node = vfs;
+    for (const p of parts){
+      const next = node.children.find(ch => ch.kind === 'dir' && ch.name === p);
+      if (!next) return null;
+      node = next;
+    }
+    return node;
+  }
+  let cwd = '/', cwdHandle = null;
+  function resolvePath(p, raw){
+    if (!p || p === '.') return cwd;
+    if (p.startsWith('/')) return p;
+    const parts = cwd.split('/').filter(Boolean);
+    for (const seg of p.split('/')){
+      if (seg === '..') parts.pop();
+      else if (seg && seg !== '.') parts.push(seg);
+    }
+    return '/' + parts.join('/');
+  }
+  async function handle(cmd){
+    const [c0, ...rest] = cmd.trim().split(/\s+/);
+    const arg = rest.join(' ');
+    if (c0 === 'help'){
+      out('available: help  ls [dir]  cd <dir>  cat <file>  pwd  echo <text> [> file]  whoami  date  open <app>  clear');
+      out(store.dirHandle ? 'filesystem: granted folder "' + store.dirName + '"' : 'filesystem: in-memory aetherfs (grant a folder in Files to browse the real one)');
+      return;
+    }
+    if (c0 === 'clear'){ sc.innerHTML = ''; return; }
+    if (c0 === 'pwd'){ out(cwd); return; }
+    if (c0 === 'whoami'){ out('browser user \u2014 no kernel account in this mockup'); return; }
+    if (c0 === 'date'){ out(new Date().toString()); return; }
+    if (c0 === 'echo'){
+      const m = cmd.match(/^echo\s+(.*?)\s*>\s*(\S+)$/);
+      if (m){
+        const dir = vfsFind(resolvePath('.'));
+        const name = m[2];
+        let node = dir.children.find(ch => ch.kind === 'file' && ch.name === name);
+        if (node) node.text = m[1];
+        else dir.children.push({ name, kind:'file', text:m[1] });
+        out('wrote ' + name);
+      } else out(arg || '');
+      return;
+    }
+    if (c0 === 'cd'){
+      const p = resolvePath(arg || '/');
+      if (store.dirHandle){
+        const h = p === '/' ? store.dirHandle : await findDir(p);
+        if (!h){ out('no such directory: ' + p, 'terr'); return; }
+        cwd = p; cwdHandle = h; out(cwd); return;
+      }
+      if (!vfsFind(p)){ out('no such directory: ' + p, 'terr'); return; }
+      cwd = p; out(cwd); return;
+    }
+    if (c0 === 'ls'){
+      const p = resolvePath(arg);
+      if (store.dirHandle){
+        const h = p === '/' ? store.dirHandle : await findDir(p);
+        if (!h){ out('no such directory: ' + p, 'terr'); return; }
+        const names = [];
+        for await (const [n] of h.entries()) names.push(n);
+        out(names.length ? names.join('  ') : '(empty)');
+        return;
+      }
+      const d = vfsFind(p);
+      if (!d){ out('no such directory: ' + p, 'terr'); return; }
+      out(d.children.length ? d.children.map(ch => ch.kind === 'dir' ? ch.name + '/' : ch.name).join('  ') : '(empty)');
+      return;
+    }
+    if (c0 === 'cat'){
+      if (!arg){ out('usage: cat <file>', 'terr'); return; }
+      const p = resolvePath(arg);
+      if (store.dirHandle){
+        const parent = await findDir(p.split('/').slice(0, -1).join('/') || '/');
+        if (!parent){ out('no such directory', 'terr'); return; }
+        const fname = p.split('/').pop();
+        try {
+          const [fh] = await parent.getFileHandle ? [await parent.getFileHandle(fname)] : [null];
+          if (!fh){ out('no such file: ' + p, 'terr'); return; }
+          const file = await fh.getFile();
+          const t = await file.text();
+          out(t.length > 1500 ? t.slice(0, 1500) + '\n\u2026 (truncated)' : t);
+        } catch { out('cannot read: ' + p, 'terr'); }
+        return;
+      }
+      const dirPath = p.split('/').slice(0, -1).join('/') || '/';
+      const d = vfsFind(dirPath), fname = p.split('/').pop();
+      const f = d && d.children.find(ch => ch.kind === 'file' && ch.name === fname);
+      if (!f){ out('no such file: ' + p, 'terr'); return; }
+      out(f.text || '');
+      return;
+    }
+    if (c0 === 'open'){
+      const a = APPS.find(x => x.id === arg.toLowerCase() || x.label.toLowerCase() === arg.toLowerCase());
+      if (!a){ out('no such app. try: ' + APPS.map(x => x.id).join(' '), 'terr'); return; }
+      await walkToApp(a.id); out('opened ' + a.label);
+      return;
+    }
+    out(c0 + ': command not found \u2014 try \u201chelp\u201d', 'terr');
+  }
+  async function findDir(p){
+    if (!store.dirHandle) return null;
+    if (p === '/' || p === '') return store.dirHandle;
+    const parts = p.split('/').filter(Boolean);
+    let h = store.dirHandle;
+    for (const part of parts){
+      try { h = await h.getDirectoryHandle(part); } catch { return null; }
+    }
+    return h;
+  }
+  inp.addEventListener('keydown', async e => {
+    if (e.key === 'Enter'){
+      const v = inp.value; inp.value = '';
+      if (!v.trim()) return;
+      out('aether> ' + v);
+      history.push(v); hIdx = history.length;
+      await handle(v);
+    } else if (e.key === 'ArrowUp' && history.length){
+      hIdx = Math.max(0, hIdx - 1); inp.value = history[hIdx];
+    } else if (e.key === 'ArrowDown' && history.length){
+      hIdx = Math.min(history.length, hIdx + 1);
+      inp.value = history[hIdx] || '';
+    }
+  });
+  out('aethersh \u2014 a small shell for this mockup.');
+  out(store.dirHandle ? 'filesystem: ' + store.dirName : 'filesystem: in-memory aetherfs. Tip: grant a folder in Files, or \u201cecho hi > notes.txt\u201d here.');
+  out('');
+}
+
+/* ---------------- code app ---------------- */
+function buildCode(app){
+  const c = app.body;
+  c.innerHTML =
+    '<div class="eyebrow">Code / read from Files \u00B7 scratch edits locally</div>' +
+    '<div class="row between"><h2 style="font-size:18px;margin:2px 0" id="cTitle">scratch.js</h2><span class="sub" id="cMeta"></span></div>' +
+    '<div class="code codelarge" id="cView" style="display:none"></div>' +
+    '<textarea class="note" id="cEdit" style="height:220px;font:12px/1.7 monospace;white-space:pre;display:" placeholder="A scratch buffer saved in this browser. Open text files from Files to view them highlighted here."></textarea>' +
+    '<div class="row" style="gap:6px;margin-top:8px">' +
+      '<button class="btn soft" id="cClear">Clear scratch</button>' +
+      '<span class="sub" id="cSaved">\u2013</span>' +
+    '</div>';
+  const KEY = 'aether-ui.scratch.v1';
+  let scratch = lsGet(KEY, { name:'scratch.js', text:'' });
+  const edit = $('#cEdit'), view = $('#cView'), title = $('#cTitle'), meta = $('#cMeta');
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const KW = /\b(const|let|var|function|return|if|else|for|while|class|new|import|export|from|try|catch|finally|throw|int|void|static|struct|char|float|double|long|short|unsigned|switch|case|break|continue|default|do|namespace|using|template|public|private|protected|package|extends|implements|def|elif|in|is|not|and|or|True|False|None|true|false|null|this|self)\b/g;
+  function highlight(src){
+    let s = esc(src);
+    s = s.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*|#(?![0-9a-fA-F]{3,6}\b)[^\n]*/g, m => '<span class="tok-c">' + m + '</span>');
+    s = s.replace(/("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)/g, m => '<span class="tok-s">' + m + '</span>');
+    s = s.replace(KW, m => '<span class="tok-k">' + m + '</span>');
+    s = s.replace(/\b(\d+(?:\.\d+)?)\b/g, m => '<span class="tok-n">' + m + '</span>');
+    return s;
+  }
+  function showPreview(name, text, size){
+    title.textContent = name;
+    meta.textContent = (size !== undefined ? size + ' B \u00B7 ' : '') + 'read-only';
+    view.style.display = ''; edit.style.display = 'none';
+    view.innerHTML = highlight(text);
+  }
+  function showScratch(){
+    title.textContent = scratch.name; meta.textContent = 'scratch \u00B7 local edits';
+    view.style.display = 'none'; edit.style.display = '';
+    edit.value = scratch.text;
+  }
+  edit.oninput = () => {
+    scratch.text = edit.value; lsSet(KEY, scratch);
+    $('#cSaved').textContent = 'Scratch saved \u00B7 ' + new Date().toLocaleTimeString([], { hour:'numeric', minute:'2-digit' });
+  };
+  $('#cClear').onclick = () => { if (!confirm('Clear the scratch buffer?')) return; scratch.text = ''; lsSet(KEY, scratch); edit.value = ''; };
+  app.onPendingCode = async function(f){
+    let text = '', size;
+    try {
+      if (f.file){ text = await f.file.text(); size = f.file.size; }
+      else if (f.handle){ const fh = await f.handle.getFile(); text = await fh.text(); size = fh.size; }
+    } catch { toast('Could not read that file.'); return; }
+    showPreview(f.name, text.slice(0, 20000), size);
+    log('Code preview: ' + f.name);
+  };
+  showScratch();
+}
+
+/* ---------------- real file search (cat flow) ---------------- */
+async function searchFiles(raw){
+  const filesApp = APPS.find(a => a.id === 'files');
+  state('ACTING'); say('Seeing what\u2019s on the desk\u2026');
+  await walkToIcon();
+  const reach = async () => {
+    let c = getWinCenter(filesApp.el);
+    if (!c) { await walkToApp('files'); c = getWinCenter(filesApp.el); }
+    if (c) await moveCatTo(c.x, c.y, 'walk');
+  };
+  await reach();
+  openApp('files');
+  await new Promise(r => setTimeout(r, 250));
+
+  if (!store.index.length){
+    say('No folder granted yet. Files can\u2019t search without one.');
+    msg('I can search real files, but I need a folder first. Use \u201cGrant folder\u201d in Files \u2014 or pick files with the fallback chooser (browsers without the File System Access API).');
+    log('Search blocked: no folder granted.'); state('IDLE'); return;
+  }
+  $('#filequery').value = '';
+  setCatState('searching'); say('Digging through ' + store.dirName + '\u2026 \uD83D\uDD0D');
+  await new Promise(r => setTimeout(r, 1200));
+  const f = await filesApp.search(raw);
+  filesApp.renderFiles('');
+  await new Promise(r => setTimeout(r, 250));
+  if (!f){
+    say('I searched, but nothing matched.');
+    msg('No match in ' + store.dirName + ' for \u201c' + raw + '\u201d. Try a filename or a type word like \u201cpdf\u201d, \u201cimage\u201d, \u201cspreadsheet\u201d or \u201ccode\u201d.');
+    log('Search finished with no match.'); setCatState('idle'); state('COMPLETED'); return;
+  }
+  const rows = [...$('#filelist').querySelectorAll('.file')];
+  const row = rows.find(el => el.querySelector('.fname')?.textContent === f.name);
+  if (row){ row.classList.add('selected'); row.scrollIntoView({ block:'nearest', behavior:'smooth' }); }
+  await jumpCat();
+  carryStart(f.type, TYPE_COLORS[f.type] || '#8a857b');
+  say('Found it! Carrying it over.');
+  const targetId = f.type === 'IMAGE' ? 'gallery' : f.type === 'CODE' ? 'code' : 'files';
+  const tApp = APPS.find(a => a.id === targetId);
+  let target = getWinCenter(tApp.el);
+  if (!target){ openApp(targetId); target = getWinCenter(tApp.el); }
+  if (target) await moveCatTo(target.x, target.y, 'walk');
+  carryStop();
+  if (f.type === 'IMAGE'){ store.pendingImage = f; openApp('gallery'); const g = APPS.find(a => a.id === 'gallery'); if (g.onPendingImage) g.onPendingImage(); }
+  else if (f.type === 'CODE'){ store.pendingCode = f; openApp('code'); const ca = APPS.find(a => a.id === 'code'); if (ca.onPendingCode) ca.onPendingCode(f); }
+  else {
+    const ca = APPS.find(a => a.id === 'files');
+    try { await ca.openFileDirect(f); }
+    catch { msg('Opened the Files list for you.'); }
+  }
+  msg('Found ' + f.name + ' in ' + f.path + '.');
+  log('Found ' + f.name + '.');
+  state('COMPLETED'); toast('Found ' + f.name);
+}
+
+/* ---------------- organize windows ---------------- */
+async function organizeDesktop(){
+  state('ACTING'); say('Time to tidy up! Let me sort things.');
+  log('Organizing desktop');
+  const positions = [
+    { left:'2%',  top:'12%', width:'30%', height:'42%' },
+    { left:'34%', top:'12%', width:'30%', height:'42%' },
+    { left:'66%', top:'12%', width:'32%', height:'42%' },
+    { left:'2%',  top:'57%', width:'44%', height:'38%' },
+    { left:'48%', top:'57%', width:'50%', height:'38%' }
+  ];
+  const wins = APPS.filter(a => {
+    const w = a.el;
+    return !w.classList.contains('hidden') && !w.classList.contains('minimized') && w.dataset.max !== '1';
+  });
+  let i = 0;
+  for (const a of wins){
+    const p = positions[i % positions.length];
+    const w = a.el;
+    if (!w.dataset.prevLeft) { w.dataset.prevLeft = w.style.left; w.dataset.prevTop = w.style.top; w.dataset.prevW = w.style.width; w.dataset.prevH = w.style.height; }
+    w.style.left = p.left; w.style.top = p.top; w.style.width = p.width; w.style.height = p.height;
+    const c = getWinCenter(w);
+    if (c){ await moveCatTo(c.x, c.y, 'walk'); await new Promise(r => setTimeout(r, 350)); }
+    i++;
+  }
+  await jumpCat();
+  say('All tidy! Your workspace is organized.');
+  msg('All tidy! Your workspace is organized. \uD83D\uDC3E');
+  state('COMPLETED'); toast('Desktop organized');
+}
+
+/* ---------------- assistant commands ---------------- */
+async function execute(raw){
+  const c = raw.trim(); if (!c) return;
+  msg(c, 'user'); $('#command').value = '';
+  state('THINKING'); cat.classList.remove('sleeping');
+  await new Promise(r => setTimeout(r, 500));
+  const s = c.toLowerCase();
+
+  /* cancel is always first so a stray command can be undone */
+  if (/stop what|stop doing|cancel|never ?mind/.test(s)){
+    endFocus(); busyFlow = false; carriedFile.style.opacity = '0';
+    msg('Stopped the current action.'); log('Operation cancelled by user.'); state('IDLE'); return;
+  }
+  /* focus deliberately outranks a generic help match so "help me focus" lands */
+  if (/focus|concentrat|study session|deep work|pomodoro/.test(s)){
+    state('ACTING'); say('Let\u2019s tune out the noise.');
+    const n = +(s.match(/(5|15|25|45|60)[ -]?minute/) || [])[1] || 25;
+    const target = APPS.find(a => a.el.classList.contains('active') && !a.el.classList.contains('hidden'));
+    startFocus(n, target ? target.id : 'writer');
+    if (/hide|away|distraction/.test(s) && SETTINGS.dist){
+      for (const a of APPS){
+        const w = a.el;
+        if (a.id !== (target && target.id) && !w.classList.contains('hidden') && w.dataset.max !== '1'){
+          await handleMinimize(a);
+        }
+      }
+      say('All tucked away. Back to your task.');
+    }
+    msg('Focus mode is on for ' + n + ' minutes. Other windows dim; use Pause or End in the chip.');
+    return;
+  }
+  if (/\b(find|search|look for|look inside|locate|where is)\b|\bmy .*(file|document|pdf|image|photo|spreadsheet|notes)\b/.test(s)){
+    await searchFiles(c); return;
+  }
+  if (/\b(open|show|launch|pull up|bring up)\b/.test(s)){
+    const map = [
+      [/terminal|console|shell/, 'terminal'],
+      [/code|editor|java|\bc\b|python/, 'code'],
+      [/writer|notes|note\b/, 'writer'],
+      [/files?|explorer/, 'files'],
+      [/clock|time\b/, 'clock'],
+      [/timer|pomodoro/, 'timer'],
+      [/calc/, 'calc'],
+      [/gallery|images?|photos?/, 'gallery'],
+      [/mines|game/, 'mines'],
+      [/monitor|resources?/, 'monitor'],
+      [/settings/, 'settings']
+    ];
+    for (const [re, id] of map){
+      if (re.test(s)){
+        state('ACTING'); say('On my way.');
+        await walkToApp(id);
+        say('Here\u2019s ' + APPS.find(a => a.id === id).label + '.');
+        msg('Opened ' + APPS.find(a => a.id === id).label + '.'); log('Opened ' + id);
+        state('COMPLETED'); return;
+      }
+    }
+  }
+  if (/what can you do|help|capabilities/.test(s)){
+    msg('I live on this desktop and can:\n\u2022 open your Aether apps \u2014 \u201copen the terminal\u201d, \u201cshow code\u201d, \u201cpull up the clock\u201d\n\u2022 search real files \u2014 grant a folder in Files first, then \u201cfind my pdf\u201d or \u201cfind images\u201d\n\u2022 run focus mode \u2014 \u201cfocus for 25 minutes\u201d (dims other windows)\n\u2022 tuck distractions away \u2014 \u201chide distractions\u201d when protection is on\n\u2022 organize windows, run break timers, play Mines, do math, and nap on command.');
+    say('Lots of little helpful things!'); state('COMPLETED'); return;
+  }
+  if (/sleep|go to sleep|nap\b/.test(s)){
+    setCatState('sleeping'); say('Wake me with a click. Zzz\u2026');
+    msg('Miso is napping. Click the cat to wake me.'); state('IDLE'); return;
+  }
+  if (/hide distractions?|tuck (away|it)|instagram|youtube|social/.test(s)){
+    if (!SETTINGS.dist){ msg('Distraction protection is off in Settings, so I won\u2019t touch your windows. Turn it on and ask again.'); say('Your call is protected.'); state('COMPLETED'); return; }
+    state('ACTING');
+    let dodge = 0;
+    for (const a of APPS){
+      const w = a.el;
+      if (['monitor','terminal','code','writer'].includes(a.id)) continue;
+      if (!w.classList.contains('hidden') && w.dataset.max !== '1'){
+        const c2 = getWinCenter(w);
+        if (c2){ await moveCatTo(c2.x, c2.y, 'walk'); await jumpCat(); }
+        w.classList.add('minimized'); w.classList.remove('active');
+        w.dataset.prevLeft = w.dataset.prevLeft || w.style.left;
+        w.dataset.prevTop = w.dataset.prevTop || w.style.top;
+        w.dataset.prevW = w.dataset.prevW || w.style.width;
+        w.dataset.prevH = w.dataset.prevH || w.style.height;
+        w.style.opacity = '0'; w.style.transform = 'translateX(-50%) scale(0.1)';
+        dodge++;
+      }
+    }
+    if (dodge){ say('Not now, little scroll. Back to your task.'); msg('Tucked away ' + dodge + ' window' + (dodge === 1 ? '' : 's') + ' (Distraction Protection is on).'); log('Distraction protection tucked ' + dodge + ' windows.'); }
+    else { say('Nothing to tuck \u2014 the desk is calm.'); msg('Nothing worth hiding was open.'); }
+    state('COMPLETED'); return;
+  }
+  if (/organize|clean up|tidy/.test(s)){ await organizeDesktop(); return; }
+  if (/break|relax|rest|tired|five[ -]?minute/.test(s)){
+    state('ACTING'); say('Five minutes, just for you.');
+    const tApp = APPS.find(a => a.id === 'timer');
+    await walkToApp('timer');
+    const sel = $('#duration'); if (sel) sel.value = '5';
+    if (!focusOn) startFocus(5, 'timer');
+    msg('Five-minute break timer started. I\u2019ll mute the rest of the desk.'); log('Break timer started.');
+    state('COMPLETED'); return;
+  }
+  if (/status|where am i|what time/.test(s)){
+    const openCount = APPS.filter(a => !a.el.classList.contains('hidden')).length;
+    msg('Desktop: ' + openCount + ' of ' + APPS.length + ' apps open \u00B7 folder: ' + (store.dirHandle ? store.dirName + ' (' + store.index.length + ' files indexed)' : 'none granted') + ' \u00B7 protection ' + (SETTINGS.dist ? 'on' : 'off') + '.');
+    say('All quiet on the desk.'); state('COMPLETED'); return;
+  }
+  const map2 = [
+    [/notes?|writer|study/, 'writer'],
+    [/code|editor|java|python/, 'code'],
+    [/files?/, 'files'],
+    [/terminal|console|shell/, 'terminal'],
+    [/clock|time\b/, 'clock'],
+    [/timer|pomodoro/, 'timer'],
+    [/calc|math|arithmetic/, 'calc'],
+    [/gallery|images?|photos?/, 'gallery'],
+    [/mines|game/, 'mines'],
+    [/monitor|resources?/, 'monitor'],
+    [/settings/, 'settings']
+  ];
+  for (const [re, id] of map2){
+    if (re.test(s)){
+      state('ACTING'); say('Coming right up.');
+      await walkToApp(id);
+      say('Here\u2019s ' + APPS.find(a => a.id === id).label + '.');
+      msg('Opened ' + APPS.find(a => a.id === id).label + '.'); log('Opened ' + id);
+      state('COMPLETED'); return;
+    }
+  }
+  msg('I can\u2019t do that from a browser mockup \u2014 no real OS underneath. Things I can do: open Aether apps, search a granted folder, run focus mode, hide distractions with protection on, organize windows, timers, Mines, the calculator. Try \u201cwhat can you do\u201d.');
+  say('Hmm\u2026 but I\u2019d rather not guess.'); state('COMPLETED');
+}
+
+/* ---------------- app wiring ---------------- */
+function wireApps(){
+  APPS.forEach(app => {
+    const w = app.el;
+    w.addEventListener('pointerdown', () => {
+      $$('.window').forEach(x => x.classList.remove('active'));
+      w.classList.add('active');
+      $$('#taskbar [data-open]').forEach(b => b.classList.toggle('active', b.dataset.open === app.id));
+    });
+    w.querySelector('[data-act="close"]').onclick = () => closeApp(app);
+    w.querySelector('[data-act="min"]').onclick = () => handleMinimize(app);
+    w.querySelector('[data-act="max"]').onclick = () => handleMaximize(app);
+    const bar = w.querySelector('.titlebar');
+    let drag = null;
+    bar.onpointerdown = e => {
+      if (e.target.closest('.dot')) return;
+      const r = w.getBoundingClientRect();
+      drag = { w, dx: e.clientX - r.left, dy: e.clientY - r.top };
+      bar.setPointerCapture(e.pointerId);
+    };
+    bar.onpointermove = e => {
+      if (!drag || drag.w !== w) return;
+      const d = desktop.getBoundingClientRect();
+      w.style.left = Math.max(0, Math.min(d.width - w.offsetWidth, e.clientX - d.left - drag.dx)) + 'px';
+      w.style.top = Math.max(44, Math.min(d.height - w.offsetHeight - 60, e.clientY - d.top - drag.dy)) + 'px';
+    };
+    bar.onpointerup = () => drag = null;
+    bar.onpointercancel = () => drag = null;
+  });
+}
+
+/* ---------------- boot ---------------- */
+function boot(){
+  APPS.forEach(buildWindow);
+  APPS.forEach(a => a.build(a));
+  buildDeskIcons();
+  buildTaskbar();
+  wireApps();
+  APPS.find(a => a.id === 'gallery').onPendingImage = function(){
+    const f = store.pendingImage; if (!f) return;
+    const g = APPS.find(a => a.id === 'gallery');
+    (function(){
+      let u = null;
+      (async () => {
+        try {
+          const file = f.file ? f.file : await f.handle.getFile();
+          u = URL.createObjectURL(file);
+          const vd = $('#gView');
+          const grid = $('#gGrid'), empty = $('#gEmpty');
+          grid.style.display = 'none'; empty.style.display = 'none'; vd.style.display = '';
+          vd.innerHTML = '';
+          const img = document.createElement('img'); img.src = u; img.alt = f.name;
+          const cap = document.createElement('div'); cap.className = 'sub';
+          cap.textContent = f.name + (file.size ? ' \u00B7 ' + humanSize(file.size) : '');
+          const back = document.createElement('button'); back.className = 'btn soft'; back.textContent = '\u2190 Back';
+          back.onclick = () => {
+            vd.style.display = 'none';
+            grid.style.display = '';
+            if (!grid.children.length) empty.style.display = '';
+            URL.revokeObjectURL(u);
+          };
+          vd.append(img, cap, back);
+          log('Gallery preview: ' + f.name);
+        } catch { toast('Could not open that image.'); }
+      })();
+    })();
+  };
+  /* desktop icons + taskbar clicks */
+  document.addEventListener('click', e => {
+    const opener = e.target.closest('[data-open]');
+    if (opener){ openApp(opener.dataset.open); }
+  });
+  $('#ask').onclick = () => { panel.classList.add('open'); say('Hi! What shall we do?'); $('#command').focus(); };
+  $('#closepanel').onclick = () => panel.classList.remove('open');
+  $('#form').onsubmit = e => { e.preventDefault(); execute($('#command').value); };
+  $$('.suggest [data-cmd]').forEach(b => b.onclick = () => execute(b.dataset.cmd));
+  $('#pause').onclick = () => {
+    paused = !paused;
+    $('#pause').textContent = paused ? 'Resume' : 'Pause';
+    say(paused ? 'Taking a pause with you.' : 'Back to our little mission.');
+  };
+  $('#end').onclick = () => endFocus();
+  /* voice input: only when the browser offers it */
+  $('#mic').onclick = () => {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR){ toast('Voice input isn\u2019t available in this browser.'); return; }
+    try {
+      const rec = new SR(); rec.lang = 'en-US';
+      rec.onstart = () => { state('LISTENING'); say('I\u2019m listening\u2026'); };
+      rec.onresult = ev => $('#command').value = ev.results[0][0].transcript;
+      rec.onerror = () => toast('Could not hear that clearly.');
+      rec.onend = () => state('IDLE');
+      rec.start();
+    } catch { toast('Voice input couldn\u2019t start here.'); }
+  };
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && panel.classList.contains('open')) panel.classList.remove('open');
+  });
+  /* initial windows */
+  ['writer','files','clock','timer'].forEach(id => openApp(id));
+  state('IDLE');
+  /* top clock */
+  const setClock = () => $('#clock').textContent = new Date().toLocaleTimeString([], { hour:'numeric', minute:'2-digit' });
+  setClock(); setInterval(setClock, 15000);
+  /* cat starting position */
+  setTimeout(() => {
+    const d = desktop.getBoundingClientRect();
+    setCatPos(d.width * 0.56 - 75, d.height * 0.62 - 60);
+    say('Psst\u2026 click me if you need a paw.');
+    log('Settled into the desktop. Watching over things.');
+  }, 150);
+}
+boot();
+})();
+</script>
+</body>
+</html>

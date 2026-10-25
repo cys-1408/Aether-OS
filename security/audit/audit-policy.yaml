@@ -1,0 +1,5 @@
+audit:
+  ledger: append-only, hash-chained, per-user query
+  events: [agent requests, permission decisions, confirmations, execution results,
+           verification, errors, rollbacks]
+  never_logged: [passwords, tokens, private keys]

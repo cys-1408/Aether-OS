@@ -1,0 +1,2 @@
+# AI Runtime Guide
+Settings → AI Runtime shows your hardware profile, installed models, and live resource use. Recommended models fit your memory budget (weights + KV cache + overhead, not just total RAM). Downloads are consent-gated, resumable, digest-verified; validation runs a harmless inference and reports measured speed. Model states: not configured, profiling, recommendation ready, awaiting consent, downloading/verifying, installing, validating, ready, degraded (with the true reason). Remove/pin/switch models anytime; the OS never requires a model.

@@ -1,0 +1,4 @@
+migration:
+  policy: forward-only
+  on_version_bump: re-evaluate all stored grants against the new catalogs
+  revoked_by_default: [unrecognized capability ids]

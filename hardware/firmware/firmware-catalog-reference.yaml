@@ -1,0 +1,2 @@
+canonical_catalog: firmware/firmware-catalog.yaml
+note: hardware-side reference mirrors the top-level firmware catalog

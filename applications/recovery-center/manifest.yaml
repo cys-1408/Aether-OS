@@ -1,0 +1,6 @@
+name: Recovery Center
+app_id: org.aether.Apps.RecoveryCenter
+version: 1.0.0
+binary: aether-recovery-center
+package: aether-apps
+description: Recovery Center — native Aether application (GTK3)

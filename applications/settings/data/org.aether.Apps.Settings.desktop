@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Settings
+Comment=Settings — Aether application
+Exec=aether-settings
+Terminal=false
+Categories=Utility;System;

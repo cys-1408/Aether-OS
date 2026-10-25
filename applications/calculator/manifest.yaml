@@ -1,0 +1,6 @@
+name: Calc
+app_id: org.aether.Apps.Calculator
+version: 1.0.0
+binary: aether-calculator
+package: aether-apps
+description: Calc — native Aether application (GTK3)

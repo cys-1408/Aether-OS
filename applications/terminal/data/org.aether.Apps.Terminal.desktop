@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Terminal
+Comment=A real shell in a terminal
+Exec=aether-terminal
+Icon=org.aetherterminal
+Terminal=false
+Categories=Utility;System;
+Keywords=aether;

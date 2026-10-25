@@ -1,0 +1,133 @@
+#!/usr/bin/env python3
+"""aetherctl — command line control for the AetherOS desktop shell.
+
+Talks to the shell UDS (Shell.* methods over JSON-RPC) so sway keybindings,
+scripts and the session can drive the shell without GTK.
+
+Usage:
+    aetherctl status
+    aetherctl launcher-toggle
+    aetherctl open-app <app_id>
+    aetherctl focus-app <app_id>
+    aetherctl list-apps | list-windows
+    aetherctl arrange <left|right|auto>
+    aetherctl tile [--columns N] [con_id ...]
+    aetherctl minimize <con_id> | restore <con_id>
+    aetherctl workspace create <name> [--switch]
+    aetherctl focus start [minutes] | focus pause | focus resume | focus end
+    aetherctl toast <message>
+
+Exit codes: 0 success, 1 shell unreachable, 2 usage error, 3 call failed.
+"""
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+from typing import Optional
+
+DESKTOP_DIR = Path(__file__).resolve().parent.parent.parent  # desktop/shell/bin -> desktop
+for candidate in (DESKTOP_DIR, DESKTOP_DIR.parent / "libraries" / "libaether-core" / "python"):
+    if candidate.is_dir() and str(candidate) not in sys.path:
+        sys.path.insert(0, str(candidate))
+
+import shell.pkgmap  # noqa: E402,F401
+from shell import aether_runtime  # noqa: E402
+
+
+def _usage() -> str:
+    return __doc__ or ""
+
+
+def _call(method: str, params: Optional[dict] = None) -> dict:
+    return aether_runtime.call_shell(method, params or {}, timeout=15.0)
+
+
+def _run(argv: list[str]) -> int:
+    if not argv or argv[0] in {"-h", "--help", "help"}:
+        print(_usage())
+        return 0
+    command, rest = argv[0], argv[1:]
+
+    if command == "status":
+        result = _call("capabilities")
+        print(json.dumps(result, indent=2))
+        return 0
+    if command == "launcher-toggle":
+        print(json.dumps(_call("launcher_toggle")))
+        return 0
+    if command == "open-app" and rest:
+        print(json.dumps(_call("open_app", {"app_id": rest[0]})))
+        return 0
+    if command == "focus-app" and rest:
+        print(json.dumps(_call("focus_app", {"app_id": rest[0]})))
+        return 0
+    if command in {"list-apps", "list-windows"}:
+        method = "list_apps" if command == "list-apps" else "list_windows"
+        print(json.dumps(_call(method), indent=2))
+        return 0
+    if command == "arrange" and rest and rest[0] in {"left", "right", "auto"}:
+        print(json.dumps(_call("arrange_windows", {"mode": rest[0]})))
+        return 0
+    if command == "tile":
+        columns: Optional[int] = None
+        ids: list[int] = []
+        index = 0
+        while index < len(rest):
+            if rest[index] == "--columns" and index + 1 < len(rest):
+                columns = int(rest[index + 1])
+                index += 2
+                continue
+            ids.append(int(rest[index]))
+            index += 1
+        params: dict = {}
+        if columns:
+            params["columns"] = columns
+        if ids:
+            params["con_ids"] = ids
+        print(json.dumps(_call("tile_windows", params)))
+        return 0
+    if command == "minimize" and rest:
+        print(json.dumps(_call("minimize_window", {"con_id": int(rest[0])})))
+        return 0
+    if command == "restore" and rest:
+        print(json.dumps(_call("restore_window", {"con_id": int(rest[0])})))
+        return 0
+    if command == "workspace" and len(rest) >= 2 and rest[0] == "create":
+        params = {"name": rest[1], "switch_to": "--switch" in rest[2:]}
+        print(json.dumps(_call("create_workspace", params)))
+        return 0
+    if command == "focus" and rest:
+        sub = rest[0]
+        if sub == "start":
+            params = {"minutes": int(rest[1])} if len(rest) > 1 else {}
+            print(json.dumps(_call("start_focus", params)))
+            return 0
+        if sub in {"pause", "resume", "end"}:
+            print(json.dumps(_call(f"{sub}_focus")))
+            return 0
+    if command == "toast" and rest:
+        print(json.dumps(_call("toast", {"message": " ".join(rest)})))
+        return 0
+
+    print(_usage(), file=sys.stderr)
+    return 2
+
+
+def main() -> int:
+    """CLI entry point."""
+    try:
+        return _run(sys.argv[1:])
+    except aether_runtime.AetherCoreUnavailable as exc:
+        print(f"shell unreachable: {exc}", file=sys.stderr)
+        return 1
+    except aether_runtime.ServiceCallError as exc:
+        print(f"call failed ({exc.code}): {exc.message}", file=sys.stderr)
+        return 3
+    except (ValueError, IndexError) as exc:
+        print(f"usage error: {exc}", file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,30 @@
+# packaging/manifests/desktop.yaml — the complete native graphical session.
+packages:
+  - sway
+  - foot
+  - greetd
+  - gtklock
+  - swaybg
+  - fuzzel
+  - wlsunset
+  - wireplumber
+  - pipewire
+  - pipewire-pulse
+  - noto-fonts
+  - noto-fonts-extra
+  - adwaita-icon-theme
+  - python
+  - python-yaml
+  - python-gobject
+  - gtk3
+  - gvfs
+  - xdg-user-dirs
+aether:
+  - aether-desktop
+  - aether-apps
+  - aether-intentfs
+  - aether-miso
+  - aether-ai
+  - aether-capability-broker
+  - aether-action-ledger
+

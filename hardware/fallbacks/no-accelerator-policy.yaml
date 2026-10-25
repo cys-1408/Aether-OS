@@ -1,0 +1,4 @@
+no_accelerator:
+  inference: CPU-only llama.cpp
+  recommendation: prefer <=1.5B quantized models
+  honest_reporting: accelerators list empty + unsupported_reason where relevant

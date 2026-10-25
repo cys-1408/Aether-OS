@@ -1,0 +1,57 @@
+# Aether installer messages (en).
+msgid ""
+msgstr ""
+"Project-Id-Version: Aether Installer 1.0.0\n"
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Aether OS installer"
+msgstr "Aether OS installer"
+
+msgid "Begin installation"
+msgstr "Begin installation"
+
+msgid "Confirm"
+msgstr "Confirm"
+
+msgid "Confirm password"
+msgstr "Confirm password"
+
+msgid "Encrypt the root filesystem (LUKS2)"
+msgstr "Encrypt the root filesystem (LUKS2)"
+
+msgid "Full name"
+msgstr "Full name"
+
+msgid "Grant administrator rights (wheel group)"
+msgstr "Grant administrator rights (wheel group)"
+
+msgid "I confirm all choices above"
+msgstr "I confirm all choices above"
+
+msgid "I reviewed the hardware results"
+msgstr "I reviewed the hardware results"
+
+msgid "I understand installation erases the "
+msgstr "I understand installation erases the "
+
+msgid "Keyboard layout"
+msgstr "Keyboard layout"
+
+msgid "Language"
+msgstr "Language"
+
+msgid "Passphrase"
+msgstr "Passphrase"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Reboot now"
+msgstr "Reboot now"
+
+msgid "Root size (GiB)"
+msgstr "Root size (GiB)"
+
+msgid "Username"
+msgstr "Username"

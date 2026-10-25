@@ -1,0 +1,2 @@
+# Release Process
+1) bump VERSION + CHANGELOG; 2) make check; 3) fetch/verify kernel; 4) build packages + rootfs + initramfs; 5) ISO + checksums; 6) release manifest (schema release/release-manifest.schema.json) with artifact digests, component versions, provenance; 7) SBOM (CycloneDX); 8) sign artifacts; 9) publish + advisory. Every step is scripted (build/scripts/*); artifacts land in artifacts/release/. A release is NOT declared bootable until the boot acceptance gate passes on reference hardware/VM (docs/user/installation-guide.md § verify).

@@ -1,0 +1,103 @@
+#!/usr/bin/env python3
+"""AetherOS firewall polkit helper.
+
+Invoked as:  pkexec /usr/libexec/aether/aether-firewall-helper <command> ...
+Polkit action: org.aether.firewall.apply (see org.aether.firewall.policy).
+
+Commands (strictly validated argv, fixed subprocess shapes, timeouts):
+  apply <nft-file>            run `nft -f <file>`; file must be an existing
+                              .nft under /etc/aether/firewall or
+                              /run/aether/firewall, not group/world writable.
+  list                        run `nft list ruleset` and print it.
+  list-chain <family> <table> <chain>
+                              run `nft -a list chain ...` and print it.
+  delete-rule <family> <table> <chain> <handle>
+                              run `nft delete rule ... handle N`; N must be a
+                              decimal integer.
+
+This helper intentionally implements nothing else.  It must never be used to
+run arbitrary nft expressions: rule content is only accepted from whitelisted
+files written by the firewall service.
+"""
+from __future__ import annotations
+
+import os
+import stat
+import subprocess
+import sys
+
+ALLOWED_RULESET_DIRS = ("/etc/aether/firewall/", "/run/aether/firewall/")
+FAMILIES = ("ip", "ip6", "inet", "arp", "bridge", "netdev")
+NAME_RE = __import__("re").compile(r"^[A-Za-z0-9_.-]{1,64}$")
+TIMEOUT_S = 30
+
+
+def fail(message: str, code: int = 2) -> None:
+    print(message, file=sys.stderr)
+    sys.exit(code)
+
+
+def run(argv: list[str]) -> int:
+    try:
+        proc = subprocess.run(argv, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                              timeout=TIMEOUT_S, check=False)
+    except subprocess.TimeoutExpired:
+        fail("helper: subprocess timed out", 3)
+    sys.stdout.write(proc.stdout.decode("utf-8", "replace"))
+    sys.stderr.write(proc.stderr.decode("utf-8", "replace"))
+    return proc.returncode
+
+
+def validate_name(value: str, what: str) -> str:
+    if not NAME_RE.match(value):
+        fail(f"helper: invalid {what} {value!r}")
+    return value
+
+
+def main(argv: list[str]) -> None:
+    if os.geteuid() != 0:
+        fail("helper: must run as root (via pkexec)")
+    if len(argv) < 1:
+        fail("usage: aether-firewall-helper apply <nft-file> | list | "
+             "list-chain <family> <table> <chain> | "
+             "delete-rule <family> <table> <chain> <handle>")
+    command, args = argv[0], argv[1:]
+
+    if command == "list" and not args:
+        sys.exit(run(["nft", "list", "ruleset"]))
+
+    if command == "apply" and len(args) == 1:
+        raw = args[0]
+        real = os.path.realpath(raw)
+        allowed = any(real.startswith(d) for d in ALLOWED_RULESET_DIRS)
+        if not allowed or not real.endswith(".nft") or not os.path.isfile(real):
+            fail("helper: refusing to apply; ruleset must be an existing .nft under "
+                 + " or ".join(ALLOWED_RULESET_DIRS))
+        mode = os.stat(real).st_mode
+        if mode & (stat.S_IWGRP | stat.S_IWOTH):
+            fail("helper: refusing to apply group/world-writable ruleset")
+        sys.exit(run(["nft", "-f", real]))
+
+    if command == "list-chain" and len(args) == 3:
+        family, table, chain = args
+        if family not in FAMILIES:
+            fail(f"helper: invalid family {family!r}")
+        validate_name(table, "table name")
+        validate_name(chain, "chain name")
+        sys.exit(run(["nft", "-a", "list", "chain", family, table, chain]))
+
+    if command == "delete-rule" and len(args) == 4:
+        family, table, chain, handle = args
+        if family not in FAMILIES:
+            fail(f"helper: invalid family {family!r}")
+        validate_name(table, "table name")
+        validate_name(chain, "chain name")
+        if not handle.isdigit():
+            fail("helper: handle must be a decimal integer")
+        sys.exit(run(["nft", "delete", "rule", family, table, chain, "handle", handle]))
+
+    fail(f"helper: unknown command {command!r} or wrong argument count")
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

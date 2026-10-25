@@ -1,0 +1,16 @@
+# fragment: memory-and-cgroups
+# Policy: cgroup v2 with memory + pids controllers for the AI resource governor
+# (MemoryMax/CPUQuota enforcement); zram swap; PSI for pressure signals.
+CONFIG_CGROUPS=y
+CONFIG_MEMCG=y
+CONFIG_CGROUP_PIDS=y
+CONFIG_CGROUP_FREEZER=y
+CONFIG_CGROUP_DEVICE=y
+CONFIG_CGROUP_CPUACCT=y
+CONFIG_BLK_CGROUP=y
+CONFIG_PSI=y
+CONFIG_SWAP=y
+CONFIG_ZRAM=m
+CONFIG_ZRAM_WRITEBACK=y
+CONFIG_TMPFS=y
+CONFIG_TMPFS_POSIX_ACL=y

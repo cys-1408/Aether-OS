@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.24)
+project(aether-config C)
+set(CMAKE_C_STANDARD 11)
+add_library(aether-config STATIC src/config_store.c src/config_migration.c)
+target_include_directories(aether-config PUBLIC include ../libaether-core/include)
+target_compile_options(aether-config PRIVATE -Wall -Wextra)

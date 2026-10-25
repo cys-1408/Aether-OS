@@ -1,0 +1,2 @@
+# ADR-0001: Upstream Linux Kernel
+Status: Accepted. Context: Aether needs a real, independently bootable OS with broad driver coverage and long-term security. Decision: pin upstream Linux 6.12 LTS; Aether identity via configuration fragments, build recipe, provenance and an (empty at 1.0.0) reviewed patch series; no kernel AI. Consequences: inherits upstream driver quality; kernel updates track stable; any patch carries full review burden; no reimplementation of Linux from directory names.

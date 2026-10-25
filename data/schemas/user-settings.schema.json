@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-2020-12/schema#",
+  "$id": "aether://data/schemas/user-settings.schema.json",
+  "title": "Aether user settings",
+  "version": 1,
+  "type": "object",
+  "required": ["schemaVersion"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "appearance": {
+      "type": "object",
+      "properties": {
+        "accent": {"type": "string", "enum": ["warm", "meadow", "dune", "slate"]},
+        "wallpaper": {"type": "string"},
+        "fontScale": {"type": "number", "minimum": 0.8, "maximum": 2.5},
+        "reducedMotion": {"type": "boolean"},
+        "highContrast": {"type": "boolean"}
+      }
+    },
+    "desktop": {
+      "type": "object",
+      "properties": {
+        "dockPosition": {"type": "string", "enum": ["top", "bottom", "auto"]},
+        "showDesktopIcons": {"type": "boolean"},
+        "quickSettingsPin": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "miso": {
+      "type": "object",
+      "properties": {
+        "companionVisible": {"type": "boolean"},
+        "assistantPanelPinned": {"type": "boolean"},
+        "confirmationMode": {"type": "string", "enum": ["always", "destructive-only"]},
+        "actionLedgerRetentionDays": {"type": "integer", "minimum": 1, "maximum": 365}
+      }
+    },
+    "focus": {
+      "type": "object",
+      "properties": {
+        "defaultSessionMinutes": {"type": "integer", "minimum": 5, "maximum": 180},
+        "autoStartBreaks": {"type": "boolean"}
+      }
+    },
+    "files": {
+      "type": "object",
+      "properties": {
+        "defaultView": {"type": "string", "enum": ["list", "grid"]},
+        "sortKey": {"type": "string", "enum": ["name", "size", "mtime", "type"]}
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "properties": {
+        "clipboardHistory": {"type": "boolean"},
+        "indexRemovableDrives": {"type": "boolean"},
+        "telemetry": {"type": "boolean"}
+      }
+    }
+  },
+  "additionalProperties": false
+}

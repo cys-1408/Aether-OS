@@ -1,0 +1,15 @@
+# Local-first defaults (users may tighten or relax via the wizard/Settings)
+local_first: true
+telemetry: disabled
+clipboard:
+  history_enabled: false
+microphone:
+  default: denied
+  visible_indicator: true
+removable_media:
+  index_consent: ask
+network:
+  ai_capabilities: denied-by-default
+  transfers_require_consent: true
+diagnostics:
+  export_requires_consent: true

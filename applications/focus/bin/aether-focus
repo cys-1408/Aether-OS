@@ -1,0 +1,3 @@
+#!/bin/sh
+# Aether Focus launcher — executes the installed application bundle.
+exec /usr/bin/python3 /usr/libexec/aether/apps/focus/main.py "$@"

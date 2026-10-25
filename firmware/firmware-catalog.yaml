@@ -1,0 +1,6 @@
+firmware:
+  - {package: linux-firmware, covers: [iwlwifi, ath9k, ath10k, rtw88, realtek-nic, amdgpu, nouveau-gsp, sof-audio], license: mixed-redistributable}
+  - {package: linux-firmware-atheros, optional: true}
+  - {package: linux-firmware-realtek, optional: true}
+non_redistributable:
+  - {family: some-broadcom-wl, note: requires user-installed package}

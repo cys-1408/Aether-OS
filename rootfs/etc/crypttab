@@ -1,0 +1,2 @@
+# Encrypted root is registered here by the installer when encryption is chosen.
+# aether-root  UUID=<luks-uuid>  none  luks,discard

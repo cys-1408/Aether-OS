@@ -1,0 +1,11 @@
+# fragment: graphics-drm
+# Policy: DRM core built-in; vendor drivers as modules loaded by the session;
+# fbdev console for early boot; backlight controllable by power-manager.
+CONFIG_DRM=y
+CONFIG_DRM_FBDEV_EMULATION=y
+CONFIG_DRM_I915=m
+CONFIG_DRM_AMDGPU=m
+CONFIG_DRM_NOUVEAU=m
+CONFIG_BACKLIGHT_CLASS_DEVICE=y
+CONFIG_FIRMWARE_EDID=y
+CONFIG_AGP=n

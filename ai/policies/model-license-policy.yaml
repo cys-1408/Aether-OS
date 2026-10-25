@@ -1,0 +1,4 @@
+# Model license handling
+require_acceptance: [llama3.2, qwen-research]
+apache_2_0: {acceptance_required: false}
+on_new_model: display-license-and-source-before-download

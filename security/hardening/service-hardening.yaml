@@ -1,0 +1,6 @@
+service_hardening:
+  baseline: [NoNewPrivileges, ProtectSystem=strict, PrivateTmp, CapabilityBoundingSet=,
+             SystemCallFilter=@system-service, RestrictAddressFamilies=AF_UNIX,
+             LockPersonality, MemoryDenyWriteExecute, ProtectKernel*]
+  restart: on-failure
+  restart_sec: 2

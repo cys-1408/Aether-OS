@@ -1,0 +1,6 @@
+name: Backup Center
+app_id: org.aether.Apps.BackupCenter
+version: 1.0.0
+binary: aether-backup-center
+package: aether-apps
+description: Backup Center — native Aether application (GTK3)

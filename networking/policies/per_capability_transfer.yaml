@@ -1,0 +1,54 @@
+# AetherOS policy: per-capability data transfer (networking/policies/per_capability_transfer.yaml)
+# Installed to /etc/aether/policies/per_capability_transfer.yaml.
+# Evaluated by services/networking/network-consent:
+#   per_capability_network_policy.evaluate(capability_id, data_class)
+#
+# Decision precedence (highest first):
+#   1. explicit grant in /var/lib/aether/consent.json   -> allow
+#   2. explicit denial in /var/lib/aether/consent.json  -> deny
+#   3. exact rule match below                          -> rule decision
+#   4. data_class default below                        -> class decision
+#   5. global default (deny)                           -> deny
+
+version: 1
+
+data_classes: [telemetry, diagnostics, documents, media, credentials, model-weights]
+
+global_default: deny
+
+data_class_defaults:
+  credentials: deny      # never transferred, no override via prompt
+  telemetry: deny        # AetherOS ships no telemetry
+  diagnostics: prompt    # diagnostic bundles require explicit consent (E_CONSENT_REQUIRED)
+  documents: prompt
+  media: prompt
+  model-weights: prompt  # model downloads from pinned repos require confirmation
+
+rules:
+  # Read-only system status capabilities may fetch nothing, so egress is
+  # irrelevant, but if asked to transfer diagnostics they follow the class.
+  - capability_id: system.get_network_status
+    data_class: diagnostics
+    decision: allow
+    reason: "read-only status data stays on-device"
+
+  - capability_id: system.read_selected_logs
+    data_class: diagnostics
+    decision: prompt
+    reason: "log data may contain sensitive strings; redaction applies"
+
+  - capability_id: models.start_download
+    data_class: model-weights
+    decision: prompt
+    reason: "model downloads need user confirmation of size and repository"
+
+  - capability_id: models.get_runtime_status
+    data_class: diagnostics
+    decision: allow
+    reason: "loopback-only status query"
+
+prompt:
+  documentation: >
+    'prompt' means the broker must ask the user interactively before any
+    network transfer; a timeout of the prompt counts as deny.
+  timeout_s: 120

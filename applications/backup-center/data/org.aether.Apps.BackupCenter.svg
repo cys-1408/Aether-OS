@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Backup Center icon">
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#d9e4d6" stroke="#e8e1d6" stroke-width="1"/>
+<path d="M32 10 L50 18 L50 32 Q50 46 32 54 Q14 46 14 32 L14 18 Z" fill="#fffdf8" stroke="#292824" stroke-width="2.5"/><path d="M24 32 L30 39 L41 26" fill="none" stroke="#7c9080" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

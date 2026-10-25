@@ -1,0 +1,4 @@
+missing_firmware:
+  detection: probe driver==null with known firmware-dependent device classes
+  user_message: "device detected but firmware not loaded — install linux-firmware(-<family>)"
+  never_pretend: true

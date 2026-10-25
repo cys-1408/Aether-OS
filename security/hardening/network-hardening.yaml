@@ -1,0 +1,5 @@
+network_hardening:
+  sysctl: system/sysctl/10-aether-network-hardening.conf
+  firewall_default: deny-incoming (nftables table inet aether)
+  no_listening_services_by_default: true
+  ai_egress: denied-by-default (network-consent service)

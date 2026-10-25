@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Focus icon">
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#dbe7f2" stroke="#e8e1d6" stroke-width="1"/>
+<circle cx="32" cy="32" r="19" fill="none" stroke="#292824" stroke-width="3"/><circle cx="32" cy="32" r="11" fill="none" stroke="#292824" stroke-width="3" opacity="0.55"/><circle cx="32" cy="32" r="4.5" fill="#d98250"/>
+</svg>

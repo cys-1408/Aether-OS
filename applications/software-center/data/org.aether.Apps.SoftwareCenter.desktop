@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Software Center
+Comment=Software Center — Aether application
+Exec=aether-software-center
+Terminal=false
+Categories=Utility;System;

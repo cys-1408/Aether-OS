@@ -1,0 +1,25 @@
+# accessibility/screen-reader/accessible_role_map.yaml
+# Maps native shell controls to AT-SPI roles/names; consumed by
+# desktop/accessibility/accessible_tree.py and
+# desktop/accessibility/screen_reader_bridge.py.
+roles:
+  top_bar:
+    clock_widget: {role: label, name: from locale_format.locale_format}
+    system_status_widget: {role: status_bar, name: "System status"}
+    quick_settings: {role: menu, name: "Quick settings"}
+  taskbar:
+    launcher_items: {role: push_button, name: app_id from desktop entry Name}
+    active_app_indicator: {role: status_bar, name: "Active application"}
+  windows:
+    title_bar: {role: frame, name: window title}
+    window_controls: {role: push_button, name: explicit minimize/maximize/close labels}
+  miso_view:
+    companion_view: {role: image, description: state, from miso_accessible_description.py}
+    speech_bubble: {role: notification, name: message}
+  dialogs:
+    permission_dialog: {role: dialog, name: capability + resource requested}
+    destructive_action_dialog: {role: alert, name: destructive confirmation}
+requirements:
+  names: human-readable, localized via localization/po
+  focus_order: dialogs > panel menus > windows > taskbar
+  live_announcement: via announcement_policy.yaml

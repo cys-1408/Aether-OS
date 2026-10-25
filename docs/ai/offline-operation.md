@@ -1,0 +1,2 @@
+# Offline Operation
+Aether is offline-first: OS install, boot, login, desktop, files, updates from local media and recovery work with no network. AI features degrade to rule-based Miso and pending IntentFS states with truthful reasons; exact filename search never needs the model. Model downloads require network + consent and are cancellable/resumable. No component phones home: telemetry is structurally absent (security/privacy/telemetry-policy.yaml).

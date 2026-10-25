@@ -1,0 +1,25 @@
+# IntentFS indexing configuration
+watch_roots:
+  - ~/Documents
+  - ~/Desktop
+  - ~/Downloads
+  - ~/Pictures
+exclusions:
+  - ~/.ssh
+  - ~/.gnupg
+  - ~/.config/aether/secrets
+  - "**/*.key"
+  - "**/*.pem"
+max_file_size_mb: 20
+max_extracted_chars: 200000
+db_path: ~/.local/share/aether/intentfs/intentfs.db
+indexing:
+  workers: 2
+  concept_attempts: 3
+  pause_on_memory_psi_pct: 60
+  pause_on_battery: true
+search:
+  max_results: 50
+retention:
+  keep_extracted_snippets: true
+  snippet_max_chars: 2000

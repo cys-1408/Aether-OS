@@ -1,0 +1,30 @@
+# Default capability authorization policy (root-owned; hash-guarded)
+policy_version: 1
+defaults:
+  read_only: allow
+  low_reversible: allow
+  write: confirm
+  destructive: strong-confirm
+overrides:
+  - capability: "system:format_disk"
+    effect: deny
+    reason: agent may never format storage
+  - capability: "start_download"
+    effect: confirm
+    reason: network + storage commitment
+  - capability: "change_setting"
+    effect: confirm
+path_scope:
+  allowed_roots:
+    - "~/Documents"
+    - "~/Desktop"
+    - "~/Downloads"
+    - "~/Pictures"
+    - "~/Music"
+    - "~/Videos"
+  denied_paths:
+    - "~/.ssh"
+    - "~/.gnupg"
+    - "/etc"
+    - "/usr"
+    - "/var"

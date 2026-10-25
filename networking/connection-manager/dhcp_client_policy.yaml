@@ -1,0 +1,26 @@
+# AetherOS DHCP client policy (networking/connection-manager/dhcp_client_policy.yaml)
+# Installed to /etc/aether/networking/dhcp_client_policy.yaml by the packaging build.
+# The connection-manager library loads this to decide how DHCP behaves on
+# AetherOS-managed interfaces.
+
+# Which DHCP client stack is authoritative. AetherOS delegates DHCP to
+# NetworkManager (its internal netcore client); no dhclient/dhcpcd sidecars.
+client: networkmanager
+
+# Upper bound for a single lease acquisition attempt before we surface a
+# truthful "no lease" result instead of hanging the service.
+request_timeout_s: 30
+
+# AetherOS does not validate DHCP server identity beyond kernel/NM defaults;
+# flipping this on requires an RFC 3118 deployment (rare, breaks most APs).
+require_dhcp_server_validation: false
+
+# Lease sanity window; leases outside it are reported in diagnostics.
+allowed_lease_time_range: [300, 86400]
+
+# When no lease is obtained within the timeout, fall back to a link-local
+# IPv4 address (RFC 3927) rather than failing the interface.
+static_fallback:
+  enabled: true
+  mode: link-local
+  documentation: "IPv4 link-local addressing per RFC 3927, handled by NetworkManager"

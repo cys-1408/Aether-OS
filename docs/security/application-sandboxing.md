@@ -1,0 +1,2 @@
+# Application Sandboxing
+Baseline: dedicated service users + systemd hardening (ProtectSystem=strict, PrivateTmp, NoNewPrivileges, empty CapabilityBoundingSet, SystemCallFilter=@system-service, RestrictAddressFamilies=AF_UNIX). The agent additionally gets ReadWritePaths limited to user state and cannot see other users' data. Apps follow the application-sandbox-policy.yaml profile (filesystem view, dbus/UDS surface, network: none unless granted). Syscall restrictions rationale: security/sandbox/syscall-restrictions.md.

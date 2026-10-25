@@ -1,0 +1,6 @@
+name: Settings
+app_id: org.aether.Apps.Settings
+version: 1.0.0
+binary: aether-settings
+package: aether-apps
+description: Settings — native Aether application (GTK3)

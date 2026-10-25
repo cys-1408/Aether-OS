@@ -1,0 +1,6 @@
+policy_version: 1
+name: read-only-policy
+defaults:
+  read_only: allow
+overrides:
+  - {capability: read_selected_logs, effect: allow, reason: redacted journal reads}

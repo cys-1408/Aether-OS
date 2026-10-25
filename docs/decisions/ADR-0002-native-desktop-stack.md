@@ -1,0 +1,2 @@
+# ADR-0002: Native Desktop Stack
+Status: Accepted. Context: need a native Wayland desktop reproducing the approved warm visual language with real window management and accessibility. Decision: sway (wlroots) compositor + GTK3/PyGObject for the shell and apps; gtk-layer-shell for panels; sway IPC for window operations; AT-SPI for accessibility; GSettings for settings. Deviation noted: per-component Makefiles instead of CMake for Python components (allowed by the implementation directive). Consequences: fast, maintainable, real WM semantics; XWayland available for legacy apps.

@@ -1,0 +1,2 @@
+# ADR-0004: Package Format
+Status: Accepted. Decision: pacman packages on an Arch-based userland assembled with pacstrap; Aether repo signed via repo-add + pacman-key; updates staged with known-good rollback. Rationale: mature dependency solver, signature enforcement, offline install from ISO-local repo, simple PKGBUILD-driven packaging of Aether components. Consequences: rolling userland base pinned at release time; ABI drift handled by rebuilding at release, not at runtime.

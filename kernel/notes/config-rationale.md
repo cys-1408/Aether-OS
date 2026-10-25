@@ -1,0 +1,2 @@
+# Config Rationale
+Highlights: PREEMPT_DYNAMIC + HZ_1000 (desktop responsiveness); PSI + memcg + cgroup controllers (resource governor); EXT4=y (root), SQUASHFS/ZSTD=y + OVERLAY_FS=y (live media); DM_CRYPT=m (LUKS2); DRM with simpledrm=y guarantees display in VMs/unknown GPUs; NIC/Wi-Fi as modules keeps the image lean; LSM=landlock,yama,bpf with seccomp+namespaces backs service sandboxing; MODULE_SIG enabled with permissive mode so user-built modules still load; FTRACE/DEBUG off for a lean release kernel.

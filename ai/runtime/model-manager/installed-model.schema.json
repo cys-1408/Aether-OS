@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["model_id", "state"],
+  "properties": {
+    "model_id": {"type": "string"},
+    "state": {"enum": ["downloading", "installed", "degraded", "removed"]},
+    "sha256": {"type": ["string", "null"]},
+    "pinned": {"type": "boolean"}
+  }
+}

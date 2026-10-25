@@ -1,0 +1,2 @@
+# ADR-0006: System Update Strategy
+Status: Accepted. Decision: staged transactional updates over pacman with signed metadata: check → download-only → user-confirmed apply → commit; known-good boot entry + kernel downgrade path as rollback; transaction journal enables package rollback. Rationale: satisfies signed-update, changelog-visibility and rollback requirements without a full A/B image system in 1.0.0; documented tradeoff: not byte-atomic at filesystem level, mitigated by journal + recovery entry.

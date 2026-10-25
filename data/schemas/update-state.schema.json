@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-2020-12/schema#",
+  "$id": "aether://data/schemas/update-state.schema.json",
+  "title": "Update lifecycle state",
+  "version": 1,
+  "type": "object",
+  "required": ["schemaVersion", "update_id", "stage"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "update_id": {"type": "string"},
+    "stage": {
+      "type": "string",
+      "enum": ["detected", "verified", "planned", "staged", "activated",
+               "committed", "failed", "rolled-back"]
+    },
+    "ts": {"type": "string"},
+    "metadata_verified": {"type": "boolean"},
+    "digest_verified": {"type": "boolean"},
+    "packages": {"type": "array", "items": {"type": "string"}},
+    "space_needed_bytes": {"type": "integer", "minimum": 0},
+    "compatibility": {
+      "type": "object",
+      "properties": {
+        "kernel": {"type": "boolean"},
+        "bootloader": {"type": "boolean"},
+        "ai_runtime": {"type": "boolean"},
+        "reboot_required": {"type": "boolean"}
+      }
+    },
+    "known_good_entry": {"type": "string"},
+    "post_health": {
+      "type": "object",
+      "properties": {
+        "checks_passed": {"type": "array", "items": {"type": "string"}},
+        "checks_failed": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

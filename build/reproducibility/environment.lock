@@ -1,0 +1,8 @@
+# Build environment snapshot (regenerate with this template before release)
+host_arch = x86_64
+gcc = record-at-build
+binutils = record-at-build
+python = 3.11+
+pyyaml = record-at-build
+xorriso = record-at-build
+note = "verify-reproducibility.sh checks declared inputs; exact versions recorded by kernel/scripts/collect-provenance.sh"

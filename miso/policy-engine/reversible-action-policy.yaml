@@ -1,0 +1,7 @@
+policy_version: 1
+name: reversible-action-policy
+defaults:
+  low_reversible: allow
+overrides:
+  - {capability: open_app, effect: allow, reason: launch is reversible via close_app}
+  - {capability: move_to_trash, effect: confirm, reason: trash is undoable but user-visible}

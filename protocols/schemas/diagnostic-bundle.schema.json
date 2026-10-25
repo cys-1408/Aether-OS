@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aether-os.org/schemas/diagnostic-bundle.schema.json",
+  "title": "Redacted diagnostic bundle metadata",
+  "type": "object",
+  "required": [
+    "bundle_id",
+    "created_at",
+    "consent",
+    "files"
+  ],
+  "properties": {
+    "bundle_id": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "consent": {
+      "type": "boolean"
+    },
+    "scope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "bytes": {
+            "type": "integer"
+          },
+          "redactions_applied": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "redactions_applied": {
+      "type": "integer"
+    },
+    "sha256": {
+      "type": "string"
+    }
+  }
+}

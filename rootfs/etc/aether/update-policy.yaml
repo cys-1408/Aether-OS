@@ -1,0 +1,16 @@
+# Update behavior (ADR-0006)
+sources:
+  - name: aether-stable
+    url: file:///var/lib/aether/repo
+    kind: local
+    signed: true
+  - name: aether-mirror
+    url: https://repo.aether-os.org/stable/x86_64
+    kind: network
+    signed: true
+behavior:
+  auto_check: true
+  check_interval_hours: 12
+  auto_download: false
+  auto_install: false
+  keep_known_good_entry: true

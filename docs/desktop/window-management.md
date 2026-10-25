@@ -1,0 +1,2 @@
+# Window Management
+sway is the compositor and window manager; aether-shell consumes the sway tree for state and issues commands for focus, close, minimize (scratchpad), restore, floating move/resize, tiling arrangement (computed grids emitted as floating geometry), and workspace (virtual desktop) operations. App windows use GTK CSD headerbars matching the reference chrome. Multi-monitor layouts and scaling are managed by the compositor adapter with per-output profiles. Browser-style absolute positioning is never used; all placement goes through compositor APIs.

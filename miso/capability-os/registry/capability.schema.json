@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Capability meta-schema",
+  "type": "object",
+  "required": [
+    "group",
+    "version",
+    "capabilities"
+  ],
+  "properties": {
+    "group": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "version",
+          "provider",
+          "risk_class",
+          "permission",
+          "timeout_s",
+          "idempotent",
+          "side_effects",
+          "confirmation",
+          "input_schema",
+          "output_schema",
+          "undo"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z_]+$"
+          },
+          "version": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "risk_class": {
+            "enum": [
+              "read_only",
+              "low_reversible",
+              "write",
+              "destructive"
+            ]
+          },
+          "permission": {
+            "type": "string"
+          },
+          "timeout_s": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "idempotent": {
+            "type": "boolean"
+          },
+          "side_effects": {
+            "type": "string"
+          },
+          "confirmation": {
+            "enum": [
+              "never",
+              "policy",
+              "always"
+            ]
+          },
+          "input_schema": {
+            "type": "object"
+          },
+          "output_schema": {
+            "type": "object"
+          },
+          "undo": {
+            "type": "object",
+            "properties": {
+              "supported": {
+                "type": "boolean"
+              },
+              "method": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

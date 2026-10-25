@@ -1,0 +1,33 @@
+# Aether built-in application strings (en).
+msgid ""
+msgstr ""
+"Project-Id-Version: Aether Applications 1.0.0\n"
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Open folder"
+msgstr "Open folder"
+
+msgid "Open file"
+msgstr "Open file"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "Open the terminal"
+msgstr "Open the terminal"
+
+msgid "Zoom in"
+msgstr "Zoom in"
+
+msgid "Zoom out"
+msgstr "Zoom out"
+
+msgid "Focus session"
+msgstr "Focus session"
+
+msgid "Pause"
+msgstr "Pause"
+
+msgid "End"
+msgstr "End"

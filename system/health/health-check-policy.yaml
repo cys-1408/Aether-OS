@@ -1,0 +1,25 @@
+# How the health service verifies each service
+checks:
+  - service: aether-hardware-probe
+    method: ipc
+    call: Health.ping
+    interval_s: 30
+  - service: aether-runtime
+    method: ipc
+    call: Runtime.status
+    interval_s: 60
+  - service: aether-intentfs
+    method: ipc
+    call: IntentFS.status
+    interval_s: 60
+  - service: aether-broker
+    method: ipc
+    call: Broker.status
+    interval_s: 30
+  - service: aether-ledger
+    method: ipc
+    call: Ledger.status
+    interval_s: 60
+events:
+  rate_limit_seconds: 60
+  notify_categories: [service_failed, service_recovered]

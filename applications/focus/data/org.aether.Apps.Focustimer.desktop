@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Focus timer
+Comment=Focus timer — Aether application
+Exec=aether-focus
+Terminal=false
+Categories=Utility;

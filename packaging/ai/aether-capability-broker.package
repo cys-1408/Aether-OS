@@ -1,0 +1,18 @@
+# aether-capability-broker.package — the validated capability gateway.
+name: aether-capability-broker
+version_from: VERSION
+recipe: packaging/PKGBUILD-aether-ai
+license: GPL-3.0-only
+source:
+  - miso/broker
+  - miso/policy-engine
+  - protocols/schemas/capability-*
+  - security/authorization/capability-permissions.yaml
+installs_to:
+  /usr/libexec/aether/miso/broker: miso/broker
+  /etc/aether/capability-policy.yaml: rootfs/etc/aether/capability-policy.yaml
+unit: system/services/aether-broker.service
+provides:
+  - /run/aether/broker.sock (CapabilityBroker.{execute,preview,permissions})
+  - authenticated socket peercreds identity check (miso/peercreds.py)
+depends: [python, python-yaml]

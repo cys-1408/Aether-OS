@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["index_status"],
+  "properties": {
+    "index_status": {"enum": ["ready", "pending", "failed", "excluded", "pending-limited"]},
+    "concepts": {"type": ["array", "null"], "minItems": 3, "maxItems": 3},
+    "failure_reason": {"type": ["string", "null"]},
+    "attempts": {"type": ["integer", "null"]}
+  }
+}

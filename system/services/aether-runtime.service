@@ -1,0 +1,40 @@
+[Unit]
+Description=Aether Runtime — local model platform
+Documentation=https://aether-os.org/docs
+After=aether-hardware-probe.service
+Wants=aether-hardware-probe.service
+ConditionPathExists=/usr/libexec/aether
+
+[Service]
+Type=simple
+User=aether-runtime
+Group=aether-runtime
+ExecStart=/usr/bin/python3 /usr/libexec/aether/ai/runtime/daemon/main.py
+Restart=on-failure
+RestartSec=2s
+RuntimeDirectory=aether
+RuntimeDirectoryMode=0755
+UMask=007
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM
+CapabilityBoundingSet=
+AmbientCapabilities=
+ReadWritePaths=/var/lib/aether /run/aether
+NoNewPrivileges=yes
+ProtectSystem=strict
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

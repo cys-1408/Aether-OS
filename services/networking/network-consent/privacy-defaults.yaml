@@ -1,0 +1,40 @@
+# AetherOS privacy defaults (installed to /etc/aether/privacy-defaults.yaml
+# by the network-consent Makefile, only if the file does not already exist).
+# This is the central, user-facing privacy posture of the OS.
+
+version: 1
+
+network:
+  # AI capabilities get no network egress unless explicitly granted.
+  ai_egress_default: deny
+  consent_store: /var/lib/aether/consent.json
+
+audio:
+  # Microphone capture is denied until the user grants voice.capture.
+  microphone_default: deny
+  capture_capability: voice.capture
+  # Recording is refused while the source is muted (truthful error).
+  refuse_capture_while_muted: true
+
+clipboard:
+  # History is OFF by default: nothing the user copies is stored.
+  history_enabled: false
+  max_entries: 50
+  ttl_seconds: 3600
+
+notifications:
+  categories:
+    system: true
+    security: true
+    reminders: true
+    ai: true
+    network: true
+    marketing: false
+  rate_limit:
+    max_events: 1
+    window_s: 60
+    suppress_unchanged: true
+
+logging:
+  redaction: true
+  diagnostic_bundles_require_consent: true

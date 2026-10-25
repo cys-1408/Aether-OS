@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aether-os.org/schemas/capability-result.schema.json",
+  "title": "Capability result (truthful, with recovery metadata)",
+  "type": "object",
+  "required": [
+    "request_id",
+    "outcome"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "outcome": {
+      "enum": [
+        "ok",
+        "denied",
+        "failed",
+        "cancelled",
+        "needs_confirmation"
+      ]
+    },
+    "result": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "error": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "retriable": {
+          "type": "boolean"
+        }
+      }
+    },
+    "verification": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "method": {
+          "type": "string"
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "detail": {
+          "type": "string"
+        }
+      }
+    },
+    "ledger_entry_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "undo": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "supported": {
+          "type": "boolean"
+        },
+        "method": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

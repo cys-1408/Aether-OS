@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "ok"
+  ],
+  "properties": {
+    "ok": {
+      "type": "boolean"
+    },
+    "root": {
+      "type": "string"
+    },
+    "steps_completed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "log": {
+      "type": "string"
+    }
+  }
+}

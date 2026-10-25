@@ -1,0 +1,2 @@
+# Recorded at fetch/build time (10-fetch-sources.sh). One line per source:
+# <sha256>  <tarball-name>

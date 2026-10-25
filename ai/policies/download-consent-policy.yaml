@@ -1,0 +1,5 @@
+consent:
+  required: true
+  scope: network + disk
+  shown_details: [size, license, source, destination]
+  remember: false

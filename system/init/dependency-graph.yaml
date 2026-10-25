@@ -1,0 +1,27 @@
+startup:
+  basic: [systemd-journald, dbus, systemd-udevd]
+  early_services:
+    - name: aether-hardware-probe
+      after: [systemd-udevd]
+    - name: aether-health
+      after: [systemd-journald]
+    - name: aether-network-policy
+      after: [NetworkManager]
+    - name: aether-notification
+      after: [dbus]
+    - name: aether-ledger
+      after: [systemd-journald]
+  ai_services:
+    - name: aether-runtime
+      after: [aether-hardware-probe]
+    - name: aether-intentfs
+      after: [aether-hardware-probe, aether-runtime]
+    - name: aether-broker
+      after: [aether-ledger]
+    - name: aether-workspace
+      after: [aether-ledger]
+  session:
+    - name: greetd (sway session)
+      after: [aether-graphical.target prereqs]
+      starts: [aether-shell (user), aether-agent (user)]
+no_cycles: verified-by-unit-dependencies

@@ -1,0 +1,8 @@
+[Unit]
+Description=Aether Recovery Environment
+Requires=basic.target
+Wants=aether-recovery.service
+After=basic.target
+AllowIsolate=yes
+
+[Install]

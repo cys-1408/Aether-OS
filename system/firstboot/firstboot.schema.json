@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["version", "completed_pages"],
+  "properties": {
+    "version": {"type": "integer"},
+    "completed_pages": {"type": "array", "items": {"type": "string"}},
+    "choices": {"type": "object"},
+    "started_at": {"type": "string"},
+    "updated_at": {"type": "string"}
+  }
+}

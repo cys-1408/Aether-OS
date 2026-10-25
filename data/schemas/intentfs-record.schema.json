@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-2020-12/schema#",
+  "$id": "aether://data/schemas/intentfs-record.schema.json",
+  "$comment": "Canonical copy also mirrored at protocols/schemas/intentfs-record.schema.json",
+  "title": "IntentFS persistent file record",
+  "version": 1,
+  "type": "object",
+  "required": ["file_id", "index_state"],
+  "properties": {
+    "file_id": {"type": "string", "description": "stable identity: dev inode or sha256(canonical path) fallback"},
+    "path": {"type": "string"},
+    "uid": {"type": "integer", "description": "owning user; per-user scope"},
+    "record_version": {"type": "integer"},
+    "mime_type": {"type": "string"},
+    "size": {"type": "integer", "minimum": 0},
+    "mtime_ns": {"type": "integer"},
+    "content_fingerprint": {"type": "string", "description": "sha256 of content stream used for extraction"},
+    "permissions_mode": {"type": "integer"},
+    "index_state": {
+      "type": "string",
+      "enum": ["pending", "indexed", "failed", "excluded", "unsupported",
+               "oversized", "deleted"]
+    },
+    "extraction": {
+      "type": "object",
+      "properties": {
+        "extractor": {"type": "string"},
+        "chars_extracted": {"type": "integer", "minimum": 0},
+        "error": {"type": "string"}
+      }
+    },
+    "concepts": {
+      "type": "array",
+      "description": "exactly three validated distinct model-predicted concepts; absent/short arrays permitted only for non-indexed states",
+      "minItems": 0,
+      "maxItems": 3,
+      "items": {"type": "string", "minLength": 2, "maxLength": 48}
+    },
+    "model_ref": {"type": "object", "properties": {
+      "model_id": {"type": "string"},
+      "digest": {"type": "string"}
+    }},
+    "updated_at": {"type": "string"}
+  },
+  "anyOf": [
+    {"properties": {"index_state": {"const": "indexed"},
+                    "concepts": {"minItems": 3, "maxItems": 3}}},
+    {"properties": {"index_state": {"enum": ["pending", "failed", "excluded",
+                                             "unsupported", "oversized", "deleted"]}}}
+  ]
+}

@@ -1,0 +1,5 @@
+retention:
+  action_ledger_days: 90
+  intentfs_snippets: capped-at-2000-chars, deletable
+  notifications_days: 30
+  journal: system/logging/log-retention.conf

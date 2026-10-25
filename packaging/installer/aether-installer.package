@@ -1,0 +1,15 @@
+# aether-installer.package — the native installer application.
+name: aether-installer
+version_from: VERSION
+recipe: packaging/PKGBUILD-aether-installer
+license: GPL-3.0-only
+source:
+  - installer
+installs_to:
+  /usr/libexec/aether/installer: installer/
+  /usr/bin/aether-installer: wrapper -> installer/app/main.py
+entry: boots from the live ISO (aether.installer=1) or a recovery boot
+boundaries:
+  - destructive write path strictly via installer/storage/destructive_action_guard.py
+  - offline package install prefers the ISO-local repo (no model download required)
+depends: [python, python-gobject, gtk3, sgdisk, parted]

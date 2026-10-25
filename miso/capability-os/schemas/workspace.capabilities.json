@@ -1,0 +1,105 @@
+{
+  "group": "workspace",
+  "version": "1.0.0",
+  "capabilities": [
+    {
+      "id": "save_workspace",
+      "version": "1.0.0",
+      "provider": "system:workspace",
+      "risk_class": "low_reversible",
+      "permission": "session",
+      "timeout_s": 20,
+      "idempotent": false,
+      "side_effects": "saves layout snapshot",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "preview_workspace_restore",
+      "version": "1.0.0",
+      "provider": "system:workspace",
+      "risk_class": "read_only",
+      "permission": "session",
+      "timeout_s": 20,
+      "idempotent": true,
+      "side_effects": "none",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "preview": {
+            "type": "object"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "restore_workspace",
+      "version": "1.0.0",
+      "provider": "system:workspace",
+      "risk_class": "write",
+      "permission": "session",
+      "timeout_s": 60,
+      "idempotent": false,
+      "side_effects": "opens/moves windows per saved layout",
+      "confirmation": "policy",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "workspace_id": {
+            "type": "string"
+          },
+          "confirmed": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "restored": {
+            "type": "boolean"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    }
+  ]
+}

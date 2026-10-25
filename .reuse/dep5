@@ -1,0 +1,19 @@
+Upstream-Name: AetherOS
+Upstream-Contact: The Aether Authors <dev@aether-os.org>
+Source: https://aether-os.org
+
+Files: *
+Copyright: 2026 The Aether Authors
+License: GPL-3.0-or-later
+
+Files: kernel/source/linux/*
+Copyright: See upstream MAINTAINERS and COPYING
+License: GPL-2.0-only
+
+Files: desktop/assets/miso/*
+Copyright: 2026 The Aether Authors (artwork derived from the approved Aether UI reference)
+License: CC-BY-4.0
+
+Files: docs/*
+Copyright: 2026 The Aether Authors
+License: CC-BY-4.0

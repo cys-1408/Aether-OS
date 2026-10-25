@@ -1,0 +1,2 @@
+# Search Ranking
+Channels: exact/prefix filename and path (instant, model-free), concept match (0.8 weight), extracted-text match (0.6), optional embedding similarity when a runtime embeddings model is configured (else disabled). Final score = max channel weight × freshness boost (recency decay) with filters for type, date, location, size, index status. Every result carries explain_match reasons; scores are presented as relevance, never certainty.

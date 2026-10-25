@@ -1,0 +1,2 @@
+# First Boot Guide
+The wizard walks locale, keyboard, timezone, your account, network, and privacy choices; it can be interrupted and resumes. Optional AI setup shows your measured hardware profile (facts vs estimates labeled), recommends fitting models with size/license/latency estimates, and downloads only after explicit consent; you can skip and revisit in Settings → AI Runtime. After setup, the Miso companion appears on the desktop; click it to chat, drag to move it, double-click to let it sleep.

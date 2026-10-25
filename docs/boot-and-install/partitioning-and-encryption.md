@@ -1,0 +1,2 @@
+# Partitioning and Encryption
+Default GPT plan: 1 GiB ESP (FAT32, /efi), remainder ext4 root labeled AETHEROS (btrfs optional where selected in manual mode). Encryption: LUKS2 (argon2id) holding the root; crypttab + initramfs hook 40-encryption unlock at boot with three retries before dropping to emergency shell. Recovery key: passphrase can be changed post-install via cryptsetup; header backup file is offered onto removable media. /home encryption follows root (single-partition design) in 1.0.0.

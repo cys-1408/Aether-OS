@@ -1,0 +1,16 @@
+# aether-miso.package — the Miso agent (planner, UI integration, ledger client).
+name: aether-miso
+version_from: VERSION
+recipe: packaging/PKGBUILD-aether-miso
+license: GPL-3.0-only
+source: miso
+installs_to:
+  /usr/libexec/aether/miso: miso/
+unit: system/services/aether-agent.service (unprivileged, sandbox in security/sandbox/agent-sandbox.conf)
+provides:
+  - /run/aether/agent.sock (JSON-RPC: Agent.{ask,cancel,tasks,history})
+boundary: |
+  Miso NEVER executes model output as shell. All consequential operations are
+  dispatched through the aether-capability-broker with typed schemas
+  (miso/capability-os/schemas) and user-visible confirmation per policy.
+depends: [python, python-yaml, aether-capability-broker]

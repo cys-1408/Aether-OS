@@ -1,0 +1,14 @@
+# aether-intentfs.package — semantic file indexing service + extractors.
+name: aether-intentfs
+version_from: VERSION
+recipe: packaging/PKGBUILD-aether-intentfs
+license: GPL-3.0-only
+source: intentfs
+installs_to:
+  /usr/libexec/aether/intentfs: intentfs/
+unit: system/services/aether-intentfs.service
+provides:
+  - /run/aether/intentfs.sock (JSON-RPC: IntentFS.{search,reindex,clear,pause,resume,metadata})
+schema: protocols/schemas/intentfs-record.schema.json
+db: $XDG_DATA_HOME/aether/intentfs/intentfs.db (schema.sql per user)
+depends: [python, python-yaml, aether-runtime (concepts; degrades to pending/failed when absent)]

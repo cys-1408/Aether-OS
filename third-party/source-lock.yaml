@@ -1,0 +1,25 @@
+# third-party/source-lock.yaml — immutable pins for release builds.
+# Mirrors third-party/pins.yaml; the pins file is authoritative for build
+# scripts, this lock records the same digits for release provenance checks.
+locked:
+  linux:
+    version: from kernel/upstream.lock
+    verify: kernel/scripts/verify-upstream.sh
+  llama-cpp:
+    version: "b4600"
+    url: https://github.com/ggml-org/llama.cpp/archive/refs/tags/b4600.tar.gz
+    sha256: RECORD-AT-FETCH (filled + verified by build/scripts/10-fetch-sources.sh)
+    license: MIT
+    build_doc: third-party/llama.cpp/BUILD.md
+  sway:
+    version: "1.9"
+    source: distro-package (not vendored)
+    note: third-party/sway/README.md
+  gtk-layer-shell:
+    version: "0.8"
+    source: distro-package
+  greetd:
+    version: "0.10"
+    source: distro-package
+  no_pinned_component_ships_unreviewed: true
+  release_reproducibility: all pins resolved by build/scripts/10-fetch-sources.sh

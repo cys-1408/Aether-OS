@@ -1,0 +1,101 @@
+#!/bin/busybox sh
+# AetherOS initramfs init (busybox).
+# Order: cmdline -> confs -> hooks(10..50) -> mount root -> switch_root(90).
+# Never enters an interactive shell from failure paths by default; failures
+# drop to a commented emergency shell, otherwise reboot is safer.
+export PATH=/bin:/usr/bin:/sbin:/usr/sbin
+busybox mount -t proc proc /proc 2>/dev/null
+busybox mount -t sysfs sys /sys 2>/dev/null
+busybox mount -t devtmpfs dev /dev 2>/dev/null || busybox mdev -s
+
+echo "AetherOS initramfs: preparing root..."
+
+# --- parse the kernel command line ----------------------------------------
+CMDLINE=""
+for f in /proc/cmdline; do
+  [ -r "$f" ] && CMDLINE="$(busybox cat $f)"
+done
+
+rd_value() { echo "$CMDLINE" | busybox tr ' ' '\n' | busybox sed -n "s/^$1=//p" | busybox head -n1; }
+rd_flag()  { echo "$CMDLINE" | busybox tr ' ' '\n' | busybox grep -qx "$1" && echo 1; }
+
+ROOT_SPEC="$(rd_value root)"
+LIVE=0; [ "$(rd_flag aether.live)" = "1" ] && LIVE=1
+INSTALLER=0; [ "$(rd_flag aether.installer)" = "1" ] && INSTALLER=1
+ENCRYPT=0; [ "$(rd_flag aether.encrypt)" = "1" ] && ENCRYPT=1
+KNOWN_GOOD=0; [ "$(rd_flag aether.known_good)" = "1" ] && KNOWN_GOOD=1
+SWITCH_TARGET="$(rd_value systemd.unit)"
+[ -z "$ROOT_SPEC" ] && ROOT_SPEC="$(busybox sed -n 's/^root=//p' /root-mount.conf 2>/dev/null)"
+# Live media default (used by the ISO): LABEL AETHER_LIVE
+[ -z "$ROOT_SPEC" ] && [ "$INSTALLER" = "1" ] && ROOT_SPEC="LABEL=AETHER_LIVE"
+[ -z "$ROOT_SPEC" ] && ROOT_SPEC="$(busybox sed -n 's/^root=//p' /storage-discovery.conf 2>/dev/null)"
+
+[ "$ROOT_SPEC" ] || { echo "FATAL: no root= on cmdline and no configured default"; exit 1; }
+
+# --- configuration ----------------------------------------------------------
+[ -r /storage-discovery.conf ] && . /storage-discovery.conf
+[ -r /root-mount.conf ]        && . /root-mount.conf
+[ -r /switch-root.conf ]       && . /switch-root.conf
+[ "$ENCRYPT" = "1" ] && [ -r /cryptsetup.conf ] && . /cryptsetup.conf
+
+# --- hooks ------------------------------------------------------------------
+for hook in /hooks/[0-9][0-9]-*; do
+  [ -x "$hook" ] || continue
+  echo "  hook: $(busybox basename $hook)"
+  busybox sh "$hook" || hook_rc=$?
+  case "$(busybox basename $hook)" in
+    50-root-selection)
+      # Hooks resolve NEWROOT into $ROOT_SPEC; verify existence now.
+      if [ -z "$ROOT_SPEC" ]; then
+        echo "FATAL: root selection failed"
+        busybox sleep 5
+        busybox reboot -f
+      fi
+      ;;
+  esac
+done
+
+# --- resolve + mount real root ----------------------------------------------
+mount_root() {
+  case "$ROOT_SPEC" in
+    UUID=*) SRC="/dev/disk/by-uuid/${ROOT_SPEC#UUID=}";;
+    LABEL=*) SRC="/dev/disk/by-label/${ROOT_SPEC#LABEL=}";;
+    PARTLABEL=*) SRC="/dev/disk/by-partlabel/${ROOT_SPEC#PARTLABEL=}";;
+    /dev/mapper/*|/dev/*) SRC="$ROOT_SPEC";;
+    *) SRC="";;
+  esac
+  [ -n "$SRC" ] || return 1
+  for attempt in 1 2 3 4 5; do
+    [ -e "$SRC" ] && break
+    sleep 1
+  done
+  busybox mount -o rw $NEWROOT_OPTS "$SRC" /newroot 2>/dev/null \
+    && [ -d /newroot/usr ] && return 0
+  busybox sleep 3 && busybox mount -o rw,relatime \
+    $NEWROOT_OPTS "$SRC" /newroot 2>/dev/null && return 0
+
+  return 1
+}
+
+if ! mount_root; then
+  if [ "$INSTALLER" != "1" ]; then
+    echo "Could not mount the Aether root ($ROOT_SPEC)."
+    echo "Rebooting in 10s. For an emergency shell add an initramfs.break=1"
+    [ "$(rd_flag initramfs.break)" = "1" ] && exec busybox sh
+    sleep 10
+    busybox reboot -f
+  else
+    echo "Live/install media root could not be mounted; starting a rescue"
+    echo "busybox environment. Use mount(8) on /dev/disk/by-label/AETHER_LIVE."
+    exec busybox sh
+  fi
+fi
+
+# Persistence drop: copy cmdline + provenance for later diagnostics.
+busybox mount -o remount,rw /newroot 2>/dev/null
+mkdir -p /newroot/run/aether
+echo "$CMDLINE" > /newroot/run/aether/initramfs-cmdline
+
+# --- switch -----------------------------------------------------------------
+echo "Transitioning to real init on /newroot."
+exec busybox switch_root /newroot "$NEWROOT_INIT"

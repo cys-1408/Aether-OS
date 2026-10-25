@@ -1,0 +1,18 @@
+# AetherOS network-service defaults (installed to /etc/aether/network.yaml)
+version: 1
+
+scan:
+  # Force a fresh scan (nmcli dev wifi list --rescan yes) by default.
+  rescan: true
+  timeout_s: 30
+
+connect:
+  # nmcli --ask dev wifi connect: password travels via stdin, never argv.
+  timeout_s: 60
+  save_profiles: false   # network-service does not auto-save profiles
+
+vpn:
+  timeout_s: 15
+
+dns:
+  apply_requires_reactivation: true  # nmcli con up needed for changes to take effect

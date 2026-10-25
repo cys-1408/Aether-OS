@@ -1,0 +1,6 @@
+name: Files
+app_id: org.aether.Apps.Files
+version: 1.0.0
+binary: aether-files
+package: aether-apps
+description: Files — native Aether application (GTK3)

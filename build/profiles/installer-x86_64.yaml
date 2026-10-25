@@ -1,0 +1,10 @@
+profile: installer-x86_64
+target: live-installer
+cmdline: boot/kernel-cmdline/installer.conf
+live_overlay: true
+aether_packages_extra:
+  - aether-installer
+enabled_services:
+  - NetworkManager.service
+  - aether-hardware-probe.service
+default_target: aether-installer.target

@@ -1,0 +1,162 @@
+{
+  "group": "app",
+  "version": "1.0.0",
+  "capabilities": [
+    {
+      "id": "list_apps",
+      "version": "1.0.0",
+      "provider": "desktop",
+      "risk_class": "read_only",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": true,
+      "side_effects": "none",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "apps": {
+            "type": "array"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "open_app",
+      "version": "1.0.0",
+      "provider": "desktop",
+      "risk_class": "low_reversible",
+      "permission": "session",
+      "timeout_s": 20,
+      "idempotent": false,
+      "side_effects": "launches an application",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "app": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "launched": {
+            "type": "string"
+          }
+        }
+      },
+      "undo": {
+        "supported": true,
+        "method": "close_app"
+      }
+    },
+    {
+      "id": "close_app",
+      "version": "1.0.0",
+      "provider": "desktop",
+      "risk_class": "write",
+      "permission": "session",
+      "timeout_s": 15,
+      "idempotent": false,
+      "side_effects": "closes app windows",
+      "confirmation": "policy",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "app": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "closed": {
+            "type": "array"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "focus_app",
+      "version": "1.0.0",
+      "provider": "desktop",
+      "risk_class": "low_reversible",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": true,
+      "side_effects": "focus change only",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "app": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "create_workspace",
+      "version": "1.0.0",
+      "provider": "desktop",
+      "risk_class": "low_reversible",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": false,
+      "side_effects": "switches virtual desktop",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    }
+  ]
+}

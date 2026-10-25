@@ -1,0 +1,15 @@
+# aether-shell.package — native Wayland desktop shell + session integration.
+name: aether-shell
+version_from: VERSION
+recipe: packaging/PKGBUILD-aether-desktop
+license: GPL-3.0-only
+source:
+  - desktop
+  - libraries/libaether-core/python/aether_core
+installs_to:
+  /usr/libexec/aether/desktop: desktop/
+  /usr/bin/aether-shell: wrapper -> desktop/shell/app_main.py
+runtime:
+  session: desktop/session/session_entry.py (greetd session 'Aether')
+  compositor: sway (third-party/sway/README.md — pinned upstream, not vendored)
+depends: [sway, gtk3, python, python-gobject]

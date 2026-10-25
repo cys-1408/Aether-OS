@@ -1,0 +1,2 @@
+# Package Format
+Packages are pacman packages (docs/decisions/ADR-0004) built from packaging/PKGBUILD-* definitions into the Aether repo (artifacts/repo) with repo-add. Package set: aether-configs, aether-services, aether-desktop, aether-apps, aether-ai, aether-intentfs, aether-miso, aether-installer, aether-recovery, aether-updater, linux-aether. File ownership follows the rootfs layout: /usr/libexec/aether (executables), /usr/lib/aether/python (libraries), /usr/share/aether (assets/schemas), /etc/aether (defaults, marked as conftest-style protected configs).

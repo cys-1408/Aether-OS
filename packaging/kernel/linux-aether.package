@@ -1,0 +1,15 @@
+# linux-aether.package — pinned upstream Linux + Aether config/patches.
+name: linux-aether
+version_from: kernel/upstream.lock
+recipe: packaging/PKGBUILD-aether-base (kernel case) + kernel/scripts/*
+source: kernel/source/linux (fetched + verified by kernel/scripts/fetch-upstream.sh)
+build:
+  config: kernel/configs/aether_defconfig via kernel/scripts/merge-config.sh
+  patches: kernel/patches/series (kernel/scripts/apply-patches.sh)
+  provenance: kernel/scripts/collect-provenance.sh -> kernel/provenance/
+produces:
+  - vmlinuz-aether
+  - System.map-aether
+  - config-aether
+depends: []
+verified_by: kernel/scripts/verify-upstream.sh (source identity + digest)

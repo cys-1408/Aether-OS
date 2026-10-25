@@ -1,0 +1,20 @@
+pins:
+  llama-cpp:
+    version: "b4600"
+    url: https://github.com/ggml-org/llama.cpp/archive/refs/tags/b4600.tar.gz
+    sha256: RECORD-AT-FETCH
+    license: MIT
+    builds: llama-server (optional backend package)
+  sway:
+    version: "1.9"
+    source: distro-package
+    license: MIT
+  gtk-layer-shell:
+    version: "0.8"
+    source: distro-package
+    license: LGPL-3.0-or-later
+  greetd:
+    version: "0.10"
+    source: distro-package
+    license: GPL-3.0-or-later
+note: sha256 slots marked RECORD-AT-FETCH are filled by fetch scripts and verified on every build

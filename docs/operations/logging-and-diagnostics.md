@@ -1,0 +1,2 @@
+# Logging and Diagnostics
+journald is the sink; services log structured, secret-redacted lines (redaction-rules.yaml). Users can query logs (Logs.query), export a redacted diagnostic bundle with explicit consent (Logs.bundle), and inspect service health (Health.*). Retention: journald persistent with size caps (system/logging/journald.conf drop-in). No log content leaves the device without user action.

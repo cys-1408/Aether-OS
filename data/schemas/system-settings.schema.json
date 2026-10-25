@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-2020-12/schema#",
+  "$id": "aether://data/schemas/system-settings.schema.json",
+  "title": "Aether system settings",
+  "version": 1,
+  "type": "object",
+  "required": ["schemaVersion"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "network": {
+      "type": "object",
+      "properties": {
+        "autoConnect": {"type": "boolean"},
+        "dnsServers": {"type": "array", "items": {"type": "string"}, "maxItems": 4},
+        "meteredDefault": {"type": "boolean"}
+      }
+    },
+    "power": {
+      "type": "object",
+      "properties": {
+        "profile": {"type": "string", "enum": ["battery", "balanced", "performance"]},
+        "autoSuspendMinutes": {"type": "integer", "minimum": 0, "maximum": 240},
+        "aiBackgroundLimit": {"type": "boolean", "description": "restrict background inference to front power sources"}
+      }
+    },
+    "indexing": {
+      "type": "object",
+      "properties": {
+        "paused": {"type": "boolean"},
+        "scope": {"type": "array", "items": {"type": "string"}},
+        "exclusions": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "updates": {
+      "type": "object",
+      "properties": {
+        "checkIntervalHours": {"type": "integer", "minimum": 1, "maximum": 168},
+        "autoStage": {"type": "boolean"}
+      }
+    },
+    "a11y": {
+      "type": "object",
+      "properties": {
+        "announcePolicy": {"type": "string", "enum": ["minimal", "standard", "verbose"]},
+        "highContrast": {"type": "boolean"},
+        "textOnly": {"type": "boolean"}
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,10 @@
+# packaging/manifests/recovery.yaml — the recovery environment.
+extends: base.yaml
+packages:
+  - sgdisk
+  - jq
+  - sqlite
+aether:
+  - aether-recovery
+  - aether-base
+

@@ -1,0 +1,6 @@
+filesystem_permissions:
+  - {path: /etc/aether, mode: '0755', owner: root:root}
+  - {path: /etc/aether/capability-policy.yaml, mode: '0644', immutable_policy: hash-guarded}
+  - {path: /var/lib/aether, mode: '0750', owner: root:aether-services}
+  - {path: /usr/libexec/aether, mode: '0755', owner: root:root}
+  - {path: /run/aether, mode: '0755', owner: root:aether-services}

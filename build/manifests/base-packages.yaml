@@ -1,0 +1,21 @@
+# Boot + ordinary OS use (see profiles for per-profile assembly)
+packages:
+  - base
+  - linux-aether
+  - systemd
+  - pacman
+  - archlinux-keyring
+  - grub
+  - efibootmgr
+  - mkinitcpio
+  - cryptsetup
+  - e2fsprogs
+  - dosfstools
+  - networkmanager
+  - nftables
+  - linux-firmware
+  - python
+  - python-yaml
+  - sudo
+  - polkit
+  - dbus

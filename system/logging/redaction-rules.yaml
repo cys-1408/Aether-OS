@@ -1,0 +1,9 @@
+# Patterns scrubbed from logs, ledger entries and exported bundles
+patterns:
+  - {name: password, regex: '(?i)(password|passwd|pwd)\s*[=:]\s*\S+'}
+  - {name: token, regex: '(?i)(token|bearer)\s*[=:]\s*\S+'}
+  - {name: api_key, regex: '(?i)(api[_-]?key|apikey)\s*[=:]\s*\S+'}
+  - {name: authorization, regex: '(?i)authorization\s*:\s*\S+'}
+  - {name: private_key, regex: '-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----'}
+  - {name: aws_secret, regex: 'AKIA[0-9A-Z]{16}'}
+replacement: "[REDACTED]"

@@ -1,0 +1,2 @@
+# Capability Schema
+Meta-schema: miso/capability-os/registry/capability.schema.json. Required fields per capability: id (snake_case), version, provider, risk_class, permission, timeout_s, idempotent, side_effects, confirmation, input_schema, output_schema, undo. Validation: broker validates every request against the capability's input_schema at execution time; results against output_schema before returning to the agent.

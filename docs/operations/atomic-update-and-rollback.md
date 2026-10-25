@@ -1,0 +1,2 @@
+# Atomic Update and Rollback
+Updates are staged: check (signed metadata) → download-only into the pacman cache → user-confirmed apply → commit. Before apply, the current kernel is recorded as the known-good boot entry (grubenv) and the previous kernel package is retained in cache for downgrade. Failed apply → automatic package rollback from the transaction journal (package-manager/core/rollback.py) + recovery entry. Users see changelog summaries before consenting; auto-install is off by default (update-policy.yaml).

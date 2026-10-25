@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-2020-12/schema#",
+  "$id": "aether://data/schemas/package-state.schema.json",
+  "title": "Installed package state",
+  "version": 1,
+  "type": "object",
+  "required": ["schemaVersion", "transaction_id"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "transaction_id": {"type": "string"},
+    "ts": {"type": "string"},
+    "operation": {"type": "string", "enum": ["install", "remove", "upgrade", "sync"]},
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {"type": "string"},
+          "version": {"type": "string"},
+          "repository": {"type": "string"},
+          "signature_status": {"type": "string", "enum": ["verified", "unsigned", "unknown"]},
+          "digest": {"type": "string"},
+          "dependencies": {"type": "array", "items": {"type": "string"}},
+          "size_bytes": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "result": {"type": "string", "enum": ["staged", "applied", "rolled-back", "failed"]},
+    "disk_delta_bytes": {"type": "integer"},
+    "signature_required": {"type": "boolean"}
+  }
+}

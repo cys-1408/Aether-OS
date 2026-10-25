@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["session_id", "uid"],
+  "properties": {
+    "session_id": {"type": "string"},
+    "uid": {"type": "integer"},
+    "seat": {"type": ["string", "null"]},
+    "state": {"enum": ["active", "online", "closing"]},
+    "locked": {"type": "boolean"},
+    "workspace_restored": {"type": "boolean"}
+  }
+}

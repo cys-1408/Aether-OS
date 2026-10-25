@@ -1,0 +1,5 @@
+name: aether
+inherits: hicolor
+size: 64
+format: svg
+source: desktop assets (derived from the approved reference)

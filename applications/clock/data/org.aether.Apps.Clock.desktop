@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Clock
+Comment=Clock — Aether application
+Exec=aether-clock
+Terminal=false
+Categories=Utility;

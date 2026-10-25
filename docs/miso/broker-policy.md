@@ -1,0 +1,2 @@
+# Broker Policy
+Decision inputs: identity (SO_PEERCRED), capability + version, input schema, resource scope (path allowlist), risk class, rate limits, user confirmation settings, policy layer files (root-owned, hash-guarded). Effects: read_only → allow+log; low_reversible → allow+toast+ledger(+undo); write → require confirmation (per user settings); destructive → strong typed confirmation; agent-requested destructive ops like formatting are denied outright (destructive-action-policy.yaml). Fail closed: broker down ⇒ no agent actions; policy tamper ⇒ deny all until restored.

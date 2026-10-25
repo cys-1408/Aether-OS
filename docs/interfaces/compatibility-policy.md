@@ -1,0 +1,2 @@
+# Compatibility Policy
+Within a major version: existing method names keep semantics; new optional params allowed; removed/renamed methods forbidden. Config files: new keys optional with defaults; removed keys migrated by libaether-config/config_migration. User data (ledger/intentfs/workspaces) schemas migrate forward only, with migration modules and tests. D-Bus XML contract docs update in the same commit as the UDS contract.

@@ -1,0 +1,2 @@
+# Undo and Recovery
+Capabilities declare undo where feasible: trash→restore, move/rename→inverse op, setting change→previous value (captured pre-execution), workspace restore→preview-then-apply, model switch→previous model. The broker records rollback availability in the ledger and exposes undo from the activity history (miso/ui/undo_action_view.py). Non-undoable operations are marked as such BEFORE confirmation. Partial failure: completed steps are kept and reported, the plan stops, and recovery options are surfaced.

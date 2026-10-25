@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Gallery icon">
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#e6d5e0" stroke="#e8e1d6" stroke-width="1"/>
+<rect x="12" y="16" width="40" height="32" rx="5" fill="#fffdf8" stroke="#292824" stroke-width="2"/><circle cx="24" cy="27" r="4" fill="#d98250"/><path d="M16 44 L28 32 L36 40 L42 35 L50 44 Z" fill="#292824" opacity="0.75"/>
+</svg>

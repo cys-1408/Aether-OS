@@ -1,0 +1,13 @@
+# AetherOS audio-service defaults (installed to /etc/aether/audio.yaml)
+version: 1
+
+volume:
+  # wpctl set-volume ... -l <limit>: hard ceiling above 100%.
+  max_percent: 150
+
+backend:
+  prefer: wpctl        # PipeWire; pactl fallback for PulseAudio-only installs
+
+microphone:
+  # Consent gate lives in /etc/aether/privacy-defaults.yaml (audio section).
+  indicator: true      # shell polls Audio.mic_state for the capture indicator

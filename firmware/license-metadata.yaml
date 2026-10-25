@@ -1,0 +1,3 @@
+license_notes:
+  linux-firmware: "per-file licenses recorded upstream (WHENCE); SBOM records the package version"
+  redistribution: only firmware permitting redistribution ships on the ISO

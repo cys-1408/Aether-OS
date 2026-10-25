@@ -1,0 +1,19 @@
+# AetherOS voice-input defaults (installed to /etc/aether/voice.yaml)
+version: 1
+
+capture:
+  dir: /var/lib/aether/voice-captures
+  rate: 48000
+  channels: 1
+  format: s16le
+  max_duration_s: 3600
+
+speech:
+  # Local whisper.cpp only. Set to the installed binary and GGML model.
+  # When unset, the adapter searches: whisper-cli, whisper-cpp, whisper and
+  # /usr/share/aether/models/*.bin; otherwise it reports supported: false.
+  binary: null
+  model: null
+  language: auto
+  threads: 0          # 0 -> os.cpu_count()
+  timeout_s: 300

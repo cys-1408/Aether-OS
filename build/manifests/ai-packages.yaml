@@ -1,0 +1,10 @@
+# Runtime, IntentFS, Miso, broker and AI-facing integration
+packages:
+  - aether-ai
+  - aether-intentfs
+  - aether-miso
+optional:
+  - note: llama.cpp built as optional backend package (llama-cpp) from third-party/pins.yaml
+  - poppler  # pdftotext for PDF extraction
+  - tesseract  # optional OCR
+  - whisper.cpp  # optional voice input backend

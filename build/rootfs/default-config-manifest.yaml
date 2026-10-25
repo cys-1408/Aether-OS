@@ -1,0 +1,21 @@
+# Files installed into /etc by aether-configs (protected: pacman marks these as config)
+configs:
+  - etc/os-release
+  - etc/hostname
+  - etc/hosts
+  - etc/issue
+  - etc/locale.conf
+  - etc/vconsole.conf
+  - etc/fstab
+  - etc/crypttab
+  - etc/sysusers.d/aether-users.conf
+  - etc/sudoers.d/00-aether
+  - etc/aether/system.yaml
+  - etc/aether/first-boot.yaml
+  - etc/aether/privacy-defaults.yaml
+  - etc/aether/runtime.yaml
+  - etc/aether/intentfs.yaml
+  - etc/aether/miso.yaml
+  - etc/aether/capability-policy.yaml
+  - etc/aether/update-policy.yaml
+  - etc/aether/supported-model-sources.yaml

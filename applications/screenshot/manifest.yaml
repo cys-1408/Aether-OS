@@ -1,0 +1,6 @@
+name: Screenshot
+app_id: org.aether.Apps.Screenshot
+version: 1.0.0
+binary: aether-screenshot
+package: aether-apps
+description: Screenshot — native Aether application (GTK3)

@@ -1,0 +1,2 @@
+# Accessibility Contract
+Every custom widget exposes ATK roles and names (desktop/accessibility/accessible_tree.py); full keyboard traversal with visible focus rings is mandatory; the assistant supports text-only mode; reduced-motion and high-contrast profiles and font scaling are GSettings-backed; a screen-reader bridge initializes AT-SPI (pyatspi guard-import) and the top-bar microphone/network/capture indicators are announced. Nothing depends on animation or color alone. The contract is verified as part of UI acceptance (docs/user/desktop-guide.md checklist).

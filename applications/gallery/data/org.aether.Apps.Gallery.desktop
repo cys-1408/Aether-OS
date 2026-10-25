@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Gallery
+Comment=Browse your images
+Exec=aether-gallery
+Icon=org.aethergallery
+Terminal=false
+Categories=Utility;System;
+Keywords=aether;

@@ -1,0 +1,19 @@
+# fragment: networking
+# Policy: full userland networking; wireless stack as modules; nftables kernel
+# support for aether-firewall.service; WireGuard available.
+CONFIG_NET=y
+CONFIG_PACKET=y
+CONFIG_UNIX=y
+CONFIG_INET=y
+CONFIG_IPV6=y
+CONFIG_CFG80211=m
+CONFIG_MAC80211=m
+CONFIG_WLAN=y
+CONFIG_IWLWIFI=m
+CONFIG_R8169=m
+CONFIG_E1000E=m
+CONFIG_WIREGUARD=m
+CONFIG_NF_TABLES=y
+CONFIG_NF_CONNTRACK=y
+CONFIG_NF_NAT=y
+CONFIG_NFT_NAT=m

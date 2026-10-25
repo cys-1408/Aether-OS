@@ -1,0 +1,2 @@
+# Generated at build time by kernel/scripts/collect-provenance.sh.
+# Format: <version> <tag>

@@ -1,0 +1,1 @@
+"""AetherOS desktop shell package."""

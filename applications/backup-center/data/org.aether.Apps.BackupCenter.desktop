@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Backup Center
+Comment=Backup Center — Aether application
+Exec=aether-backup-center
+Terminal=false
+Categories=Utility;System;

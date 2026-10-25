@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Writer
+Comment=Write and save documents
+Exec=aether-writer
+Icon=org.aetherwriter
+Terminal=false
+Categories=Utility;System;
+Keywords=aether;

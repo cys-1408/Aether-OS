@@ -1,0 +1,39 @@
+#!/bin/sh
+# 50-root-selection: resolve the final ROOT_SPEC the root mount will use.
+# Priority (first non-empty wins):
+#   1. the encrypted mapper (set by 40-encryption)
+#   2. cmdline root=
+#   3. live/install default: LABEL=AETHER_LIVE
+#   4. known-good rollback slot (aether.known_good=1)
+#   5. installed default from root-mount.conf / storage-discovery.conf
+if [ -n "${ROOT_SPEC:-}" ]; then
+  exit 0
+fi
+
+spec_cmdline="$(cat /proc/cmdline | tr ' ' '\n' | sed -n 's/^root=//p' | head -n1)"
+if [ -n "$spec_cmdline" ]; then
+  ROOT_SPEC="$spec_cmdline"
+elif [ "${INSTALLER:-0}" = "1" ] || [ "${LIVE:-0}" = "1" ]; then
+  ROOT_SPEC="LABEL=${LIVE_LABEL:-AETHER_LIVE}"
+elif [ "${KNOWN_GOOD:-0}" = "1" ]; then
+  ROOT_SPEC="LABEL=${KNOWN_GOOD_LABEL:-AETHEROS}"
+else
+  ROOT_SPEC="LABEL=${ROOT_LABEL:-AETHEROS}"
+fi
+
+# Validate long before mounting, so failures name the missing device.
+case "$ROOT_SPEC" in
+  UUID=*) dev="/dev/disk/by-uuid/${ROOT_SPEC#UUID=}" ;;
+  LABEL=*) dev="/dev/disk/by-label/${ROOT_SPEC#LABEL=}" ;;
+  PARTLABEL=*) dev="/dev/disk/by-partlabel/${ROOT_SPEC#PARTLABEL=}" ;;
+  *) dev="$ROOT_SPEC" ;;
+esac
+i=0
+while [ "$i" -lt "${DISCOVERY_TIMEOUT:-5}" ] && [ ! -e "$dev" ]; do
+  i=$((i + 1)); sleep 1; mdev -s 2>/dev/null
+done
+if [ ! -e "$dev" ] && [ "${INSTALLER:-0}" != "1" ]; then
+  echo "warning: resolved root $dev not present yet"
+fi
+echo "root selection: $ROOT_SPEC"
+exit 0

@@ -1,0 +1,7 @@
+secure_defaults:
+  - ssh server NOT installed by default
+  - no listening services (except local unix sockets)
+  - autorun disabled on removable media
+  - clipboard history OFF
+  - microphone denied by default
+  - telemetry: none (structurally absent)

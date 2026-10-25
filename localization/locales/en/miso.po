@@ -1,0 +1,39 @@
+# Aether Miso UI + capability confirmations (en).
+msgid ""
+msgstr ""
+"Project-Id-Version: Aether Miso 1.0.0\n"
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Ask Miso"
+msgstr "Ask Miso"
+
+msgid "Tell Miso what you need…"
+msgstr "Tell Miso what you need…"
+
+msgid "Plan preview"
+msgstr "Plan preview"
+
+msgid "Confirm this action"
+msgstr "Confirm this action"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Undo"
+msgstr "Undo"
+
+msgid "Action history"
+msgstr "Action history"
+
+msgid "Starting…"
+msgstr "Starting…"
+
+msgid "Completed"
+msgstr "Completed"
+
+msgid "Failed"
+msgstr "Failed"
+
+msgid "Cancelled"
+msgstr "Cancelled"

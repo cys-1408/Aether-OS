@@ -1,0 +1,20 @@
+# fragment: security-and-lsm
+# Policy: landlock (app sandboxing), yama (ptrace scope), bpf LSM (site policy);
+# seccomp filters for systemd units; module signing enabled but not forced;
+# standard hardening.
+CONFIG_SECURITY=y
+CONFIG_LSM="landlock,yama,bpf"
+CONFIG_SECURITY_LANDLOCK=y
+CONFIG_SECURITY_YAMA=y
+CONFIG_BPF_LSM=y
+CONFIG_BPF_SYSCALL=y
+CONFIG_BPF_JIT=y
+CONFIG_SECCOMP=y
+CONFIG_SECCOMP_FILTER=y
+CONFIG_STACKPROTECTOR_STRONG=y
+CONFIG_RANDOMIZE_BASE=y
+CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
+CONFIG_MODULE_SIG=y
+CONFIG_MODULE_SIG_ALL=y
+CONFIG_MODULE_SIG_SHA256=y
+CONFIG_MODULE_SIG_FORCE=n

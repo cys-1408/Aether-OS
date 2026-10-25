@@ -1,0 +1,2 @@
+# ADR-0005: Inference Backend
+Status: Accepted. Decision: llama.cpp (llama-server) as the first pluggable backend behind the Aether Runtime API; GGUF models; loopback-only HTTP; optional GPU offload when detected and supported. Rationale: permissive license (MIT), CPU-first performance, quantization breadth, no daemon dependency (Ollama explicitly avoided). Extension: backend_interface.py contract; new engines register in backend_registry without service changes. License constraints of each model are enforced before download.

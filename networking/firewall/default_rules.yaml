@@ -1,0 +1,42 @@
+# AetherOS default nftables policy (YAML mirror of default_rules.nft)
+# The canonical machine-readable ruleset is /etc/aether/firewall/default.nft,
+# applied via `nft -f` through the polkit helper /usr/libexec/aether/aether-firewall-helper.
+# This YAML documents the same rules for policy review and diffing.
+
+table: inet
+table_name: aether_filter
+
+chains:
+  input:
+    hook: input
+    type: filter
+    priority: 0
+    policy: drop
+    rules:
+      - "iifname \"lo\" accept comment \"loopback\""
+      - "ct state established,related accept comment \"established/related\""
+      - "ct state invalid drop comment \"drop invalid\""
+      - "udp dport 68 accept comment \"DHCPv4 client replies\""
+      - "udp dport 546 accept comment \"DHCPv6 client replies\""
+      - "udp dport 5353 accept comment \"mDNS\""
+      # Incoming ping (icmp/icmpv6 echo-request) intentionally NOT accepted
+      # by default per AetherOS privacy defaults; enable via Firewall.rule_add.
+
+  output:
+    hook: output
+    type: filter
+    priority: 0
+    policy: accept
+    rules: []
+
+  forward:
+    hook: forward
+    type: filter
+    priority: 0
+    policy: drop
+    rules: []
+
+documentation:
+  - "Incoming ping is off by default; allow it explicitly with a validated rule."
+  - "Output traffic is allowed; egress restrictions for AI capabilities live in"
+  - "the consent service (network-consent) and policies/ai_network_access.yaml."

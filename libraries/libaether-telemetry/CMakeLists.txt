@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.24)
+project(aether-telemetry C)
+set(CMAKE_C_STANDARD 11)
+add_library(aether-telemetry STATIC src/system_metrics.c src/metrics_redaction.c)
+target_include_directories(aether-telemetry PUBLIC include)
+target_compile_options(aether-telemetry PRIVATE -Wall -Wextra)

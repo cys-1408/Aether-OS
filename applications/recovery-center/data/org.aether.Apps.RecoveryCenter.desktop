@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Recovery Center
+Comment=Recovery Center — Aether application
+Exec=aether-recovery-center
+Terminal=false
+Categories=Utility;System;

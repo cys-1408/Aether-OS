@@ -1,0 +1,6 @@
+name: Code
+app_id: org.aether.Apps.Code
+version: 1.0.0
+binary: aether-code
+package: aether-apps
+description: Code — native Aether application (GTK3)

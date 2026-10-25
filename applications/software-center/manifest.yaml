@@ -1,0 +1,6 @@
+name: Software Center
+app_id: org.aether.Apps.SoftwareCenter
+version: 1.0.0
+binary: aether-software-center
+package: aether-apps
+description: Software Center — native Aether application (GTK3)

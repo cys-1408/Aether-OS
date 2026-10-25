@@ -1,0 +1,8 @@
+policy_version: 1
+name: default-policy
+defaults:
+  read_only: allow
+  low_reversible: allow
+  write: confirm
+  destructive: strong-confirm
+overrides: []

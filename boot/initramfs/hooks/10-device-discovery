@@ -1,0 +1,14 @@
+#!/bin/sh
+# 10-device-discovery: wait briefly for /dev/disk/by-* to be populated.
+timeout="${DISCOVERY_TIMEOUT:-5}"
+i=0
+while [ "$i" -lt "$timeout" ]; do
+  if ls /dev/disk/by-label >/dev/null 2>&1 \
+     || ls /dev/disk/by-uuid >/dev/null 2>&1; then
+    exit 0
+  fi
+  sleep 1
+  i=$((i + 1))
+done
+echo "warning: /dev/disk/by-* not settled after ${timeout}s; continuing"
+exit 0

@@ -1,0 +1,2 @@
+# Repository Signing
+The repo database and packages are signed by the Aether release key imported into pacman-key on install media and installed systems. SigLevel = Required TrustedOnly for the aether repo. Signing happens on the release host with the signing subkey; the primary key stays offline. Verification is enforced by pacman before any transaction; signature status is user-visible in Software Center (signature_status).

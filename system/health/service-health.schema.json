@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aether-os.org/schemas/service-health.schema.json",
+  "type": "object",
+  "required": ["name", "state", "started_at"],
+  "properties": {
+    "name": {"type": "string"},
+    "state": {"enum": ["starting", "ready", "degraded", "stopped", "failed"]},
+    "started_at": {"type": "string"},
+    "last_error": {"type": ["string", "null"]},
+    "reason": {"type": ["string", "null"]},
+    "pid": {"type": ["integer", "null"]},
+    "socket": {"type": ["string", "null"]}
+  }
+}

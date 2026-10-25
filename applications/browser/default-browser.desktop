@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Default Web Browser
+Comment=Registered by xdg-settings after a browser is installed
+Exec=xdg-open %u
+Terminal=false
+NoDisplay=true
+MimeType=text/html;x-scheme-handler/http;x-scheme-handler/https;

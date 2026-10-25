@@ -1,0 +1,4 @@
+requirements:
+  wifi_intel: {firmware: linux-firmware (iwlwifi), license: redistributable}
+  amd_gpu: {firmware: linux-firmware (amdgpu), license: redistributable}
+  sof_audio: {firmware: linux-firmware (sof), license: redistributable}

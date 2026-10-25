@@ -1,0 +1,19 @@
+# aether-base.package — core identity/configs package descriptor.
+name: aether-base
+version_from: VERSION
+recipe: packaging/PKGBUILD-aether-base
+license: GPL-3.0-only
+source:
+  - rootfs/etc/aether
+  - rootfs/etc/os-release
+  - rootfs/etc/hostname
+  - rootfs/etc/issue
+  - rootfs/etc/sysusers.d
+  - rootfs/etc/skel
+  - rootfs/etc/sudoers.d
+  - VERSION
+installs_to:
+  /etc: rootfs/etc/aether + identity files
+  /usr/share/aether/VERSION: VERSION
+depends: [systemd, pacman]
+verify: python -m compileall (syntactic), JSON/YAML parse in build/scripts/00

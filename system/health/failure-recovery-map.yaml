@@ -1,0 +1,23 @@
+# Service failure -> user-visible explanation + real recovery action
+map:
+  aether-hardware-probe:
+    user_message: "System status is unavailable (hardware probe down)."
+    action: "systemctl restart aether-hardware-probe"
+  aether-runtime:
+    user_message: "AI features are unavailable (runtime down). Everything else keeps working."
+    action: "systemctl restart aether-runtime"
+  aether-intentfs:
+    user_message: "Semantic search is offline; filename search still works."
+    action: "systemctl restart aether-intentfs; Settings → IntentFS → Reindex if needed"
+  aether-broker:
+    user_message: "Miso cannot perform actions right now (fails closed by design)."
+    action: "systemctl restart aether-broker"
+  aether-ledger:
+    user_message: "Action history is unavailable; consequential agent actions are paused."
+    action: "systemctl restart aether-ledger"
+  aether-notification:
+    user_message: "Notifications may be delayed."
+    action: "systemctl restart aether-notification"
+  aether-update-check:
+    user_message: "Update checks are paused."
+    action: "systemctl start aether-update-check.service"

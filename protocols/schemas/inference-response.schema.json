@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aether-os.org/schemas/inference-response.schema.json",
+  "title": "Streamed/final inference output",
+  "type": "object",
+  "required": [
+    "request_id",
+    "state"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "streaming",
+        "final",
+        "error",
+        "cancelled"
+      ]
+    },
+    "text": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "chunk": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_final": {
+      "type": "boolean"
+    },
+    "usage": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "tokens_in": {
+          "type": "integer"
+        },
+        "tokens_out": {
+          "type": "integer"
+        },
+        "latency_ms": {
+          "type": "integer"
+        }
+      }
+    },
+    "error": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

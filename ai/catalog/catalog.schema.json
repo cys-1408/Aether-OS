@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aether-os.org/schemas/catalog.schema.json",
+  "title": "Curated local model catalog",
+  "type": "object",
+  "required": [
+    "catalog_version",
+    "models"
+  ],
+  "properties": {
+    "catalog_version": {
+      "type": "string"
+    },
+    "models": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "model_id",
+          "name",
+          "task_classes",
+          "repo",
+          "file",
+          "quantization",
+          "approx_size_gb",
+          "license",
+          "context_lengths",
+          "min_ram_gb"
+        ],
+        "properties": {
+          "model_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "task_classes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "repo": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string"
+          },
+          "quantization": {
+            "type": "string"
+          },
+          "approx_size_gb": {
+            "type": "number"
+          },
+          "approx_size_gb_note": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "context_lengths": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "min_ram_gb": {
+            "type": "number"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

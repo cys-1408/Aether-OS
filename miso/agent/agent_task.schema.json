@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["task_id", "text", "uid"],
+  "properties": {
+    "task_id": {"type": "string"},
+    "text": {"type": "string"},
+    "uid": {"type": "integer"},
+    "state": {"enum": ["planning", "awaiting_confirmation", "executing", "done", "failed", "cancelled"]},
+    "plan": {"type": ["object", "null"]},
+    "reply": {"type": ["string", "null"]}
+  }
+}

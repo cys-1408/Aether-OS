@@ -1,0 +1,5 @@
+kernel_hardening:
+  sysctl_fragments: [system/sysctl/30-aether-kernel-hardening.conf]
+  config: [CONFIG_STACKPROTECTOR_STRONG, CONFIG_FORTIFY_SOURCE, CONFIG_INIT_ON_ALLOC_DEFAULT_ON,
+           CONFIG_HARDENED_USERCOPY, CONFIG_RANDOMIZE_BASE]
+  lsm: 'landlock,lockdown,yama,integrity,bpf'

@@ -1,0 +1,2 @@
+# Privacy and Exclusions
+Defaults index user Documents/Desktop/Downloads/Pictures; excluded: ~/.ssh, ~/.gnupg, credential/key files, hidden system paths, other users' homes, removable drives unless consented per drive (ask by default). File permissions are honored at extraction time. Extracted snippets are capped and deletable; clear_index removes ONLY index data (intentfs/privacy/index_delete_only.py asserts source files are untouched). Indexing pauses under memory pressure/battery. All rules live in /etc/aether/intentfs.yaml plus per-user overrides.

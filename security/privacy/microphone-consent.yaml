@@ -1,0 +1,4 @@
+microphone:
+  default: denied
+  indicator: always-visible-when-live
+  voice_input: opt-in feature with per-use capture

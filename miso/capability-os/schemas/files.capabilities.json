@@ -1,0 +1,335 @@
+{
+  "group": "files",
+  "version": "1.0.0",
+  "capabilities": [
+    {
+      "id": "search_files",
+      "version": "1.0.0",
+      "provider": "agent-local",
+      "risk_class": "read_only",
+      "permission": "session",
+      "timeout_s": 20,
+      "idempotent": true,
+      "side_effects": "none",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "show_file_metadata",
+      "version": "1.0.0",
+      "provider": "agent-local",
+      "risk_class": "read_only",
+      "permission": "session",
+      "timeout_s": 10,
+      "idempotent": true,
+      "side_effects": "none",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "record": {
+            "type": "object"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "open_file",
+      "version": "1.0.0",
+      "provider": "agent-local",
+      "risk_class": "low_reversible",
+      "permission": "session",
+      "timeout_s": 15,
+      "idempotent": false,
+      "side_effects": "opens file with default app",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "opened": {
+            "type": "boolean"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "create_folder",
+      "version": "1.0.0",
+      "provider": "agent-local",
+      "risk_class": "write",
+      "permission": "user-write",
+      "timeout_s": 10,
+      "idempotent": false,
+      "side_effects": "creates a directory",
+      "confirmation": "policy",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        }
+      },
+      "undo": {
+        "supported": true,
+        "method": "move_to_trash"
+      }
+    },
+    {
+      "id": "copy_file",
+      "version": "1.0.0",
+      "provider": "agent-local",
+      "risk_class": "write",
+      "permission": "user-write",
+      "timeout_s": 30,
+      "idempotent": true,
+      "side_effects": "creates a file copy",
+      "confirmation": "policy",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "src": {
+            "type": "string"
+          },
+          "dst": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "dst": {
+            "type": "string"
+          }
+        }
+      },
+      "undo": {
+        "supported": true,
+        "method": "move_to_trash"
+      }
+    },
+    {
+      "id": "move_file",
+      "version": "1.0.0",
+      "provider": "agent-local",
+      "risk_class": "write",
+      "permission": "user-write",
+      "timeout_s": 30,
+      "idempotent": false,
+      "side_effects": "moves a file",
+      "confirmation": "policy",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "src": {
+            "type": "string"
+          },
+          "dst": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "dst": {
+            "type": "string"
+          }
+        }
+      },
+      "undo": {
+        "supported": true,
+        "method": "move back"
+      }
+    },
+    {
+      "id": "rename_file",
+      "version": "1.0.0",
+      "provider": "agent-local",
+      "risk_class": "write",
+      "permission": "user-write",
+      "timeout_s": 10,
+      "idempotent": false,
+      "side_effects": "renames a file",
+      "confirmation": "policy",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "new_name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "new_path": {
+            "type": "string"
+          }
+        }
+      },
+      "undo": {
+        "supported": true,
+        "method": "rename back"
+      }
+    },
+    {
+      "id": "move_to_trash",
+      "version": "1.0.0",
+      "provider": "agent-local",
+      "risk_class": "write",
+      "permission": "user-write",
+      "timeout_s": 15,
+      "idempotent": false,
+      "side_effects": "moves file to XDG trash",
+      "confirmation": "policy",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "trashed_to": {
+            "type": "string"
+          }
+        }
+      },
+      "undo": {
+        "supported": true,
+        "method": "restore_from_trash"
+      }
+    },
+    {
+      "id": "restore_from_trash",
+      "version": "1.0.0",
+      "provider": "agent-local",
+      "risk_class": "write",
+      "permission": "user-write",
+      "timeout_s": 15,
+      "idempotent": false,
+      "side_effects": "restores from trash",
+      "confirmation": "policy",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "restored_to": {
+            "type": "string"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    },
+    {
+      "id": "index_file",
+      "version": "1.0.0",
+      "provider": "system:intentfs",
+      "risk_class": "low_reversible",
+      "permission": "session",
+      "timeout_s": 30,
+      "idempotent": true,
+      "side_effects": "updates the index only",
+      "confirmation": "never",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "queued": {
+            "type": "integer"
+          }
+        }
+      },
+      "undo": {
+        "supported": false,
+        "method": null
+      }
+    }
+  ]
+}

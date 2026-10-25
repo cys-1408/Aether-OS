@@ -1,0 +1,3 @@
+# Surface add/remove events to the device monitor
+SUBSYSTEM=="block", ACTION=="add|remove", RUN+="/usr/bin/logger -t aether-dev 'block %k %A{devtype} %A{action}'"
+SUBSYSTEM=="drm", ACTION=="add", RUN+="/usr/bin/logger -t aether-dev 'drm card added'"

@@ -1,0 +1,47 @@
+# accessibility/keyboard/global-shortcuts.yaml
+# System-wide shortcuts consumed by accessibility/keyboard_nav_config.py and
+# the shell keybinds; stable across the desktop and built-in apps.
+shortcuts:
+  - id: launch-launcher
+    combo: Super+Space
+    action: shell.open_launcher
+    announce: "Run launcher"
+  - id: launch-terminal
+    combo: Super+Return
+    action: apps.launch(term)
+    announce: "Terminal"
+  - id: miso-assistant
+    combo: Super+M
+    action: shell.toggle_miso_panel
+    announce: "Miso assistant panel"
+  - id: focus-toggle
+    combo: Super+F
+    action: focus.toggle
+    announce: "Focus session"
+  - id: notification-center
+    combo: Super+N
+    action: shell.toggle_notifications
+    announce: "Notification center"
+  - id: workspace-next
+    combo: Super+BracketRight
+    action: wm.next_workspace
+    announce: "Next workspace"
+  - id: workspace-prev
+    combo: Super+BracketLeft
+    action: wm.prev_workspace
+    announce: "Previous workspace"
+  - id: screenshot
+    combo: Print
+    action: apps.launch(screenshot)
+    announce: "Screenshot"
+  - id: lock-screen
+    combo: Super+L
+    action: session.lock
+    announce: "Lock screen"
+  - id: show-help
+    combo: Super+Question
+    action: a11y.keyboard_help
+    announce: "Keyboard help overlay"
+no_conflict_with:
+  - screen-reader modifier chords (screen-reader/announcement_policy.yaml)
+  - AT-SPI grab rules (see screen-reader/accessible_role_map.yaml)

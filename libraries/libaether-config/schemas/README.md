@@ -1,0 +1,1 @@
+Schema notes for the C config store: files are key=value with a leading config_version key; migration is forward-only (see src/config_migration.c). The YAML configs used by Python services are separate (/etc/aether/*.yaml).

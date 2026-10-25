@@ -1,0 +1,6 @@
+# Explicitly unsupported / problematic (honest reporting)
+devices:
+  - {class: gpu, model: "NVIDIA proprietary driver", status: unsupported,
+     notes: "nouveau/modesetting only; see docs/hardware/known-limitations.md"}
+  - {class: firmware, model: "non-redistributable blobs", status: unsupported,
+     notes: "user may install separately; reported by probes when missing"}

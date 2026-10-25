@@ -1,0 +1,20 @@
+# Native graphical session + desktop applications
+packages:
+  - sway
+  - swaylock
+  - grim
+  - slurp
+  - gtk3
+  - python-gobject
+  - gtk-layer-shell
+  - pipewire
+  - wireplumber
+  - noto-fonts
+  - noto-fonts-cjk
+  - ttf-croscore
+  - xdg-user-dirs
+  - hicolor-icon-theme
+  - greetd
+aether:
+  - aether-desktop
+  - aether-apps

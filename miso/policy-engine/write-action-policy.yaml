@@ -1,0 +1,7 @@
+policy_version: 1
+name: write-action-policy
+defaults:
+  write: confirm
+overrides:
+  - {capability: create_folder, effect: confirm}
+  - {capability: save_workspace, effect: allow, reason: only records state}

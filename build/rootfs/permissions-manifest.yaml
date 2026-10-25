@@ -1,0 +1,10 @@
+# Sensitive path modes enforced at image assembly
+paths:
+  - {path: root, mode: "0700"}
+  - {path: tmp, mode: "1777"}
+  - {path: var/tmp, mode: "1777"}
+  - {path: var/lib/aether, mode: "0750"}
+  - {path: etc/aether, mode: "0755"}
+  - {path: etc/shadow, mode: "0600", owner: root:shadow}
+  - {path: etc/gshadow, mode: "0600", owner: root:shadow}
+  - {path: etc/sudoers.d, mode: "0750"}

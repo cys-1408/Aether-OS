@@ -1,0 +1,16 @@
+# Exact timing tokens from the approved reference
+tail_s: 2.0
+tail_walk_s: 1.0
+tail_search_s: 0.5
+tail_sleep_s: 4.0
+head_s: 5.0
+walk_bob_s: 0.5
+run_bob_s: 0.3
+jump_s: 0.65
+panel_s: 0.25
+window_s: 0.6
+window_easing: 'cubic-bezier(.2,.7,.2,1)'
+toast_s: 2.6
+bubble_s: 3.0
+fps: 30
+reduced_motion: zero-duration

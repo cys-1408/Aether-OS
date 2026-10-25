@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Code
+Comment=Edit source files
+Exec=aether-code
+Icon=org.aethercode
+Terminal=false
+Categories=Utility;System;
+Keywords=aether;

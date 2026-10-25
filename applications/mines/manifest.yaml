@@ -1,0 +1,6 @@
+name: Mines
+app_id: org.aether.Apps.Mines
+version: 1.0.0
+binary: aether-mines
+package: aether-apps
+description: Mines — native Aether application (GTK3)

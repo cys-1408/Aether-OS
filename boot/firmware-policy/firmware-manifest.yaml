@@ -1,0 +1,11 @@
+# Redistributable firmware shipped via the linux-firmware package
+firmware:
+  - package: linux-firmware
+    version_policy: pinned-at-release
+    covers: [iwlwifi, ath, rtw, realtek-nic, amdgpu, nouveau-gsp, sof-audio]
+  - package: linux-firmware-atheros
+    optional: true
+  - package: linux-firmware-realtek
+    optional: true
+non_redistributable:
+  - note: "Some Broadcom/DVB firmware cannot be shipped; see redistribution-notes.md"

@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aether-os.org/schemas/networking/connection-profile.schema.json",
+  "title": "AetherOS network connection profile",
+  "type": "object",
+  "required": ["name", "kind"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "description": "Profile name; used as the file name on disk."
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["wifi", "ethernet"]
+    },
+    "ssid": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 32,
+      "description": "Target SSID for wifi profiles."
+    },
+    "security": {
+      "type": "string",
+      "enum": ["open", "wpa-psk", "wpa-eap"],
+      "default": "open"
+    },
+    "hidden": {
+      "type": "boolean",
+      "default": false
+    },
+    "autoconnect": {
+      "type": "boolean",
+      "default": true
+    },
+    "dns_servers": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "string",
+        "description": "IPv4 or IPv6 literal; validated with ipaddress by the manager."
+      }
+    },
+    "dns_search": {
+      "type": "array",
+      "maxItems": 16,
+      "items": {
+        "type": "string",
+        "maxLength": 255
+      }
+    },
+    "static_ipv4": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "address": {"type": "string", "description": "CIDR, e.g. 192.168.1.42/24"},
+        "gateway": {"type": "string"},
+        "routes": {
+          "type": "array",
+          "items": {"type": "string", "description": "CIDR + optional via, rendered by NetworkManager"}
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 512
+    },
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"kind": {"const": "wifi"}}, "required": ["kind"]},
+      "then": {"required": ["ssid"]}
+    }
+  ]
+}

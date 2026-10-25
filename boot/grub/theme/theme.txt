@@ -1,0 +1,17 @@
+# Aether GRUB theme — warm paper
+title-text: "Aether OS"
+desktop-image: "background.png"
+desktop-color: "#f2eee5"
+terminal-box: "terminal_box.png"
+terminal-font: "Unknown Regular 16"
++ boot_menu {
+  left = 20%
+  top = 30%
+  width = 60%
+  item_height = 34
+  item_padding = 6
+  item_color = "#292824"
+  selected_item_color = "#d98250"
+  selected_item_pixmap_style = "select_*.png"
+}
++ label { top = 92% left = 2% text = "Aether Cognitive Operating System" color = "#817b70" }

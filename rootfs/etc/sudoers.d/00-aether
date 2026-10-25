@@ -1,0 +1,2 @@
+# Wheel members may administer with their own password (installer asks).
+%wheel ALL=(ALL:ALL) ALL

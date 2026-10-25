@@ -1,0 +1,6 @@
+name: Monitor
+app_id: org.aether.Apps.SystemMonitor
+version: 1.0.0
+binary: aether-system-monitor
+package: aether-apps
+description: Monitor — native Aether application (GTK3)

@@ -1,0 +1,2 @@
+# Agent Loop
+submit → classify (deterministic first, model when healthy) → build plan (action-plan schema; targets + side effects explicit) → capability selection from the registry → broker request (auth, schema validation, scope, risk, rate limit) → confirmation when policy requires → stepwise execution with timeout/cancellation → result verification from system state → ledger entry → truthful response (completed/skipped/failed + undo availability, mode labeled rule-based vs model). Budgets: ≤8 steps, ≤120 s, bounded retries. Any step can be cancelled from the panel.

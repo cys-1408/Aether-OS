@@ -1,0 +1,1 @@
+The account helper is installed to /usr/libexec/aether/aether-account-helper (root:root 0755) by the aether-services package; actions are authorized via security/authorization/polkit/aether-account-actions.policy.

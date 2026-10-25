@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.24)
+project(aether-ui C)
+set(CMAKE_C_STANDARD 11)
+add_library(aether-ui STATIC src/theme.c src/keyboard_navigation.c src/reduced_motion.c)
+target_include_directories(aether-ui PUBLIC include ../libaether-core/include)
+target_compile_options(aether-ui PRIVATE -Wall -Wextra)
